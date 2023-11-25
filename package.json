@@ -1,0 +1,78 @@
+{
+  "name": "boilerplate-frontend-react-graphql-apollo",
+  "version": "2.0.2",
+  "description": "boilerplate-frontend-react-graphql-apollo",
+  "private": true,
+  "dependencies": {
+    "@apollo/client": "3.7.7",
+    "graphql": "16.6.0",
+    "graphql-tag": "2.12.6",
+    "jsonwebtoken": "9.0.0",
+    "prop-types": "15.8.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "4.8.0",
+    "react-router": "6.10.0",
+    "react-router-dom": "6.10.0",
+    "react-scripts": "5.0.1"
+  },
+  "scripts": {
+    "lint": "eslint --ext .js ./src",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "prepare": "husky install"
+  },
+  "keywords": [
+    "boilerplate",
+    "React",
+    "GraphQL",
+    "Apollo",
+    "client"
+  ],
+  "author": "Dídac García (https://didaquis.github.io/)",
+  "license": "MIT",
+  "eslintConfig": {
+    "extends": "react-app",
+    "plugins": [
+      "no-lenght"
+    ],
+    "rules": {
+      "no-lenght/no-lenght": "error",
+      "semi": [
+        "warn",
+        "always"
+      ],
+      "quotes": [
+        "warn",
+        "single"
+      ],
+      "no-return-await": "error"
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@craco/craco": "7.1.0",
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/react": "13.4.0",
+    "buffer": "6.0.3",
+    "crypto-browserify": "3.12.0",
+    "eslint-plugin-no-lenght": "1.0.2-0",
+    "husky": "8.0.3",
+    "process": "0.11.10",
+    "stream-browserify": "3.0.0",
+    "util": "0.12.5"
+  }
+}
