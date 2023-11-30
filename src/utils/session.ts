@@ -1,3 +1,5 @@
+import { UserData } from "src/AuthContext";
+
 /**
  * Save data in Session Storage
  * @param {string} name - key for data
