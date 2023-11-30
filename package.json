@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "3.7.7",
-    "graphql": "16.6.0",
+    "graphql": "^16.8.1",
     "graphql-tag": "2.12.6",
     "jsonwebtoken": "9.0.0",
     "prop-types": "15.8.1",
@@ -14,15 +14,16 @@
     "react-icons": "4.8.0",
     "react-router": "6.10.0",
     "react-router-dom": "6.10.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "^3.0.1"
   },
   "scripts": {
-    "lint": "eslint --ext .js ./src",
+    "lint": "eslint --ext .ts ./src",
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "typecheck": "tsc"
   },
   "keywords": [
     "boilerplate",
@@ -64,15 +65,21 @@
     ]
   },
   "devDependencies": {
-    "@craco/craco": "7.1.0",
+    "@craco/craco": "^5.9.0",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "13.4.0",
+    "@types/jest": "^29.5.10",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.10.1",
+    "@types/react": "^18.2.39",
+    "@types/react-dom": "^18.2.17",
     "buffer": "6.0.3",
     "crypto-browserify": "3.12.0",
     "eslint-plugin-no-lenght": "1.0.2-0",
-    "husky": "8.0.3",
+    "husky": "^8.0.3",
     "process": "0.11.10",
     "stream-browserify": "3.0.0",
+    "typescript": "^4.9.5",
     "util": "0.12.5"
   }
 }
