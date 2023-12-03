@@ -38,7 +38,9 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ activateAuth }) => {
 		setIsLoading(true);
 		setError(null);
 
-		const variables = { email: email.value, password: password.value };
+		const variables = {
+			email: email.value, password: password.value, userType: "NORMAL_USER"
+		};
 
 		registerUser({ variables }).then(({ data }) => {
 			const { token } = data.registerUser;
