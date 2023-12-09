@@ -1,15 +1,12 @@
-# ⚡️ Boilerplate: Frontend with React + GraphQL + Apollo
+# ⚡️ Fast App: Frontend with React + GraphQL + Apollo
 
 This project is an easy and fast way to start new projects in JavaScript. 
 The main goal is to provide two repositories: one for the backend and one for the frontend application. 
 
-This repository is for the frontend and is designed to work with another boilerplate: [the backend](https://github.com/didaquis/boilerplate-backend-node-graphql-mongodb)
-
 If you prefer it, you can use one of these boilerplates without using the other! Feel free to explore any ideas like developing your own backend in PHP or your frontend in Angular, for example.
 
 
-### 🎁 What is included on the frontend boilerplate?
-Technologies used are: React + GraphQL + Apollo Client + Bootstrap 4
+### 🎁 Technologies used are: React + GraphQL + Apollo Client + Bootstrap 4
 
 **✨ These are some of the highlights:** 
 

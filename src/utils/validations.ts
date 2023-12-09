@@ -32,9 +32,9 @@ const validateLoginForm = (email: string, password: string): boolean => {
 		dataIsValid = false;
 	}
 
-	if (!regexPassword.test(password)) {
-		dataIsValid = false;
-	}
+	// if (!regexPassword.test(password)) {
+	// 	dataIsValid = false;
+	// }
 	return dataIsValid;
 };
 
@@ -66,9 +66,9 @@ const validateRegisterForm = (
 		dataIsValid = false;
 	}
 
-	if (!regexPassword.test(password)) {
-		dataIsValid = false;
-	}
+	// if (!regexPassword.test(password)) {
+	// 	dataIsValid = false;
+	// }
 	return dataIsValid;
 };
 export {

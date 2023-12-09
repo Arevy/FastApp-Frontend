@@ -81,7 +81,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ activateAuth }) => {
 								type='password'
 								{...password}
 								required
-								pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!*^?+-_@#$%&]{8,}$"
+								// pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!*^?+-_@#$%&]{8,}$"
 							/>
 							<small id="passwordHelp" className="form-text text-muted">At least 8 characters. It must contain numbers, lowercase letters and uppercase letters. The spaces are not allowed</small>
 						</div>
@@ -95,7 +95,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ activateAuth }) => {
 								type='password'
 								{...repeatPassword}
 								required
-								pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!*^?+-_@#$%&]{8,}$"
+								// pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!*^?+-_@#$%&]{8,}$"
 							/>
 							<small id="repeatPasswordHelp" className="form-text text-muted">At least 8 characters. It must contain numbers, lowercase letters and uppercase letters. The spaces are not allowed</small>
 						</div>
@@ -112,7 +112,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ activateAuth }) => {
 										</Fragment>
 								}
 							</SubmitButton>
-							<SubmitButtonHelper mustShowHelper={!validateRegisterForm(email.value, password.value, repeatPassword.value)}></SubmitButtonHelper>
+							<SubmitButtonHelper mustShowHelper={!validateRegisterForm(email.value, password.value, repeatPassword.value)} />
 						</div>
 					</form>
 				</fieldset>
