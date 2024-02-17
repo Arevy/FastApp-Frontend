@@ -1,17 +1,32 @@
-import { useQuery } from '@apollo/client';
+// import { useQuery } from "@apollo/client";
 
-import { Spinner } from './Spinner';
-import { ErrorAlert } from './ErrorAlert';
+import { Spinner } from "./Spinner";
+import { ErrorAlert } from "./ErrorAlert";
+import ListOfUsers from "./ListOfUsers";
+import React, { useEffect } from "react";
+import { useStores } from "src/stores/RootStoreContext";
+import { observer } from "mobx-react-lite";
 
-import { LIST_ALL_USERS } from '../gql/queries/users';
-import ListOfUsers from './ListOfUsers';
-import React from 'react';
+export const GetListOfUsers = observer(() => {
+  // const { loading, error, data, startPolling, stopPolling } = useQuery(LIST_ALL_USERS, { fetchPolicy: 'no-cache' });
 
-export const GetListOfUsers = () => {
-	const { loading, error, data, startPolling, stopPolling } = useQuery(LIST_ALL_USERS, { fetchPolicy: 'no-cache' });
+  const { userStore } = useStores();
 
-	if (loading) return <Spinner />;
-	if (error) return <ErrorAlert errorMessage={error.message} />;
+  useEffect(() => {
+    userStore.listAllUsers();
 
-	return <ListOfUsers users={data.listAllUsers} startPolling={startPolling} stopPolling={stopPolling} />;
-};
+    return () => {
+      userStore.stopPolling(); // Stop polling when the component is unmounted
+    };
+  }, [userStore]);
+
+  if (userStore.isLoading) return <Spinner />;
+  if (userStore.error)
+    return <ErrorAlert errorMessage={userStore.error.message} />;
+
+  return userStore.users.length > 0 ? (
+    <ListOfUsers users={userStore.users} />
+  ) : (
+    <ErrorAlert errorMessage="No users found" />
+  );
+});

@@ -1,20 +1,25 @@
-import React, { ReactNode, useContext } from 'react';
+import React, { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { AuthContext } from '../../AuthContext';
+import { useStores } from 'src/stores/RootStoreContext';
 
+import { observer } from 'mobx-react-lite';
 interface RequireUnauthenticatedProps {
-	children: ReactNode;
+  children: ReactNode;
 }
 
-const RequireUnauthenticated: React.FC<RequireUnauthenticatedProps> = ({ children }) => {
-	const { isAuth } = useContext(AuthContext);
+const RequireUnauthenticated: React.FC<RequireUnauthenticatedProps> = observer(
+  ({ children }) => {
+    const {
+      authStore: { isAuth },
+    } = useStores();
 
-	if (isAuth) {
-		return <Navigate to='/' />;
-	}
+    if (isAuth) {
+      return <Navigate to="/" />;
+    }
 
-	return <>{children}</>;
-};
+    return <>{children}</>;
+  }
+);
 
 export default RequireUnauthenticated;

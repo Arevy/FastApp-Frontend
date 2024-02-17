@@ -4,7 +4,8 @@
  * @default
  */
 
-const regexEmail: RegExp = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+const regexEmail: RegExp =
+  /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 
 /**
  * Regular expression for password
@@ -12,7 +13,8 @@ const regexEmail: RegExp = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?
  * @default
  */
 
-const regexPassword: RegExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!*^?+-_@#$%&]{8,}$/;
+const regexPassword: RegExp =
+  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!*^?+-_@#$%&]{8,}$/;
 
 /**
  * Validate the login form data. This is useful for reduce traffic to backend
@@ -22,22 +24,21 @@ const regexPassword: RegExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!*^?+-_@
  */
 
 const validateLoginForm = (email: string, password: string): boolean => {
-	let dataIsValid: boolean = true;
+  let dataIsValid: boolean = true;
 
-	if (!email || !password) {
-		dataIsValid = false;
-	}
+  if (!email || !password) {
+    dataIsValid = false;
+  }
 
-	if (!regexEmail.test(email)) {
-		dataIsValid = false;
-	}
+  if (!regexEmail.test(email)) {
+    dataIsValid = false;
+  }
 
-	// if (!regexPassword.test(password)) {
-	// 	dataIsValid = false;
-	// }
-	return dataIsValid;
+  // if (!regexPassword.test(password)) {
+  // 	dataIsValid = false;
+  // }
+  return dataIsValid;
 };
-
 
 /**
  * Validate the registration form data
@@ -48,32 +49,27 @@ const validateLoginForm = (email: string, password: string): boolean => {
  */
 
 const validateRegisterForm = (
-	email: string,
-	password: string,
-	repeatPassword: string
+  email: string,
+  password: string,
+  repeatPassword: string
 ): boolean => {
-	let dataIsValid: boolean = true;
+  let dataIsValid: boolean = true;
 
-	if (!email || !password || !repeatPassword) {
-		dataIsValid = false;
-	}
+  if (!email || !password || !repeatPassword) {
+    dataIsValid = false;
+  }
 
-	if (password !== repeatPassword) {
-		dataIsValid = false;
-	}
+  if (password !== repeatPassword) {
+    dataIsValid = false;
+  }
 
-	if (!regexEmail.test(email)) {
-		dataIsValid = false;
-	}
+  if (!regexEmail.test(email)) {
+    dataIsValid = false;
+  }
 
-	// if (!regexPassword.test(password)) {
-	// 	dataIsValid = false;
-	// }
-	return dataIsValid;
+  // if (!regexPassword.test(password)) {
+  // 	dataIsValid = false;
+  // }
+  return dataIsValid;
 };
-export {
-	regexEmail,
-	regexPassword,
-	validateLoginForm,
-	validateRegisterForm,
-};
+export { regexEmail, regexPassword, validateLoginForm, validateRegisterForm };
