@@ -6,9 +6,10 @@ export const LIST_ALL_USERS = gql`
       email
       isAdmin
       isActive
+      uuid
       registrationDate
       lastLogin
-      uuid
+      userType
     }
   }
 `;

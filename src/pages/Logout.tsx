@@ -1,13 +1,12 @@
-import { useContext, useEffect, Fragment } from 'react';
+import { useEffect, Fragment } from 'react';
 
 import { SubmitButton } from '../components/SubmitButton';
 import { PageTitle } from '../components/PageTitle';
-// import { AuthContext } from '@/AuthContext'; // Assuming correct path
 import React from 'react';
-import { AuthContext } from 'src/AuthContext';
+import { useStores } from 'src/stores/RootStoreContext';
 
 export const Logout = () => {
-	const { removeAuth } = useContext(AuthContext);
+	const { authStore: { removeAuth } } = useStores();
 
 	useEffect(() => {
 		/* Closing the session after the render of the view */
