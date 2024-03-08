@@ -1,5 +1,6 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
+/* eslint-disable quotes */
 export const LOGIN = gql`
   mutation authUser($email: String!, $password: String!) {
     authUser(email: $email, password: $password) {
@@ -19,3 +20,4 @@ export const REGISTER_USER = gql`
     }
   }
 `;
+/* eslint-enable quotes */
