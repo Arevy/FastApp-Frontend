@@ -1,9 +1,6 @@
-import { Fragment } from 'react';
-
-import { PageTitle } from '../components/PageTitle';
-import React from 'react';
-
-import { GetListOfUsers } from '../components/GetListOfUsers';
+import React, { Fragment } from 'react';
+import { PageTitle } from '../../components/PageTitle';
+import { GetListOfUsers } from '../../components/GetListOfUsers';
 
 const UserAdministration = () => {
   return (

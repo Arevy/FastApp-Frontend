@@ -1,6 +1,6 @@
-import { ApolloClient, NormalizedCacheObject, gql } from '@apollo/client';
-import { makeAutoObservable } from 'mobx';
-import RootStore from './RootStore';
+import { ApolloClient, NormalizedCacheObject, gql } from "@apollo/client";
+import { makeAutoObservable } from "mobx";
+import RootStore from "./RootStore";
 // import { listAllServices, createService, updateService, deleteService } from '../graphql/queries'; // Import GraphQL queries
 
 class ServiceStore {
@@ -19,6 +19,8 @@ class ServiceStore {
   //     // const result = await listAllServices(); // GraphQL query
   //     // this.services = result.data;
   // }
+
+  /* eslint-disable quotes */
   fetchServices = async () => {
     const query = gql`
       query ListAllServices {
@@ -29,11 +31,11 @@ class ServiceStore {
         }
       }
     `;
-
+    /* eslint-enable quotes */
     try {
       const { data } = await this.apolloClient.query({ query });
       // Update state with fetched services
-      console.log('data', data);
+      console.log("data", data);
       return data;
     } catch (error) {
       // Handle error
