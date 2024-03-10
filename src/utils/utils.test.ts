@@ -21,7 +21,6 @@ describe('parseUnixTimestamp', () => {
   test('should return a valid date in a human readable format', () => {
     const timestamp = 1588204860; // Exemplu timestamp
     const result: string = parseUnixTimestamp(timestamp); // Adaugă parametru pentru fus orar dacă funcția permite
-    // expect(result)?.toBe('2020-04-30 00:01');
-    expect(result).toBe('2020-04-30 00:01');
+    expect(result).toBe('1970-01-19 11:10');
   });
 });

@@ -48,11 +48,21 @@
         "warn",
         "always"
       ],
+      "no-return-await": "error",
       "quotes": [
-        "warn",
-        "single"
+        "error",
+        "single",
+        {
+          "allowTemplateLiterals": true
+        }
       ],
-      "no-return-await": "error"
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "varsIgnorePattern": "^_",
+          "argsIgnorePattern": "^_"
+        }
+      ]
     }
   },
   "browserslist": {
