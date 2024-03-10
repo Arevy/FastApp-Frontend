@@ -1,5 +1,4 @@
 import { lazy } from 'react';
-import RequireAuth from 'src/components/RequireAuth';
 import { RouteConfig } from 'src/routes/routesConfig';
 
 const UserAdministration = lazy(() => import('./UserAdministration'));

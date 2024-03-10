@@ -6,7 +6,7 @@ import { SubmitButton } from '../SubmitButton';
 import { SubmitButtonHelper } from '../SubmitButtonHelper';
 
 import { useInputValue } from '../../hooks/useInputValue';
-import { validateRegisterForm } from '../../utils/validations';
+import { validateRegisterForm } from 'src/utils/validations';
 
 import React from 'react';
 import { useStores } from 'src/stores/RootStoreContext';

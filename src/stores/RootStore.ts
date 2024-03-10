@@ -15,7 +15,7 @@ class RootStore {
 
 	constructor(apolloClient: ApolloClient<NormalizedCacheObject>) {
 		makeAutoObservable(this);
-		this.authStore = new AuthStore(this);
+		this.authStore = new AuthStore(this, apolloClient);
 		this.userStore = new UserStore(this, apolloClient);
 		this.serviceStore = new ServiceStore(this, apolloClient);
 		this.appointmentStore = new AppointmentStore(this, apolloClient);

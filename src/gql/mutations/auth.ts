@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 /* eslint-disable quotes */
 export const LOGIN = gql`

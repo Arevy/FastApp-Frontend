@@ -1,5 +1,5 @@
 // Remove this import
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import { ErrorAlert } from '../../components/ErrorAlert';
 
