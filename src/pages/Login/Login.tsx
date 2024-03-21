@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 import { PageTitle } from '../../components/PageTitle';
-// import LoginForm from '@/components/LoginForm';
 import LoginForm from 'src/components/LoginForm';
 import { useStores } from 'src/stores/RootStoreContext';
 

@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
-import { PageTitle } from '../../components/PageTitle';
-import { GetListOfUsers } from '../../components/GetListOfUsers';
+import React, { Fragment } from "react";
+import { PageTitle } from "src/components/PageTitle";
+import { GetListOfUsers } from "src/components/GetListOfUsers";
 
 const UserAdministration = () => {
   return (
@@ -11,6 +11,6 @@ const UserAdministration = () => {
   );
 };
 
-UserAdministration.displayName = 'UserAdministration';
+UserAdministration.displayName = "UserAdministration";
 
 export default UserAdministration;

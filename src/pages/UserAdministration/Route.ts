@@ -6,6 +6,7 @@ const UserAdministration = lazy(() => import('./UserAdministration'));
 export const UserAdministrationRoute: RouteConfig = {
   path: '/user-administration',
   element: UserAdministration,
+
   auth: true,
   admin: true,
 };

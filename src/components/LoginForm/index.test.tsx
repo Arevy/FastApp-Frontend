@@ -1,21 +1,21 @@
 // LoginForm/index.test.js
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import { FetchResult } from '@apollo/client';
-import React from 'react';
-import { LOGIN } from '../../gql/mutations/auth';
-import LoginForm from '.';
-import { GraphQLError } from 'graphql';
-// import { gql } from "@apollo/client";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
+import { MockedProvider, MockedResponse } from "@apollo/client/testing";
+import { FetchResult } from "@apollo/client";
+import React from "react";
+import { LOGIN } from "../../gql/mutations/auth";
+import LoginForm from ".";
+import { GraphQLError } from "graphql";
+import { gql } from "@apollo/client";
 
 interface CustomMockedResponse<TData = Record<string, any>>
   extends MockedResponse<TData> {
   result?: FetchResult<TData>;
 }
 
-describe('LoginForm', () => {
-  it('should render a disabled button until password and email inputs are filled with data', () => {
+describe("LoginForm", () => {
+  it("should render a disabled button until password and email inputs are filled with data", () => {
     const activateAuth = jest.fn();
     const mocks: CustomMockedResponse[] = [];
 
@@ -25,44 +25,44 @@ describe('LoginForm', () => {
       </MockedProvider>
     );
 
-    const emailInput = screen.getByRole('textbox', {
+    const emailInput = screen.getByRole("textbox", {
       name: /Email/i,
     }) as HTMLInputElement;
     const passwordInput = screen.getByPlaceholderText(
       /password/
     ) as HTMLInputElement;
-    const submitButton = screen.getByRole('button', { name: 'Log in' });
+    const submitButton = screen.getByRole("button", { name: "Log in" });
 
-    expect(emailInput.value).toBe('');
-    expect(passwordInput.value).toBe('');
+    expect(emailInput.value).toBe("");
+    expect(passwordInput.value).toBe("");
     expect(submitButton).toBeDisabled();
 
-    fireEvent.change(emailInput, { target: { value: 'example@mail.com' } });
+    fireEvent.change(emailInput, { target: { value: "example@mail.com" } });
     expect(submitButton).toBeDisabled();
 
-    fireEvent.change(passwordInput, { target: { value: 'ABCabc*1234*4321' } });
+    fireEvent.change(passwordInput, { target: { value: "ABCabc*1234*4321" } });
     expect(submitButton).not.toBeDisabled();
 
-    fireEvent.change(emailInput, { target: { value: '' } });
-    fireEvent.change(passwordInput, { target: { value: '' } });
+    fireEvent.change(emailInput, { target: { value: "" } });
+    fireEvent.change(passwordInput, { target: { value: "" } });
     expect(submitButton).toBeDisabled();
   });
 
-  it('should call to activateAuth method passing a token as an argument if credentials are valid', async () => {
+  it("should call to activateAuth method passing a token as an argument if credentials are valid", async () => {
     const activateAuth = jest.fn();
     const mocks: CustomMockedResponse[] = [
       {
         request: {
           query: LOGIN,
           variables: {
-            email: 'example@mail.com',
-            password: 'ABCabc*1234*4321',
+            email: "example@mail.com",
+            password: "ABCabc*1234*4321",
           },
         },
         result: {
           data: {
             authUser: {
-              token: 'f3b2c1a0d2',
+              token: "f3b2c1a0d2",
             },
           },
         },
@@ -75,44 +75,52 @@ describe('LoginForm', () => {
       </MockedProvider>
     );
 
-    const emailInput = screen.getByRole('textbox', {
+    const emailInput = screen.getByRole("textbox", {
       name: /Email/i,
     }) as HTMLInputElement;
     const passwordInput = screen.getByPlaceholderText(
       /password/
     ) as HTMLInputElement;
-    const submitButton = screen.getByRole('button', { name: 'Log in' });
+    const submitButton = screen.getByRole("button", { name: "Log in" });
 
-    fireEvent.change(emailInput, { target: { value: 'example@mail.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'ABCabc*1234*4321' } });
+    fireEvent.change(emailInput, { target: { value: "example@mail.com" } });
+    fireEvent.change(passwordInput, { target: { value: "ABCabc*1234*4321" } });
     fireEvent.click(submitButton);
 
-    const submitButtonLoadingState = screen.getByRole('button', {
-      name: 'Loading',
+    const submitButtonLoadingState = screen.getByRole("button", {
+      name: "Loading",
     });
 
     expect(submitButtonLoadingState).toBeInTheDocument();
     expect(submitButtonLoadingState).toBeDisabled();
 
     await waitFor(() => expect(activateAuth).toHaveBeenCalled());
-    expect(activateAuth).toHaveBeenCalledWith('f3b2c1a0d2');
+    expect(activateAuth).toHaveBeenCalledWith("f3b2c1a0d2");
   });
 
-  it('should render an error if credentials are not valid', async () => {
+  it("should render an error if credentials are not valid", async () => {
     const activateAuth = jest.fn();
+    jest.mock("@apollo/client", () => {
+      const actualApolloClient = jest.requireActual("@apollo/client");
+      return {
+        ...actualApolloClient,
+        gql: jest.fn().mockImplementation(() => ({})), // Returnează un obiect gol sau o structură mock-uită așteptată
+      };
+    });
+
     const mocks: CustomMockedResponse[] = [
       {
         request: {
           query: LOGIN,
           variables: {
-            email: 'example@mail.com',
-            password: 'ABCabc*1234*4321',
+            email: "example@mail.com",
+            password: "ABCabc*1234*4321",
           },
         },
         result: {
           errors: [
             {
-              message: 'Invalid credentials',
+              message: "Invalid credentials",
               locations: [],
               path: [],
               nodes: [],
@@ -130,29 +138,29 @@ describe('LoginForm', () => {
       </MockedProvider>
     );
 
-    const emailInput = screen.getByRole('textbox', {
+    const emailInput = screen.getByRole("textbox", {
       name: /Email/i,
     }) as HTMLInputElement;
     const passwordInput = screen.getByPlaceholderText(
       /password/
     ) as HTMLInputElement;
-    const submitButton = screen.getByRole('button', { name: 'Log in' });
+    const submitButton = screen.getByRole("button", { name: "Log in" });
 
-    fireEvent.change(emailInput, { target: { value: 'example@mail.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'ABCabc*1234*4321' } });
+    fireEvent.change(emailInput, { target: { value: "example@mail.com" } });
+    fireEvent.change(passwordInput, { target: { value: "ABCabc*1234*4321" } });
     fireEvent.click(submitButton);
 
     await waitFor(() => expect(activateAuth).not.toHaveBeenCalled());
 
-    const submitButtonAfterCTA = await screen.findByRole('button', {
-      name: 'Log in',
+    const submitButtonAfterCTA = await screen.findByRole("button", {
+      name: "Log in",
     });
 
     expect(submitButtonAfterCTA).toBeInTheDocument();
     expect(submitButtonAfterCTA).not.toBeDisabled();
 
-    expect(screen.getByRole('alert')).toBeInTheDocument();
-    expect(screen.getByText('Invalid credentials'));
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+    expect(screen.getByText("Invalid credentials"));
   });
 });
 

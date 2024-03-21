@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { RouteConfig } from '../../routes/routesConfig'; // Asumând că avem un tip exportat RouteConfig
+import { RouteConfig } from 'src/routes/routesConfig';
 
 const Home = lazy(() => import('./Home'));
 

@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { RouteConfig } from '../../routes/routesConfig'; // Asumând că avem un tip exportat RouteConfig
+import { RouteConfig } from 'src/routes/routesConfig';
 import RequireUnauthenticated from 'src/components/RequireUnauthenticated';
 
 const Login = lazy(() => import('./Login'));

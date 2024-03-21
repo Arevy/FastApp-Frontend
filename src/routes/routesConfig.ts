@@ -1,5 +1,6 @@
 // routesConfig.ts
 import React, { ReactNode } from 'react';
+import { AppointmentsRoute } from 'src/pages/AppointmentsList/Route';
 
 import { HomeRoute } from 'src/pages/Home/Route';
 import { LoginRoute } from 'src/pages/Login/Route';
@@ -29,4 +30,5 @@ export const routes: RouteConfig[] = [
   RegistrationRoute,
   UserAdministrationRoute,
   Page404Route,
+  AppointmentsRoute,
 ];
