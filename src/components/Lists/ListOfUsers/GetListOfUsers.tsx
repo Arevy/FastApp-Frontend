@@ -1,8 +1,8 @@
 // import { useQuery } from "@apollo/client";
 
-import { Spinner } from './Spinner';
-import { ErrorAlert } from './ErrorAlert';
-import ListOfUsers from './ListOfUsers';
+import { Spinner } from '../../SmallComponents/Spinner';
+import { ErrorAlert } from '../../SmallComponents/ErrorAlert';
+import ListOfUsers from 'src/components/Lists/ListOfUsers/ListOfUsersComponent';
 import React, { useEffect } from 'react';
 import { useStores } from 'src/stores/RootStoreContext';
 import { observer } from 'mobx-react-lite';

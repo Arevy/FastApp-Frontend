@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { PageTitle } from "src/components/PageTitle";
-import { GetListOfUsers } from "src/components/GetListOfUsers";
+import { GetListOfUsers } from "src/components/Lists/ListOfUsers/GetListOfUsers";
 
 const UserAdministration = () => {
   return (

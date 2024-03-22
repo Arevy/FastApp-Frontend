@@ -1,8 +1,9 @@
-import React from 'react';
-import { EmojiGreenCheck } from '../EmojiGreenCheck';
-import { EmojiRedCross } from '../EmojiRedCross';
-import { parseUnixTimestamp } from 'src/utils/utils';
-import { User } from 'src/gql/types';
+import React from "react";
+
+import { parseUnixTimestamp } from "src/utils/utils";
+import { User } from "src/gql/types";
+import { EmojiGreenCheck } from "src/components/SmallComponents/EmojiGreenCheck";
+import { EmojiRedCross } from "src/components/SmallComponents/EmojiRedCross";
 
 interface ListOfUsersProps {
   users: User[];

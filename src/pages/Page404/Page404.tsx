@@ -1,7 +1,7 @@
 // Remove this import
 import React from 'react';
 
-import { ErrorAlert } from '../../components/ErrorAlert';
+import { ErrorAlert } from '../../components/SmallComponents/ErrorAlert';
 
 const Page404 = () => {
   return (

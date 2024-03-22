@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { useStores } from "src/stores/RootStoreContext";
-import { Spinner } from "./Spinner";
-import { ErrorAlert } from "./ErrorAlert";
+import { Spinner } from "../../SmallComponents/Spinner";
+import { ErrorAlert } from "../../SmallComponents/ErrorAlert";
 import { PageTitle } from "src/components/PageTitle";
 import { ModifyAppointmentInput } from "src/gql/types";
 

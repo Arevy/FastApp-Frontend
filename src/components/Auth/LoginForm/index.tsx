@@ -2,15 +2,15 @@ import { useState, Fragment, FormEvent } from 'react';
 import { useMutation } from '@apollo/client';
 import PropTypes from 'prop-types';
 
-import { ErrorAlert } from '../ErrorAlert';
-import { SubmitButton } from '../SubmitButton';
+import { ErrorAlert } from '../../SmallComponents/ErrorAlert';
+import { SubmitButton } from '../../SubmitButton';
 import React from 'react';
 
-import { useInputValue } from '../../hooks/useInputValue';
-import { validateLoginForm } from '../../utils/validations';
+import { useInputValue } from '../../../hooks/useInputValue';
+import { validateLoginForm } from '../../../utils/validations';
 
-import { LOGIN } from '../../gql/mutations/auth';
-import { SubmitButtonHelper } from '../SubmitButtonHelper';
+import { LOGIN } from '../../../gql/mutations/auth';
+import { SubmitButtonHelper } from '../../SubmitButtonHelper';
 
 interface LoginFormProps {
   activateAuth: (token: string) => void;

@@ -2,7 +2,7 @@ import React, { StrictMode, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { NavBar } from 'src/components/NavBar';
 import { Footer } from 'src/components/Footer';
-import { Spinner } from 'src/components/Spinner';
+import { Spinner } from 'src/components/SmallComponents/Spinner';
 import { routes } from 'src/routes/routesConfig';
 import wrapComponentForProtection from 'src/routes/wrapComponentForProtection';
 

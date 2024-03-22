@@ -4,7 +4,7 @@ import "@testing-library/jest-dom/extend-expect";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { FetchResult } from "@apollo/client";
 import React from "react";
-import { LOGIN } from "../../gql/mutations/auth";
+import { LOGIN } from "../../../gql/mutations/auth";
 import LoginForm from ".";
 import { GraphQLError } from "graphql";
 import { gql } from "@apollo/client";
