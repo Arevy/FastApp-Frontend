@@ -4,10 +4,27 @@ import { useStores } from "src/stores/RootStoreContext";
 import { Spinner } from "./Spinner";
 import { ErrorAlert } from "./ErrorAlert";
 import { PageTitle } from "src/components/PageTitle";
-import { Appointment } from "src/gql/types";
+import { ModifyAppointmentInput } from "src/gql/types";
 
 export const ListOfAppointments = observer(() => {
   const { appointmentStore } = useStores();
+
+  const handleModify = (
+    appointmentId: string,
+    newData: Omit<ModifyAppointmentInput, "id">
+  ) => {
+    const modifiedData = {
+      ...newData,
+      newDate: newData.newDate
+        ? new Date(newData.newDate).toISOString()
+        : undefined,
+    };
+    appointmentStore.modifyAppointment(appointmentId, modifiedData);
+  };
+
+  const handleCancel = (appointmentId: string) => {
+    appointmentStore.cancelAppointment(appointmentId);
+  };
 
   useEffect(() => {
     appointmentStore.fetchAppointments();
@@ -34,6 +51,8 @@ export const ListOfAppointments = observer(() => {
                 <th scope="col">Service Name</th>
                 <th scope="col">Date</th>
                 <th scope="col">Status</th>
+                <th scope="col">Modify</th>
+                <th scope="col">Cancel</th>
               </tr>
             </thead>
             <tbody>
@@ -43,6 +62,23 @@ export const ListOfAppointments = observer(() => {
                   <td>{appointment.service?.name}</td>
                   <td>{new Date(appointment.date).toLocaleString()}</td>
                   <td>{appointment.status}</td>
+                  <td>
+                    <button
+                      onClick={() =>
+                        handleModify(appointment.uuid, {
+                          newDate: new Date().toISOString(), // Convert current date to ISO string
+                          newStatus: "", // Or whatever status you need to set
+                        })
+                      }
+                    >
+                      Modify
+                    </button>
+                  </td>
+                  <td>
+                    <button onClick={() => handleCancel(appointment.uuid)}>
+                      Cancel
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

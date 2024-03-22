@@ -32,4 +32,45 @@ export const LIST_ALL_APPOINTMENTS_FULL = gql`
   }
 `;
 
-// Adaugă aici alte interogări și mutații pentru crearea, actualizarea și ștergerea programărilor
+export const LIST_USER_APPOINTMENTS = gql`
+  query UserAppointments($userId: ID!) {
+    userAppointments(userId: $userId) {
+      id
+      serviceId
+      date
+      status
+    }
+  }
+`;
+
+export const CREATE_APPOINTMENTS = gql`
+  mutation CreateAppointment($userId: ID!, $serviceId: ID!, $date: String!) {
+    createAppointment(userId: $userId, serviceId: $serviceId, date: $date) {
+      id
+      userId
+      serviceId
+      date
+      status
+    }
+  }
+`;
+
+export const UPDATE_APPOINTMENTS = gql`
+  mutation UpdateAppointment($uuid: ID!, $newDate: String, $newStatus: String) {
+    updateAppointment(uuid: $uuid, newDate: $newDate, newStatus: $newStatus) {
+      uuid
+      date
+      status
+    }
+  }
+`;
+
+export const DELETE_APPOINTMENTS = gql`
+  mutation DeleteAppointment($uuid: ID!) {
+    deleteAppointment(uuid: $uuid) {
+      success
+      message
+    }
+  }
+`;
+
