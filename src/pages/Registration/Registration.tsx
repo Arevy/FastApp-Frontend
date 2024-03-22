@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import { PageTitle } from '../../components/PageTitle';
-import { RegisterForm } from '../../components/RegisterForm';
+import { RegisterForm } from 'src/components/Auth/RegisterForm';
+import { PageTitle } from 'src/components/Top/PageTitle';
 
 const Registration = () => {
   return (

@@ -1,15 +1,14 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment } from "react";
 // import PropTypes from 'prop-types';
 
-import { ErrorAlert } from '../Emoji/ErrorAlert';
-import { SubmitButton } from '../SubmitButton';
-import { SubmitButtonHelper } from '../SubmitButtonHelper';
+import { validateRegisterForm } from "src/utils/validations";
 
-import { useInputValue } from '../../hooks/useInputValue';
-import { validateRegisterForm } from 'src/utils/validations';
-
-import React from 'react';
-import { useStores } from 'src/stores/RootStoreContext';
+import React from "react";
+import { useStores } from "src/stores/RootStoreContext";
+import { ErrorAlert } from "src/components/SmallComponents/ErrorAlert";
+import { SubmitButton } from "src/components/SmallComponents/SubmitButton";
+import { SubmitButtonHelper } from "src/components/SmallComponents/SubmitButtonHelper";
+import { useInputValue } from "src/hooks/useInputValue";
 
 const propTypes = {};
 
@@ -17,11 +16,11 @@ export const RegisterForm: React.FC = () => {
   const { userStore } = useStores();
 
   const [isDisabled, setIsDisabled] = useState(false);
-//   const [isLoading, setIsLoading] = useState(false);
+  //   const [isLoading, setIsLoading] = useState(false);
 
-  const email = useInputValue('');
-  const password = useInputValue('');
-  const repeatPassword = useInputValue('');
+  const email = useInputValue("");
+  const password = useInputValue("");
+  const repeatPassword = useInputValue("");
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -33,7 +32,7 @@ export const RegisterForm: React.FC = () => {
         await userStore.registerUser(
           email.value,
           password.value,
-          'NORMAL_USER'
+          "NORMAL_USER"
         );
       } catch (error) {
         console.log(error);
@@ -117,7 +116,7 @@ export const RegisterForm: React.FC = () => {
                 }
               >
                 {!userStore.isLoading ? (
-                  'Create account'
+                  "Create account"
                 ) : (
                   <Fragment>
                     <span

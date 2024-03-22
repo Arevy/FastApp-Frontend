@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment } from 'react';
-import { PageTitle } from 'src/components/PageTitle';
-import { SubmitButton } from 'src/components/SubmitButton';
+import { SubmitButton } from 'src/components/SmallComponents/SubmitButton';
+import { PageTitle } from 'src/components/Top/PageTitle';
 import { useStores } from 'src/stores/RootStoreContext';
 
 const Logout = () => {

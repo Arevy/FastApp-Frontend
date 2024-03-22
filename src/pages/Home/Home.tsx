@@ -1,5 +1,5 @@
-import React from 'react';
-import { Jumbotron } from '../../components/Jumbotron';
+import React from "react";
+import { Jumbotron } from "src/components/Top/Jumbotron";
 
 const Home = () => {
   return (
@@ -10,6 +10,6 @@ const Home = () => {
   );
 };
 
-Home.displayName = 'Home';
+Home.displayName = "Home";
 
 export default Home;

@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { useStores } from "src/stores/RootStoreContext";
-import { Spinner } from "../../SmallComponents/Spinner";
-import { ErrorAlert } from "../../SmallComponents/ErrorAlert";
-import { PageTitle } from "src/components/PageTitle";
+import { PageTitle } from "src/components/Top/PageTitle";
 import { ModifyAppointmentInput } from "src/gql/types";
+import { ErrorAlert } from "src/components/SmallComponents/ErrorAlert";
+import { Spinner } from "src/components/SmallComponents/Spinner";
 
 export const ListOfAppointments = observer(() => {
   const { appointmentStore } = useStores();

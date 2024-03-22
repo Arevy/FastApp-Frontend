@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 import {
   BsHouse,
   BsPeople,
   BsBoxArrowInRight,
   BsBoxArrowRight,
-} from 'react-icons/bs';
-import React from 'react';
-import { useStores } from 'src/stores/RootStoreContext';
+} from "react-icons/bs";
+import { useStores } from "src/stores/RootStoreContext";
 
-const SIZE = '32px';
+const SIZE = "32px";
 
 export const NavBar = () => {
   const {
