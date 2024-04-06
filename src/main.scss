@@ -1,0 +1,26 @@
+
+// Importarea Bootstrap
+// @import "../public/vendor/bootstrap-4.3.1/css/bootstrap.css";
+// @import "../public/vendor/bootstrap-4.3.1/css/bootstrap.min.css";
+// @import "../public/vendor/bootstrap-4.3.1/css/bootstrap-grid.css";
+// @import "../public/vendor/bootstrap-4.3.1/css/bootstrap-grid.min.css";
+// @import "../public/vendor/bootstrap-4.3.1/css/bootstrap-reboot.css";
+// @import "../public/vendor/bootstrap-4.3.1/css/bootstrap-reboot.min.css";
+
+// Suprascriere variabile Bootstrap (opțional)
+$theme-colors: (
+  "primary": #007bff,
+  "success": #28a745,
+  // Adăugați sau suprascrieți alte variabile după cum este necesar
+);
+
+$light:  #007bff;
+$primary: blue;
+// Stiluri personalizate
+body {
+  background-color: $light;
+}
+
+.custom-class {
+  color: $primary;
+}
