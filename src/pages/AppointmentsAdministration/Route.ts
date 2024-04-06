@@ -6,5 +6,6 @@ const AppointmentsList = lazy(() => import('./AppointmentsAdministration'));
 export const AppointmentsRoute: RouteConfig = {
   path: '/appointments',
   element: AppointmentsList,
-  auth: false,
+  auth: true,
+  admin: false,
 };

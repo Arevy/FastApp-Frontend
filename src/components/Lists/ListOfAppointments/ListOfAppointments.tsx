@@ -40,8 +40,6 @@ export const ListOfAppointments = observer(() => {
 
   return (
     <React.Fragment>
-      <PageTitle text="Panel de administrare programări" />
-
       {appointmentStore.appointments.length > 0 ? (
         <section className="table-responsive">
           <table className="table text-light">

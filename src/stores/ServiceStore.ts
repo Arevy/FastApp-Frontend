@@ -1,44 +1,77 @@
-import { ApolloClient, NormalizedCacheObject, gql } from '@apollo/client';
+import {
+  ApolloClient,
+  NormalizedCacheObject,
+  ObservableQuery,
+} from '@apollo/client';
 import { makeAutoObservable } from 'mobx';
 import RootStore from './RootStore';
-// import { listAllServices, createService, updateService, deleteService } from '../graphql/queries'; // Import GraphQL queries
+import { DELETE_SERVICE, LIST_ALL_SERVICES } from 'src/gql/queries/services';
+import { Service } from 'src/gql/types'; // Presupunem că acesta este tipul de date pentru un service.
 
 class ServiceStore {
-  services = [];
+  services: Service[] = [];
+  isLoading: boolean = false;
+  error: Error | null | unknown | any = null;
+  private queryObservable: ObservableQuery<any> | null = null;
 
-  private rootStore: RootStore;
   constructor(
-    rootStore: RootStore,
+    private rootStore: RootStore,
     private apolloClient: ApolloClient<NormalizedCacheObject>
   ) {
     makeAutoObservable(this);
-    this.rootStore = rootStore;
   }
 
-  // async fetchServices() {
-  //     // const result = await listAllServices(); // GraphQL query
-  //     // this.services = result.data;
-  // }
-
-  /* eslint-disable quotes */
   fetchServices = async () => {
-    const query = gql`
-      query ListAllServices {
-        listAllServices {
-          serviceId
-          name
-          category
-        }
-      }
-    `;
-    /* eslint-enable quotes */
+    this.isLoading = true;
+    this.error = null;
     try {
-      const { data } = await this.apolloClient.query({ query });
-      // Update state with fetched services
-      console.log('data', data);
-      return data;
+      this.queryObservable = this.apolloClient.watchQuery({
+        query: LIST_ALL_SERVICES,
+        fetchPolicy: 'network-only',
+        pollInterval: 600000, // 10 minutes
+      });
+
+      this.queryObservable.subscribe({
+        next: (response) => {
+          this.services = response.data.listAllServices;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          this.error = error;
+          this.isLoading = false;
+        },
+      });
     } catch (error) {
-      // Handle error
+      this.isLoading = false;
+      this.error =
+        error instanceof Error ? error : new Error('An unknown error occurred');
+    }
+  };
+
+  stopPolling = () => {
+    this.queryObservable?.stopPolling();
+  };
+
+  deleteService = async (serviceId: string) => {
+    this.isLoading = true;
+    try {
+      const result = await this.apolloClient.mutate({
+        mutation: DELETE_SERVICE,
+        variables: { serviceId },
+      });
+
+      if (result.data.deleteService.success) {
+        this.services = this.services.filter(
+          (service) => service.serviceId !== serviceId
+        );
+      } else {
+        console.error(result.data.deleteService.message);
+      }
+    } catch (e) {
+      console.error('An error occurred while deleting the service', e);
+      this.error = e;
+    } finally {
+      this.isLoading = false;
     }
   };
 

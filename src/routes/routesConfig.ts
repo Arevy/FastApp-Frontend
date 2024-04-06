@@ -6,6 +6,7 @@ import { LoginRoute } from 'src/pages/Login/Route';
 import { LogoutRoute } from 'src/pages/Logout/Route';
 import { Page404Route } from 'src/pages/Page404/Route';
 import { RegistrationRoute } from 'src/pages/Registration/Route';
+import { ServiceAdministrationRoute } from 'src/pages/ServiceAdministration/Route';
 import { UserAdministrationRoute } from 'src/pages/UserAdministration/Route';
 
 interface WrapperProps {
@@ -30,4 +31,5 @@ export const routes: RouteConfig[] = [
   UserAdministrationRoute,
   Page404Route,
   AppointmentsRoute,
+  ServiceAdministrationRoute,
 ];

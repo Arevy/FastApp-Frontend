@@ -17,6 +17,9 @@ export interface Service {
   category: string;
 }
 
+export interface FetchServicesOutput {
+  listAllServices: Service[];
+}
 export interface Appointment {
   uuid: string;
   user: User;

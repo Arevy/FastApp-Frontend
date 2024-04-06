@@ -8,5 +8,5 @@ export const UserAdministrationRoute: RouteConfig = {
   element: UserAdministration,
 
   auth: true,
-  admin: true,
+  admin: false,
 };
