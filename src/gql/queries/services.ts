@@ -1,4 +1,3 @@
-// src/gql/queries/services.ts
 import { gql } from '@apollo/client';
 
 export const LIST_ALL_SERVICES = gql`
@@ -7,6 +6,7 @@ export const LIST_ALL_SERVICES = gql`
       serviceId
       name
       category
+      isActive
     }
   }
 `;
@@ -16,6 +16,17 @@ export const DELETE_SERVICE = gql`
     deleteService(serviceId: $serviceId) {
       success
       message
+    }
+  }
+`;
+
+export const TOGGLE_SERVICE_ACTIVE = gql`
+  mutation ToggleServiceActive($serviceId: ID!) {
+    toggleServiceActive(serviceId: $serviceId) {
+      serviceId
+      name
+      category
+      isActive
     }
   }
 `;

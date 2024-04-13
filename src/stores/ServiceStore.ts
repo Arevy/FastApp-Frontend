@@ -5,8 +5,12 @@ import {
 } from '@apollo/client';
 import { makeAutoObservable } from 'mobx';
 import RootStore from './RootStore';
-import { DELETE_SERVICE, LIST_ALL_SERVICES } from 'src/gql/queries/services';
-import { Service } from 'src/gql/types'; // Presupunem că acesta este tipul de date pentru un service.
+import {
+  DELETE_SERVICE,
+  LIST_ALL_SERVICES,
+  TOGGLE_SERVICE_ACTIVE,
+} from 'src/gql/queries/services';
+import { Service } from 'src/gql/types';
 
 class ServiceStore {
   services: Service[] = [];
@@ -70,6 +74,26 @@ class ServiceStore {
     } catch (e) {
       console.error('An error occurred while deleting the service', e);
       this.error = e;
+    } finally {
+      this.isLoading = false;
+    }
+  };
+
+  toggleServiceActive = async (serviceId: string) => {
+    this.isLoading = true;
+    try {
+      const result = await this.apolloClient.mutate({
+        mutation: TOGGLE_SERVICE_ACTIVE,
+        variables: { serviceId },
+        refetchQueries: [{ query: LIST_ALL_SERVICES }], // Reîmprospătează lista de servicii după mutație
+      });
+
+      if (result.data.toggleServiceActive) {
+        console.log('Service active status toggled successfully');
+        return result.data.toggleServiceActive;
+      }
+    } catch (error) {
+      console.error('Error toggling service active status', error);
     } finally {
       this.isLoading = false;
     }
