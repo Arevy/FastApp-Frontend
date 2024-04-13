@@ -44,27 +44,30 @@ export const ListOfServices = observer(() => {
           </tr>
         </thead>
         <tbody>
-          {serviceStore.services.map((service) => (
-            <tr key={service.serviceId}>
-              <td>{service.name}</td>
-              <td>{service.category}</td>
-              <td
-                style={{ cursor: "pointer" }}
-                onClick={() => handleToggleActive(service.serviceId)}
-              >
-                {service.isActive ? <EmojiGreenCheck /> : <EmojiRedCross />}
-              </td>
-              <td>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleDelete(service.serviceId)}
+          {serviceStore.services
+            .slice()
+            .sort((a, b) => a.category.localeCompare(b.category))
+            .map((service) => (
+              <tr key={service.serviceId}>
+                <td>{service.name}</td>
+                <td>{service.category}</td>
+                <td
                   style={{ cursor: "pointer" }}
+                  onClick={() => handleToggleActive(service.serviceId)}
                 >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
+                  {service.isActive ? <EmojiGreenCheck /> : <EmojiRedCross />}
+                </td>
+                <td>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(service.serviceId)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </section>

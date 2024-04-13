@@ -33,6 +33,8 @@ export interface UpdateServiceOutput {
 export interface CreateServiceInput {
   name: string;
   category: string;
+  isActive: boolean;
+
 }
 
 export interface CreateServiceOutput {
