@@ -62,6 +62,7 @@ export const ListOfAppointments = observer(() => {
               <td>{appointment.status}</td>
               <td>
                 <select
+                  style={{ cursor: "pointer" }}
                   value={selectedStatuses[appointment.uuid]}
                   onChange={(e) =>
                     setSelectedStatuses({
@@ -80,6 +81,7 @@ export const ListOfAppointments = observer(() => {
               </td>
               <td>
                 <button
+                  style={{ cursor: "pointer" }}
                   onClick={() =>
                     appointmentStore.cancelAppointment(appointment.uuid)
                   }

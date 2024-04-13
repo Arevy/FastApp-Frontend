@@ -42,6 +42,7 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
             <tr key={user.uuid}>
               <td>{user.email}</td>
               <td
+                style={{ cursor: "pointer" }}
                 onClick={() =>
                   updateUserAdminStatus(
                     user.uuid,
@@ -54,6 +55,7 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                 {user.isAdmin ? <EmojiGreenCheck /> : <EmojiRedCross />}{" "}
               </td>
               <td
+                style={{ cursor: "pointer" }}
                 onClick={() =>
                   updateUserAdminStatus(
                     user.uuid,
@@ -67,7 +69,7 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
               </td>
               <td>{parseUnixTimestamp(user.registrationDate)}</td>
               <td>{parseUnixTimestamp(user.lastLogin)}</td>
-              <td>
+              <td style={{ cursor: "pointer" }}>
                 {editing === user.uuid ? (
                   <select
                     value={selectedType}

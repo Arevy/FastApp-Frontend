@@ -39,6 +39,7 @@ export const ListOfServices = observer(() => {
                 <button
                   className="btn btn-danger"
                   onClick={() => handleDelete(service.serviceId)}
+                  style={{ cursor: 'pointer' }}
                 >
                   Delete
                 </button>
