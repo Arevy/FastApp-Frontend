@@ -22,14 +22,25 @@ export interface RouteConfig {
 }
 
 // Configurarea rutelor
-export const routes: RouteConfig[] = [
+export const routesArray: RouteConfig[] = [
   HomeRoute,
   LoginRoute,
   RegistrationRoute,
   LogoutRoute,
-  RegistrationRoute,
   UserAdministrationRoute,
   Page404Route,
   AppointmentsRoute,
   ServiceAdministrationRoute,
 ];
+
+// destructure object with routes for an easy import
+export const routes = {
+  HomeRoute,
+  LoginRoute,
+  RegistrationRoute,
+  LogoutRoute,
+  UserAdministrationRoute,
+  Page404Route,
+  AppointmentsRoute,
+  ServiceAdministrationRoute,
+};
