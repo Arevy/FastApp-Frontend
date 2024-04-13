@@ -13,7 +13,6 @@ const App: React.FC = () => {
         <div className="container">
           <NavBar />
           <main className="pb-4">
-            <Suspense fallback={<Spinner />}>
               <Routes>
                 {routes.map(({ path, element, wrapper, auth, admin }) => (
                   <Route
@@ -31,7 +30,6 @@ const App: React.FC = () => {
                   />
                 ))}
               </Routes>
-            </Suspense>
           </main>
           <div className="row pb-5"></div>
           <Footer />

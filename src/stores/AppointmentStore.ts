@@ -6,7 +6,7 @@ import {
   ObservableQuery,
 } from '@apollo/client';
 
-import { makeAutoObservable, toJS } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import RootStore from './RootStore';
 // import { userAppointments, createAppointment, updateAppointment, deleteAppointment } from '../graphql/queries'; // Import GraphQL queries
 import {
