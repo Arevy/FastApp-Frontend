@@ -156,6 +156,8 @@ class AppointmentStore {
 
       console.log('modifyAppointment', appointmentId, newData, result);
       if (result.data) {
+        await this.fetchAppointments();
+        console.log('Update successful:', result.data.updateAppointment);
         this.appointments = this.appointments.map((appointment) =>
           appointment.uuid === appointmentId
             ? { ...appointment, ...result?.data?.updateAppointment }

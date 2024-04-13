@@ -71,3 +71,17 @@ export const UserTypeLabels: { [key in UserType]: string } = {
   [UserType.SERVICE_USER]: 'Service User',
   [UserType.ADMIN_USER]: 'Administrator'
 };
+
+export enum AppointmentStatus {
+  PENDING = 'pending',
+  CONFIRMED = 'confirmed',
+  COMPLETED = 'completed',
+  CANCELED = 'canceled'
+}
+
+export const AppointmentStatusLabels: { [key in AppointmentStatus]: string } = {
+  [AppointmentStatus.PENDING]: 'Pending',
+  [AppointmentStatus.CONFIRMED]: 'Confirmed',
+  [AppointmentStatus.COMPLETED]: 'Completed',
+  [AppointmentStatus.CANCELED]: 'Canceled'
+};
