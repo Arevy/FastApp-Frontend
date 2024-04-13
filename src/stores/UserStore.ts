@@ -5,9 +5,9 @@ import {
   ObservableQuery,
 } from '@apollo/client';
 
-import * as Queries from '../gql/queries/users';
-import * as Mutations from '../gql/mutations/auth';
-import { User } from '../gql/types';
+import * as Queries from 'src/gql/queries/users';
+import * as Mutations from 'src/gql/mutations/auth';
+import { User, UserType } from 'src/gql/types';
 import RootStore from './RootStore';
 
 class UserStore {
@@ -87,6 +87,36 @@ class UserStore {
       this.queryObservable.stopPolling();
     }
   }
+  updateUserAdminStatus = async (
+    uuid: string,
+    isAdmin: boolean,
+    isActive: boolean,
+    userType: UserType
+  ): Promise<void> => {
+    this.isLoading = true;
+    try {
+      const result = await this.apolloClient.mutate({
+        mutation: Queries.UPDATE_USER_ADMIN_STATUS,
+        variables: { uuid, isAdmin, isActive, userType },
+      });
+      if (result.data.updateUserAdminStatus.success) {
+        console.log(
+          'Update successful:',
+          result.data.updateUserAdminStatus.message
+        );
+        this.listAllUsers(); // Re-fetch the users list to reflect the changes
+      } else {
+        console.error(
+          'Update failed:',
+          result.data.updateUserAdminStatus.message
+        );
+      }
+    } catch (error) {
+      console.error('Failed to update user admin status', error);
+    } finally {
+      this.isLoading = false;
+    }
+  };
 
   // Add more functions for other operations
 }

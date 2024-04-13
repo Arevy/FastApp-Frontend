@@ -1,7 +1,5 @@
-// import { useQuery } from "@apollo/client";
-
-import { Spinner } from '../../SmallComponents/Spinner';
-import { ErrorAlert } from '../../SmallComponents/ErrorAlert';
+import { Spinner } from 'src/components/SmallComponents/Spinner';
+import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
 import ListOfUsers from 'src/components/Lists/ListOfUsers/ListOfUsersComponent';
 import React, { useEffect } from 'react';
 import { useStores } from 'src/stores/RootStoreContext';
@@ -25,7 +23,10 @@ export const GetListOfUsers = observer(() => {
     return <ErrorAlert errorMessage={userStore.error.message} />;
 
   return userStore.users.length > 0 ? (
-    <ListOfUsers users={userStore.users} />
+    <ListOfUsers
+      users={userStore.users}
+      updateUserAdminStatus={userStore.updateUserAdminStatus}
+    />
   ) : (
     <ErrorAlert errorMessage="No users found" />
   );

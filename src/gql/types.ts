@@ -5,10 +5,7 @@ export interface User {
   isActive: boolean;
   registrationDate: string;
   lastLogin: string;
-}
-
-export interface User {
-  email: string;
+  userType: UserType;
 }
 
 export interface Service {
@@ -62,3 +59,15 @@ export interface CancelAppointmentOutput {
     message: string;
   };
 }
+
+export enum UserType {
+  NORMAL_USER = 'NORMAL_USER',
+  SERVICE_USER = 'SERVICE_USER',
+  ADMIN_USER = 'ADMIN_USER',
+}
+
+export const UserTypeLabels: { [key in UserType]: string } = {
+  [UserType.NORMAL_USER]: 'Normal User',
+  [UserType.SERVICE_USER]: 'Service User',
+  [UserType.ADMIN_USER]: 'Administrator'
+};
