@@ -1,12 +1,12 @@
-export interface User {
-  uuid: string;
-  email: string;
-  isAdmin: boolean;
-  isActive: boolean;
-  registrationDate: string;
-  lastLogin: string;
-  userType: UserType;
-}
+// export interface User {
+//   uuid: string;
+//   email: string;
+//   isAdmin: boolean;
+//   isActive: boolean;
+//   registrationDate: string;
+//   lastLogin: string;
+//   userType: UserType;
+// }
 
 export interface Service {
   serviceId: string;
@@ -34,7 +34,6 @@ export interface CreateServiceInput {
   name: string;
   category: string;
   isActive: boolean;
-
 }
 
 export interface CreateServiceOutput {
@@ -47,16 +46,35 @@ export interface DeleteServiceOutput {
     message: string;
   };
 }
-export interface Appointment {
-  uuid: string;
-  user: User;
-  service: Service;
+export interface IUser {
+  _id: string;
+  email: string;
+  isAdmin: boolean;
+  isActive: boolean;
+  registrationDate: string | number;
+  lastLogin: string | number;
+  userType: UserType;
+}
+
+export interface IService {
+  _id: string;
+  name: string;
+  category: string;
+  isActive: boolean;
+}
+
+export interface IAppointment {
+  user: any;
+  _id: string;
+  userId: string;
+  serviceId: string;
+  service?: IService; // Include nested service details
   date: string;
   status: string;
 }
 
 export interface FetchUserAppointmentsOutput {
-  userAppointments: Appointment[];
+  userAppointments: IAppointment[];
 }
 
 export interface ScheduleAppointmentInput {
@@ -66,7 +84,7 @@ export interface ScheduleAppointmentInput {
 }
 
 export interface ScheduleAppointmentOutput {
-  createAppointment: Appointment;
+  createAppointment: IAppointment;
 }
 
 export interface ModifyAppointmentInput {
@@ -76,7 +94,7 @@ export interface ModifyAppointmentInput {
 }
 
 export interface ModifyAppointmentOutput {
-  updateAppointment: Appointment;
+  updateAppointment: IAppointment;
 }
 
 export interface CancelAppointmentInput {

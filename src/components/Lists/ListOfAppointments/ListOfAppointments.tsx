@@ -4,12 +4,13 @@ import { useStores } from "src/stores/RootStoreContext";
 import { AppointmentStatus, AppointmentStatusLabels } from "src/gql/types";
 import { ErrorAlert } from "src/components/SmallComponents/ErrorAlert";
 import { Spinner } from "src/components/SmallComponents/Spinner";
+import { parseUnixTimestamp } from "src/utils/utils";
 
 export const ListOfAppointments = observer(() => {
   const { appointmentStore } = useStores();
 
   const [selectedStatuses, setSelectedStatuses] = useState<{
-    [uuid: string]: AppointmentStatus;
+    [_id: string]: AppointmentStatus; // Schimbare de la [uuid: string] la [_id: string]
   }>({});
 
   const handleModify = (appointmentId: string) => {
@@ -29,9 +30,9 @@ export const ListOfAppointments = observer(() => {
   }, [appointmentStore]);
 
   useEffect(() => {
-    const newStatuses: { [uuid: string]: AppointmentStatus } = {};
+    const newStatuses: { [_id: string]: AppointmentStatus } = {};
     appointmentStore.appointments.forEach((appointment) => {
-      newStatuses[appointment.uuid] = appointment.status as AppointmentStatus;
+      newStatuses[appointment._id] = appointment.status as AppointmentStatus; // Schimbare de la appointment.uuid la appointment._id
     });
     setSelectedStatuses(newStatuses);
   }, [appointmentStore.appointments]);
@@ -39,6 +40,9 @@ export const ListOfAppointments = observer(() => {
   if (appointmentStore.isLoading) return <Spinner />;
   if (appointmentStore.error)
     return <ErrorAlert errorMessage={appointmentStore.error.message} />;
+  if (appointmentStore.appointments.length === 0) {
+    return <ErrorAlert errorMessage="No appointments found" />;
+  }
 
   return appointmentStore.appointments.length > 0 ? (
     <section className="table-responsive">
@@ -55,22 +59,28 @@ export const ListOfAppointments = observer(() => {
         </thead>
         <tbody>
           {appointmentStore.appointments.map((appointment) => (
-            <tr key={appointment.uuid}>
+            <tr key={appointment._id}>
               <td>{appointment.user?.email}</td>
               <td>{appointment.service?.name}</td>
-              <td>{new Date(appointment.date).toLocaleString()}</td>
-              <td>{appointment.status}</td>
+              <td>{parseUnixTimestamp(appointment.date)}</td>
+              <td>
+                {
+                  AppointmentStatusLabels[
+                    appointment.status as AppointmentStatus
+                  ]
+                }
+              </td>
               <td>
                 <select
                   style={{ cursor: "pointer" }}
-                  value={selectedStatuses[appointment.uuid]}
+                  value={selectedStatuses[appointment._id]}
                   onChange={(e) =>
                     setSelectedStatuses({
                       ...selectedStatuses,
-                      [appointment.uuid]: e.target.value as AppointmentStatus,
+                      [appointment._id]: e.target.value as AppointmentStatus,
                     })
                   }
-                  onBlur={() => handleModify(appointment.uuid)}
+                  onBlur={() => handleModify(appointment._id)}
                 >
                   {Object.values(AppointmentStatus).map((status) => (
                     <option key={status} value={status}>
@@ -83,7 +93,7 @@ export const ListOfAppointments = observer(() => {
                 <button
                   style={{ cursor: "pointer" }}
                   onClick={() =>
-                    appointmentStore.cancelAppointment(appointment.uuid)
+                    appointmentStore.cancelAppointment(appointment._id)
                   }
                 >
                   Cancel

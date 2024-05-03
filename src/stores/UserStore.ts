@@ -7,14 +7,14 @@ import {
 
 import * as Queries from 'src/gql/queries/users';
 import * as Mutations from 'src/gql/mutations/auth';
-import { User, UserType } from 'src/gql/types';
+import { IUser, UserType } from 'src/gql/types';
 import RootStore from './RootStore';
 
 class UserStore {
   private rootStore: RootStore;
   private apolloClient: ApolloClient<NormalizedCacheObject>;
 
-  users: User[] = [];
+  users: IUser[] = [];
   isLoading: Boolean = false;
   error: Error | null = null;
   private queryObservable: ObservableQuery<any> | null = null;
@@ -88,7 +88,7 @@ class UserStore {
     }
   }
   updateUserAdminStatus = async (
-    uuid: string,
+    _id: string,
     isAdmin: boolean,
     isActive: boolean,
     userType: UserType
@@ -96,15 +96,15 @@ class UserStore {
     this.isLoading = true;
     try {
       const result = await this.apolloClient.mutate({
-        mutation: Queries.UPDATE_USER_ADMIN_STATUS,
-        variables: { uuid, isAdmin, isActive, userType },
+        mutation: Mutations.UPDATE_USER_ADMIN_STATUS,
+        variables: { _id, isAdmin, isActive, userType },
       });
       if (result.data.updateUserAdminStatus.success) {
         console.log(
           'Update successful:',
           result.data.updateUserAdminStatus.message
         );
-        this.listAllUsers(); // Re-fetch the users list to reflect the changes
+        this.listAllUsers();
       } else {
         console.error(
           'Update failed:',
@@ -117,8 +117,6 @@ class UserStore {
       this.isLoading = false;
     }
   };
-
-  // Add more functions for other operations
 }
 
 export default UserStore;
