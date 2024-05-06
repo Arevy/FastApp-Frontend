@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
 import { parseUnixTimestamp } from "src/utils/utils";
-import { User, UserType, UserTypeLabels } from "src/gql/types";
+import { IUser, UserType, UserTypeLabels } from "src/gql/types";
 import { EmojiGreenCheck } from "src/components/SmallComponents/EmojiGreenCheck";
 import { EmojiRedCross } from "src/components/SmallComponents/EmojiRedCross";
 
 interface ListOfUsersProps {
-  users: User[];
+  users: IUser[];
   updateUserAdminStatus: (
-    uuid: string,
+    _id: string,
     isAdmin: boolean,
     isActive: boolean,
     userType: UserType
@@ -39,12 +39,13 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
         </thead>
         <tbody>
           {users.map((user) => (
-            <tr key={user.uuid}>
+            <tr key={user._id}>
               <td>{user.email}</td>
               <td
+                style={{ cursor: "pointer" }}
                 onClick={() =>
                   updateUserAdminStatus(
-                    user.uuid,
+                    user._id,
                     !user.isAdmin,
                     user.isActive,
                     user.userType
@@ -54,9 +55,10 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                 {user.isAdmin ? <EmojiGreenCheck /> : <EmojiRedCross />}{" "}
               </td>
               <td
+                style={{ cursor: "pointer" }}
                 onClick={() =>
                   updateUserAdminStatus(
-                    user.uuid,
+                    user._id,
                     user.isAdmin,
                     !user.isActive,
                     user.userType
@@ -67,8 +69,8 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
               </td>
               <td>{parseUnixTimestamp(user.registrationDate)}</td>
               <td>{parseUnixTimestamp(user.lastLogin)}</td>
-              <td>
-                {editing === user.uuid ? (
+              <td style={{ cursor: "pointer" }}>
+                {editing === user._id ? (
                   <select
                     value={selectedType}
                     onChange={(e) =>
@@ -76,8 +78,8 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                     }
                     onBlur={() => {
                       updateUserAdminStatus(
-                        user.uuid,
-                        selectedType == "ADMIN_USER",
+                        user._id,
+                        selectedType === UserType.ADMIN_USER,
                         user.isActive,
                         selectedType
                       );
@@ -93,7 +95,7 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                 ) : (
                   <span
                     onClick={() => {
-                      setEditing(user.uuid);
+                      setEditing(user._id);
                       setSelectedType(user.userType);
                     }}
                   >

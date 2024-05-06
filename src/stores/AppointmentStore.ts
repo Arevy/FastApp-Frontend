@@ -18,16 +18,16 @@ import {
   DELETE_APPOINTMENTS,
 } from 'src/gql/queries/appointments';
 import {
-  Appointment,
   CancelAppointmentOutput,
   FetchUserAppointmentsOutput,
+  IAppointment,
   ModifyAppointmentInput,
   ModifyAppointmentOutput,
   ScheduleAppointmentInput,
   ScheduleAppointmentOutput,
 } from 'src/gql/types';
 class AppointmentStore {
-  appointments: Appointment[] = [];
+  appointments: IAppointment[] = [];
   isLoading: boolean = false;
   error: Error | null = null;
   private queryObservable: ObservableQuery<any> | null = null;
@@ -54,39 +54,40 @@ class AppointmentStore {
   //   }
   // };
 
-  fetchAppointments = async () => {
+  async fetchAppointments(userId?: string) {
     this.isLoading = true;
     this.error = null;
     try {
+      // Use watchQuery for continuous polling
       this.queryObservable = this.apolloClient.watchQuery({
-        query: LIST_ALL_APPOINTMENTS_FULL,
+        query: userId ? LIST_USER_APPOINTMENTS : LIST_ALL_APPOINTMENTS_FULL,
+        variables: userId ? { userId } : {},
         fetchPolicy: 'network-only',
-        pollInterval: 600000,
+        pollInterval: 600000, // Poll every 10 minutes
       });
 
       this.queryObservable.subscribe({
         next: (response) => {
-          this.appointments = response.data.listAllAppointmentsFull;
+          // Update appointments based on the query executed
+          this.appointments =
+            response.data[
+              userId ? 'userAppointments' : 'listAllAppointmentsFull'
+            ];
           this.isLoading = false;
         },
         error: (error) => {
+          console.error('Failed to load appointments:', error);
+          this.error = error;
           this.isLoading = false;
-          this.error =
-            error instanceof Error
-              ? error
-              : new Error('An unknown error occurred on subscribe');
         },
       });
     } catch (error) {
-      console.error(
-        'Eroare la inițializarea interogării pentru programări:',
-        error
-      );
+      console.error('Error initializing appointment query:', error);
       this.isLoading = false;
       this.error =
         error instanceof Error ? error : new Error('An unknown error occurred');
     }
-  };
+  }
 
   stopPolling = () => {
     if (this.queryObservable) {
@@ -148,7 +149,7 @@ class AppointmentStore {
         await this.apolloClient.mutate({
           mutation: UPDATE_APPOINTMENTS,
           variables: {
-            uuid: appointmentId,
+            _id: appointmentId, // Change to _id
             newDate: isoDate,
             newStatus: newData.newStatus || '',
           },
@@ -159,7 +160,7 @@ class AppointmentStore {
         await this.fetchAppointments();
         console.log('Update successful:', result.data.updateAppointment);
         this.appointments = this.appointments.map((appointment) =>
-          appointment.uuid === appointmentId
+          appointment._id === appointmentId // Change to _id
             ? { ...appointment, ...result?.data?.updateAppointment }
             : appointment
         );
@@ -175,12 +176,12 @@ class AppointmentStore {
     this.isLoading = true;
     try {
       await this.apolloClient.mutate({
-        mutation: DELETE_APPOINTMENTS,
-        variables: { uuid: appointmentId }, // Aici a fost schimbat de la `id` la `uuid`
+        mutation: DELETE_APPOINTMENTS, // Change to deleteAppointment
+        variables: { _id: appointmentId }, // Change to _id
       });
       console.log('__+__', appointmentId, this.appointments);
       this.appointments = this.appointments.filter(
-        (appointment) => appointment.uuid !== appointmentId
+        (appointment) => appointment._id !== appointmentId // Change to _id
       );
       this.isLoading = false;
     } catch (error) {

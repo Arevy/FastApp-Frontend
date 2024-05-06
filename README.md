@@ -61,3 +61,10 @@ You can collaborate in multiple ways, of course. Let me give you some ideas:
 - Help me with this documentation. If you think something it's not clear, open an issue and talk to me!
 - Share this project, mark it as a favorite (⭐️) or make some suggestions
 - Help me to improve the implementation of React. I'm not an expert!
+
+
+### Dev mode
+- MongoDB 7.0+
+- Node.js 16.15.1
+- yarn start
+- eslint --ext .ts ./src --fix
