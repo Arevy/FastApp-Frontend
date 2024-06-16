@@ -1,10 +1,10 @@
-import React, { StrictMode, Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
-import { NavBar } from "src/components/Top/NavBar";
-import { Footer } from "src/components/Footer";
-import { Spinner } from "src/components/SmallComponents/Spinner";
-import { routesArray } from "src/routes/routesConfig";
-import wrapComponentForProtection from "src/routes/wrapComponentForProtection";
+import React, { StrictMode, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { NavBar } from 'src/components/Top/NavBar';
+import { Footer } from 'src/components/Footer';
+import { Spinner } from 'src/components/SmallComponents/Spinner';
+import { routesArray } from 'src/routes/routesConfig';
+import wrapComponentForProtection from 'src/routes/wrapComponentForProtection';
 
 const App: React.FC = () => {
   return (

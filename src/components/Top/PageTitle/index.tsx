@@ -1,14 +1,39 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import ModalForm from 'src/components/Modal/Modal';
+import CreateServiceForm from 'src/components/Create/CreateServiceForm';
+import CreateAppointmentForm from 'src/components/Create/CreateAppointmentForm';
 
 interface PageTitleProps {
-	text: string;
+  text: string;
+  createBtn?: boolean;
+  createType?: 'service' | 'appointment';
 }
 
-export const PageTitle: React.FC<PageTitleProps> = ({ text }) => (
-	<h2 className="mb-3 font-weight-light text-light">{text}</h2>
-);
+export const PageTitle: React.FC<PageTitleProps> = ({
+  text,
+  createBtn,
+  createType,
+}) => {
+  let formComponent = null;
+  if (createType === 'service') {
+    formComponent = <CreateServiceForm />;
+  } else if (createType === 'appointment') {
+    formComponent = <CreateAppointmentForm />;
+  }
+
+  return (
+    <>
+      <h2 className="mb-3 font-weight-light text-light">{text}</h2>
+      {createBtn && (
+        <ModalForm buttonLabel="Create" formComponent={formComponent} />
+      )}
+    </>
+  );
+};
 
 PageTitle.propTypes = {
-	text: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  createBtn: PropTypes.bool,
+  createType: PropTypes.oneOf(['service', 'appointment']),
 };

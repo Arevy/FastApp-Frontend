@@ -1,26 +1,25 @@
-import { useState, Fragment } from "react";
+import { useState, Fragment } from 'react';
 // import PropTypes from 'prop-types';
 
-import { validateRegisterForm } from "src/utils/validations";
+import { validateRegisterForm } from 'src/utils/validations';
 
-import React from "react";
-import { useStores } from "src/stores/RootStoreContext";
-import { ErrorAlert } from "src/components/SmallComponents/ErrorAlert";
-import { SubmitButton } from "src/components/SmallComponents/SubmitButton";
-import { SubmitButtonHelper } from "src/components/SmallComponents/SubmitButtonHelper";
-import { useInputValue } from "src/hooks/useInputValue";
+import React from 'react';
+import { useStores } from 'src/stores/RootStoreContext';
+import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
+import { SubmitButton } from 'src/components/SmallComponents/SubmitButton';
+import { SubmitButtonHelper } from 'src/components/SmallComponents/SubmitButtonHelper';
+import { useInputValue } from 'src/hooks/useInputValue';
 
 const propTypes = {};
 
 export const RegisterForm: React.FC = () => {
-  const { userStore } = useStores();
+  const { authStore } = useStores();
 
   const [isDisabled, setIsDisabled] = useState(false);
-  //   const [isLoading, setIsLoading] = useState(false);
 
-  const email = useInputValue("");
-  const password = useInputValue("");
-  const repeatPassword = useInputValue("");
+  const email = useInputValue('');
+  const password = useInputValue('');
+  const repeatPassword = useInputValue('');
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -29,10 +28,10 @@ export const RegisterForm: React.FC = () => {
       validateRegisterForm(email.value, password.value, repeatPassword.value)
     ) {
       try {
-        await userStore.registerUser(
+        await authStore.registerUser(
           email.value,
           password.value,
-          "NORMAL_USER"
+          'NORMAL_USER'
         );
       } catch (error) {
         console.log(error);
@@ -115,8 +114,8 @@ export const RegisterForm: React.FC = () => {
                   )
                 }
               >
-                {!userStore.isLoading ? (
-                  "Create account"
+                {!authStore.isLoading ? (
+                  'Create account'
                 ) : (
                   <Fragment>
                     <span
@@ -142,8 +141,8 @@ export const RegisterForm: React.FC = () => {
         </fieldset>
 
         <div className="col-md-8">
-          {userStore.error && (
-            <ErrorAlert errorMessage={userStore.error.message} />
+          {authStore.error && (
+            <ErrorAlert errorMessage={authStore.error.message} />
           )}
         </div>
       </div>

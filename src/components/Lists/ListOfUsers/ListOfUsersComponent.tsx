@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { parseUnixTimestamp } from "src/utils/utils";
-import { IUser, UserType, UserTypeLabels } from "src/gql/types";
-import { EmojiGreenCheck } from "src/components/SmallComponents/EmojiGreenCheck";
-import { EmojiRedCross } from "src/components/SmallComponents/EmojiRedCross";
+import { parseUnixTimestamp } from 'src/utils/utils';
+import { IUser, UserType, UserTypeLabels } from 'src/gql/types';
+import { EmojiGreenCheck } from 'src/components/SmallComponents/EmojiGreenCheck';
+import { EmojiRedCross } from 'src/components/SmallComponents/EmojiRedCross';
 
 interface ListOfUsersProps {
   users: IUser[];
@@ -42,7 +42,7 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
             <tr key={user._id}>
               <td>{user.email}</td>
               <td
-                style={{ cursor: "pointer" }}
+                style={{ cursor: 'pointer' }}
                 onClick={() =>
                   updateUserAdminStatus(
                     user._id,
@@ -52,10 +52,10 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                   )
                 }
               >
-                {user.isAdmin ? <EmojiGreenCheck /> : <EmojiRedCross />}{" "}
+                {user.isAdmin ? <EmojiGreenCheck /> : <EmojiRedCross />}{' '}
               </td>
               <td
-                style={{ cursor: "pointer" }}
+                style={{ cursor: 'pointer' }}
                 onClick={() =>
                   updateUserAdminStatus(
                     user._id,
@@ -65,11 +65,11 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                   )
                 }
               >
-                {user.isActive ? <EmojiGreenCheck /> : <EmojiRedCross />}{" "}
+                {user.isActive ? <EmojiGreenCheck /> : <EmojiRedCross />}{' '}
               </td>
               <td>{parseUnixTimestamp(user.registrationDate)}</td>
               <td>{parseUnixTimestamp(user.lastLogin)}</td>
-              <td style={{ cursor: "pointer" }}>
+              <td style={{ cursor: 'pointer' }}>
                 {editing === user._id ? (
                   <select
                     value={selectedType}

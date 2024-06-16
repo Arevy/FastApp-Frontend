@@ -1,34 +1,30 @@
-import { useState, Fragment, FormEvent } from "react";
-import { useMutation } from "@apollo/client";
-import PropTypes from "prop-types";
+import { useState, Fragment, FormEvent } from 'react';
+import PropTypes from 'prop-types';
 
-import React from "react";
-import { ErrorAlert } from "src/components/SmallComponents/ErrorAlert";
-import { SubmitButton } from "src/components/SmallComponents/SubmitButton";
-import { SubmitButtonHelper } from "src/components/SmallComponents/SubmitButtonHelper";
-import { LOGIN } from "src/gql/mutations/auth";
-import { useInputValue } from "src/hooks/useInputValue";
-import { validateLoginForm } from "src/utils/validations";
-const styles = require("./index.scss");
+import React from 'react';
+import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
+import { SubmitButton } from 'src/components/SmallComponents/SubmitButton';
+import { SubmitButtonHelper } from 'src/components/SmallComponents/SubmitButtonHelper';
+import { useInputValue } from 'src/hooks/useInputValue';
+import { validateLoginForm } from 'src/utils/validations';
+import { useStores } from 'src/stores/RootStoreContext';
+const styles = require('./index.scss');
 
-interface LoginFormProps {
-  activateAuth: (token: string) => void;
-}
 class CustomError extends Error {
   constructor(message?: string) {
     super(message);
-    this.name = "CustomError";
+    this.name = 'CustomError';
   }
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ activateAuth }) => {
+const LoginForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { authStore } = useStores();
 
-  const [authUser] = useMutation(LOGIN);
-
-  const email = useInputValue("");
-  const password = useInputValue("");
+  const email = useInputValue('');
+  const password = useInputValue('');
+  const userType = 'NORMAL_USER';
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -36,16 +32,19 @@ const LoginForm: React.FC<LoginFormProps> = ({ activateAuth }) => {
     setError(null);
 
     try {
-      const { data } = await authUser({
-        variables: { email: email.value, password: password.value },
-      });
+      const { data } = await authStore.loginUser(
+        email.value,
+        password.value,
+        userType
+      );
       const { token } = data.authUser;
-      activateAuth(token);
+      console.log('token', token);
+      authStore.activateAuth(token);
     } catch (e) {
       if (e instanceof CustomError) {
         setError(e.message);
       } else {
-        setError("An error occurred");
+        setError('An error occurred');
       }
     } finally {
       setLoading(false);
@@ -54,7 +53,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ activateAuth }) => {
 
   return (
     <Fragment>
-      <div className={styles["form-container"]}>
+      <div className={styles['form-container']}>
         <form className="mb-3" onSubmit={handleSubmit}>
           <fieldset disabled={loading}>
             <div className="form-row">
@@ -95,7 +94,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ activateAuth }) => {
                 }
               >
                 {!loading ? (
-                  "Log in"
+                  'Log in'
                 ) : (
                   <Fragment>
                     <span
@@ -119,8 +118,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ activateAuth }) => {
   );
 };
 
-LoginForm.propTypes = {
-  activateAuth: PropTypes.func.isRequired,
-};
+// LoginForm.propTypes = {
+//   activateAuth: PropTypes.func.isRequired,
+// };
 
 export default LoginForm;

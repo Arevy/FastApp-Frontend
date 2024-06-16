@@ -41,3 +41,18 @@ export const TOGGLE_SERVICE_ACTIVE = gql`
     }
   }
 `;
+
+export const CREATE_SERVICE = gql`
+  mutation CreateService(
+    $name: String!
+    $category: String!
+    $isActive: Boolean!
+  ) {
+    createService(name: $name, category: $category, isActive: $isActive) {
+      _id
+      name
+      category
+      isActive
+    }
+  }
+`;

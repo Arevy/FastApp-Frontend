@@ -1,5 +1,32 @@
 import { gql } from '@apollo/client';
 
+export const CREATE_APPOINTMENT = gql`
+  mutation CreateAppointment(
+    $userId: ID!
+    $serviceId: ID!
+    $date: String!
+    $status: String!
+  ) {
+    createAppointment(
+      userId: $userId
+      serviceId: $serviceId
+      date: $date
+      status: $status
+    ) {
+      _id
+      userId {
+        uuid
+        email
+      }
+      serviceId {
+        _id
+        name
+      }
+      date
+      status
+    }
+  }
+`;
 export const LIST_ALL_APPOINTMENTS = gql`
   query ListAllAppointments {
     listAllAppointmentsShort {

@@ -31,13 +31,15 @@ const wrapComponentForProtection = (
           <Component />
         </RequireAuth>
       );
-    } else {
+    } else if (auth !== undefined) {
       // Wrap in RequireUnauthenticated for unauthenticated users.
       return (
         <RequireUnauthenticated>
           <Component />
         </RequireUnauthenticated>
       );
+    } else {
+      return <Component />;
     }
   };
 
