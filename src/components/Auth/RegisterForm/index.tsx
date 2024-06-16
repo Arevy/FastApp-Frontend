@@ -18,6 +18,7 @@ export const RegisterForm: React.FC = () => {
   const [isDisabled, setIsDisabled] = useState(false);
 
   const email = useInputValue('');
+  const userName = useInputValue('');
   const password = useInputValue('');
   const repeatPassword = useInputValue('');
 
@@ -25,13 +26,19 @@ export const RegisterForm: React.FC = () => {
     event.preventDefault();
 
     if (
-      validateRegisterForm(email.value, password.value, repeatPassword.value)
+      validateRegisterForm(
+        email.value,
+        userName.value,
+        password.value,
+        repeatPassword.value
+      )
     ) {
       try {
         await authStore.registerUser(
           email.value,
           password.value,
-          'NORMAL_USER'
+          'NORMAL_USER',
+          userName.value
         );
       } catch (error) {
         console.log(error);
@@ -60,6 +67,24 @@ export const RegisterForm: React.FC = () => {
               />
               <small id="emailHelp" className="form-text text-muted">
                 Make sure it's a valid email address
+              </small>
+            </div>
+            <div className="form-group">
+              <label htmlFor="inputUserNameRegisterForm" className="text-light">
+                Username <span className="text-danger">*</span>
+              </label>
+              <input
+                disabled={isDisabled}
+                inputMode="text"
+                className="form-control"
+                id="inputUserNameRegisterForm"
+                placeholder="username"
+                {...userName}
+                required
+                autoFocus
+              />
+              <small id="emailHelp" className="form-text text-muted">
+                Make sure it's a valid Username
               </small>
             </div>
             <div className="form-group">
@@ -109,6 +134,7 @@ export const RegisterForm: React.FC = () => {
                   isDisabled ||
                   !validateRegisterForm(
                     email.value,
+                    userName.value,
                     password.value,
                     repeatPassword.value
                   )
@@ -131,6 +157,7 @@ export const RegisterForm: React.FC = () => {
                 mustShowHelper={
                   !validateRegisterForm(
                     email.value,
+                    userName.value,
                     password.value,
                     repeatPassword.value
                   )

@@ -20,6 +20,7 @@ export interface UserData {
   email: string;
   isAdmin: boolean;
   isActive: boolean;
+  userName: string;
   _id: string;
 }
 
@@ -41,6 +42,7 @@ class AuthStore {
     const recoveredUserData = recoverUserDataFromSessionStorage();
     this.userData = recoveredUserData || {
       email: '',
+      userName: '',
       isAdmin: false,
       isActive: false,
       _id: '',
@@ -75,13 +77,13 @@ class AuthStore {
     }
   }
 
-  async registerUser(email: string, password: string, userType: string) {
+  async registerUser(email: string, password: string, userType: string, userName: string) {
     this.isLoading = true;
     this.error = null;
     try {
       const response = await this.apolloClient.mutate({
         mutation: Mutations.REGISTER_USER,
-        variables: { email, password, userType },
+        variables: { email, password, userType, userName },
       });
 
       const token = response.data?.registerUser?.token;
@@ -109,6 +111,7 @@ class AuthStore {
     const decodedToken = (jwt.decode(token) as Partial<UserData>) || {};
     const userData: UserData = {
       email: decodedToken.email || '',
+      userName: decodedToken.email || '',
       isAdmin: !!decodedToken.isAdmin,
       isActive: !!decodedToken.isActive,
       _id: decodedToken._id || '',
@@ -124,7 +127,7 @@ class AuthStore {
     deleteUserDataFromSessionStorage();
     deleteSession();
     this.isAuth = false;
-    this.userData = { email: '', isAdmin: false, isActive: false, _id: '' };
+    this.userData = { email: '', userName: '', isAdmin: false, isActive: false, _id: '' };
   }
 }
 
