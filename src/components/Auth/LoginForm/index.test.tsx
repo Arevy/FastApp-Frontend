@@ -4,10 +4,9 @@ import '@testing-library/jest-dom/extend-expect';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { FetchResult } from '@apollo/client';
 import React from 'react';
-import { LOGIN } from '../../../gql/mutations/auth';
-import LoginForm from '.';
+import { LOGIN } from 'src/gql/mutations/auth';
+import LoginForm from 'src/components/Auth/LoginForm/index';
 import { GraphQLError } from 'graphql';
-import { gql } from '@apollo/client';
 
 interface CustomMockedResponse<TData = Record<string, any>>
   extends MockedResponse<TData> {
@@ -16,12 +15,13 @@ interface CustomMockedResponse<TData = Record<string, any>>
 
 describe('LoginForm', () => {
   it('should render a disabled button until password and email inputs are filled with data', () => {
-    const activateAuth = jest.fn();
+    // const activateAuth = jest.fn();
     const mocks: CustomMockedResponse[] = [];
 
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <LoginForm activateAuth={activateAuth} />
+        {/* <LoginForm activateAuth={activateAuth} /> */}
+        <LoginForm />
       </MockedProvider>
     );
 
@@ -71,7 +71,8 @@ describe('LoginForm', () => {
 
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <LoginForm activateAuth={activateAuth} />
+        {/* <LoginForm activateAuth={activateAuth} /> */}
+        <LoginForm />
       </MockedProvider>
     );
 
@@ -134,7 +135,8 @@ describe('LoginForm', () => {
 
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <LoginForm activateAuth={activateAuth} />
+        {/* <LoginForm activateAuth={activateAuth} /> */}
+        <LoginForm />
       </MockedProvider>
     );
 

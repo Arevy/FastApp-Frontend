@@ -1,5 +1,4 @@
 import { useState, Fragment, FormEvent } from 'react';
-import PropTypes from 'prop-types';
 
 import React from 'react';
 import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';

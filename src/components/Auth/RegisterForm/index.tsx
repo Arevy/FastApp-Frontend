@@ -15,7 +15,7 @@ const propTypes = {};
 export const RegisterForm: React.FC = () => {
   const { authStore } = useStores();
 
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isDisabled] = useState(false);
 
   const email = useInputValue('');
   const userName = useInputValue('');
@@ -41,7 +41,7 @@ export const RegisterForm: React.FC = () => {
           userName.value
         );
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   };

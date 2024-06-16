@@ -10,20 +10,20 @@ import {
 } from 'react-icons/bs';
 import { useStores } from 'src/stores/RootStoreContext';
 import { routes } from 'src/routes/routesConfig';
+import { observer } from 'mobx-react-lite';
+
 const SIZE = '32px';
 
-export const NavBar = () => {
+export const NavBar = observer(() => {
   const {
-    authStore: { isAuth, userData },
+    authStore,
   } = useStores();
 
   const {
     HomeRoute,
     LoginRoute,
-    RegistrationRoute,
     LogoutRoute,
     UserAdministrationRoute,
-    Page404Route,
     AppointmentsRoute,
     ServiceAdministrationRoute,
   } = routes;
@@ -57,14 +57,17 @@ export const NavBar = () => {
       </Link>
       <Link
         className="navbar-item text-light font-weight-bold"
-        to={!isAuth ? LoginRoute.path : LogoutRoute.path}
+        to={!authStore.isAuth ? LoginRoute.path : LogoutRoute.path}
       >
-        {!isAuth ? (
+        {!authStore.isAuth ? (
           <BsBoxArrowInRight size={SIZE} title="Login" />
         ) : (
-          <BsBoxArrowRight size={SIZE} title="Logout" />
+          <button type="button" className="btn btn-secondary btn-sm mx-auto">
+            Hi, {authStore.userData.userName}
+            <BsBoxArrowRight size={SIZE} title="Logout" />
+          </button>
         )}
       </Link>
     </nav>
   );
-};
+});

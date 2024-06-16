@@ -1,9 +1,9 @@
-import { makeAutoObservable, toJS } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import jwt from 'jsonwebtoken';
 import {
   ApolloClient,
   NormalizedCacheObject,
-  ObservableQuery,
+  
 } from '@apollo/client';
 import {
   saveSession,
@@ -67,7 +67,7 @@ class AuthStore {
 
       return response.data;
     } catch (error) {
-      console.log('error', error);
+      console.error('error', error);
       this.isLoading = false;
       this.error =
         error instanceof Error
@@ -90,10 +90,9 @@ class AuthStore {
       if (token) {
         this.activateAuth(token);
       }
-      console.log('token', token, response.data?.registerUser?.token);
       this.isLoading = false;
     } catch (error) {
-      console.log('error', error);
+      console.error('error', error);
       this.isLoading = false;
       this.error =
         error instanceof Error
@@ -103,11 +102,6 @@ class AuthStore {
   }
 
   async activateAuth(token: string) {
-    console.log(
-      'userData',
-      jwt.decode(token) as Partial<UserData>,
-      toJS(this.userData)
-    );
     const decodedToken = (jwt.decode(token) as Partial<UserData>) || {};
     const userData: UserData = {
       email: decodedToken.email || '',
