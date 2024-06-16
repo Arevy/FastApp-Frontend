@@ -6,6 +6,7 @@ import {
 import { makeAutoObservable } from 'mobx';
 import RootStore from './RootStore';
 import {
+  CREATE_SERVICE,
   DELETE_SERVICE,
   LIST_ALL_SERVICES,
   TOGGLE_SERVICE_ACTIVE,
@@ -116,6 +117,22 @@ class ServiceStore {
       this.error = error;
     } finally {
       this.isLoading = false;
+    }
+  };
+  createService = async (name: string, category: string, isActive: boolean) => {
+    this.isLoading = true;
+    try {
+      const result = await this.apolloClient.mutate({
+        mutation: CREATE_SERVICE,
+        variables: { name, category, isActive },
+      });
+      this.isLoading = false;
+      if (result.data) {
+        this.services.push(result.data.createService);
+      }
+    } catch (error) {
+      this.isLoading = false;
+      this.error = error;
     }
   };
 }

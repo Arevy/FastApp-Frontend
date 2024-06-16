@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   BsHouse,
   BsPeople,
@@ -7,10 +7,10 @@ import {
   BsBoxArrowRight,
   BsListCheck,
   BsTools,
-} from "react-icons/bs";
-import { useStores } from "src/stores/RootStoreContext";
-import { routes } from "src/routes/routesConfig";
-const SIZE = "32px";
+} from 'react-icons/bs';
+import { useStores } from 'src/stores/RootStoreContext';
+import { routes } from 'src/routes/routesConfig';
+const SIZE = '32px';
 
 export const NavBar = () => {
   const {

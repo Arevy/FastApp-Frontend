@@ -1,16 +1,16 @@
-import React, { Fragment } from "react";
-import { PageTitle } from "src/components/Top/PageTitle";
-import { GetListOfUsers } from "src/components/Lists/ListOfUsers/GetListOfUsers";
+import React, { Fragment } from 'react';
+import { PageTitle } from 'src/components/Top/PageTitle';
+import { GetListOfUsers } from 'src/components/Lists/ListOfUsers/GetListOfUsers';
 
 const UserAdministration = () => {
   return (
     <Fragment>
-      <PageTitle text="User administration panel" />
+      <PageTitle text="User administration panel" createBtn />
       <GetListOfUsers />
     </Fragment>
   );
 };
 
-UserAdministration.displayName = "UserAdministration";
+UserAdministration.displayName = 'UserAdministration';
 
 export default UserAdministration;

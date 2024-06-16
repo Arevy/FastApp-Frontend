@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { observer } from "mobx-react-lite";
-import { useStores } from "src/stores/RootStoreContext";
-import { AppointmentStatus, AppointmentStatusLabels } from "src/gql/types";
-import { ErrorAlert } from "src/components/SmallComponents/ErrorAlert";
-import { Spinner } from "src/components/SmallComponents/Spinner";
-import { parseUnixTimestamp } from "src/utils/utils";
+import React, { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/stores/RootStoreContext';
+import { AppointmentStatus, AppointmentStatusLabels } from 'src/gql/types';
+import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
+import { Spinner } from 'src/components/SmallComponents/Spinner';
+import { parseUnixTimestamp } from 'src/utils/utils';
 
 export const ListOfAppointments = observer(() => {
   const { appointmentStore } = useStores();
@@ -72,7 +72,7 @@ export const ListOfAppointments = observer(() => {
               </td>
               <td>
                 <select
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: 'pointer' }}
                   value={selectedStatuses[appointment._id]}
                   onChange={(e) =>
                     setSelectedStatuses({
@@ -91,7 +91,7 @@ export const ListOfAppointments = observer(() => {
               </td>
               <td>
                 <button
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: 'pointer' }}
                   onClick={() =>
                     appointmentStore.cancelAppointment(appointment._id)
                   }

@@ -16,6 +16,7 @@ import {
   CREATE_APPOINTMENTS,
   UPDATE_APPOINTMENTS,
   DELETE_APPOINTMENTS,
+  CREATE_APPOINTMENT,
 } from 'src/gql/queries/appointments';
 import {
   CancelAppointmentOutput,
@@ -29,7 +30,7 @@ import {
 class AppointmentStore {
   appointments: IAppointment[] = [];
   isLoading: boolean = false;
-  error: Error | null = null;
+  error: Error | null | unknown | any = null;
   private queryObservable: ObservableQuery<any> | null = null;
 
   private rootStore: RootStore;
@@ -108,6 +109,29 @@ class AppointmentStore {
     } catch (error) {
       console.error('Failed to fetch user appointments', error);
       this.isLoading = false;
+    }
+  }
+  async createAppointment(
+    userId: string,
+    serviceId: string,
+    date: string,
+    status: string
+  ) {
+    this.error = null;
+    this.isLoading = true;
+    try {
+      const result = await this.apolloClient.mutate({
+        mutation: CREATE_APPOINTMENT,
+        variables: { userId, serviceId, date, status },
+      });
+      this.isLoading = false;
+      if (result.data) {
+        this.appointments.push(result.data.createAppointment);
+      }
+    } catch (error) {
+      this.isLoading = false;
+      console.error('Failed to load appointments:', error);
+      this.error = error;
     }
   }
 

@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import { observer } from "mobx-react-lite";
-import { useStores } from "src/stores/RootStoreContext";
-import { ErrorAlert } from "src/components/SmallComponents/ErrorAlert";
-import { Spinner } from "src/components/SmallComponents/Spinner";
-import { EmojiGreenCheck } from "src/components/SmallComponents/EmojiGreenCheck";
-import { EmojiRedCross } from "src/components/SmallComponents/EmojiRedCross";
+import React, { useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/stores/RootStoreContext';
+import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
+import { Spinner } from 'src/components/SmallComponents/Spinner';
+import { EmojiGreenCheck } from 'src/components/SmallComponents/EmojiGreenCheck';
+import { EmojiRedCross } from 'src/components/SmallComponents/EmojiRedCross';
 
 export const ListOfServices = observer(() => {
   const { serviceStore } = useStores();
@@ -21,10 +21,10 @@ export const ListOfServices = observer(() => {
     try {
       const data = await serviceStore.toggleServiceActive(serviceId);
       if (data) {
-        console.log("Service active status toggled successfully");
+        console.log('Service active status toggled successfully');
       }
     } catch (error) {
-      console.error("Failed to toggle service active status", error);
+      console.error('Failed to toggle service active status', error);
     }
   };
 
@@ -52,7 +52,7 @@ export const ListOfServices = observer(() => {
                 <td>{service.name}</td>
                 <td>{service.category}</td>
                 <td
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: 'pointer' }}
                   onClick={() => handleToggleActive(service.serviceId)}
                 >
                   {service.isActive ? <EmojiGreenCheck /> : <EmojiRedCross />}
@@ -61,7 +61,7 @@ export const ListOfServices = observer(() => {
                   <button
                     className="btn btn-danger"
                     onClick={() => handleDelete(service.serviceId)}
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                   >
                     Delete
                   </button>

@@ -1,10 +1,9 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import {
   ApolloClient,
   NormalizedCacheObject,
   ObservableQuery,
 } from '@apollo/client';
-
 import * as Queries from 'src/gql/queries/users';
 import * as Mutations from 'src/gql/mutations/auth';
 import { IUser, UserType } from 'src/gql/types';
@@ -15,8 +14,8 @@ class UserStore {
   private apolloClient: ApolloClient<NormalizedCacheObject>;
 
   users: IUser[] = [];
-  isLoading: Boolean = false;
-  error: Error | null = null;
+  isLoading: boolean = false;
+  error: Error | null | unknown | any = null;
   private queryObservable: ObservableQuery<any> | null = null;
 
   constructor(
@@ -28,65 +27,65 @@ class UserStore {
     this.apolloClient = apolloClient;
   }
 
-  async registerUser(email: string, password: string, userType: string) {
+  fetchUsers = async () => {
     this.isLoading = true;
     this.error = null;
     try {
-      const response = await this.apolloClient.mutate({
-        mutation: Mutations.REGISTER_USER,
-        variables: { email, password, userType },
+      const result = await this.apolloClient.query({
+        query: Queries.LIST_ALL_USERS,
       });
-
-      const token = response.data?.registerUser?.token;
-      if (token) {
-        this.rootStore.authStore.activateAuth(token); // Use activateAuth from AuthStore
-      }
-
-      this.isLoading = false;
+      runInAction(() => {
+        this.users = result.data.listAllUsers;
+        this.isLoading = false;
+      });
     } catch (error) {
-      this.isLoading = false;
-      this.error =
-        error instanceof Error ? error : new Error('An unknown error occurred');
+      runInAction(() => {
+        this.error = error;
+        this.isLoading = false;
+      });
     }
-  }
+  };
 
-  async listAllUsers() {
+  listAllUsers = async () => {
     this.isLoading = true;
     this.error = null;
     try {
       this.queryObservable = this.apolloClient.watchQuery({
         query: Queries.LIST_ALL_USERS,
         fetchPolicy: 'network-only',
-        pollInterval: 600000, // Example: 10 minutes
+        pollInterval: 600000, // 10 minutes
       });
 
       this.queryObservable.subscribe({
         next: (response) => {
-          this.users = response.data.listAllUsers;
-          this.isLoading = false;
+          runInAction(() => {
+            this.users = response.data.listAllUsers;
+            this.isLoading = false;
+          });
         },
         error: (error) => {
-          // Error handling
-          this.isLoading = false;
-          this.error =
-            error instanceof Error
-              ? error
-              : new Error('An unknown error occurred on subscribe');
+          runInAction(() => {
+            this.isLoading = false;
+            this.error =
+              error instanceof Error
+                ? error
+                : new Error('An unknown error occurred on subscribe');
+          });
         },
       });
     } catch (error) {
-      console.error('Failed to initialize users query:', error);
       this.isLoading = false;
       this.error =
         error instanceof Error ? error : new Error('An unknown error occurred');
     }
-  }
+  };
 
-  async stopPolling() {
+  stopPolling = () => {
     if (this.queryObservable) {
       this.queryObservable.stopPolling();
     }
-  }
+  };
+
   updateUserAdminStatus = async (
     _id: string,
     isAdmin: boolean,
@@ -100,19 +99,12 @@ class UserStore {
         variables: { _id, isAdmin, isActive, userType },
       });
       if (result.data.updateUserAdminStatus.success) {
-        console.log(
-          'Update successful:',
-          result.data.updateUserAdminStatus.message
-        );
         this.listAllUsers();
       } else {
-        console.error(
-          'Update failed:',
-          result.data.updateUserAdminStatus.message
-        );
+        this.error = new Error(result.data.updateUserAdminStatus.message);
       }
     } catch (error) {
-      console.error('Failed to update user admin status', error);
+      this.error = error;
     } finally {
       this.isLoading = false;
     }

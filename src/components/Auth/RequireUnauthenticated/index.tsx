@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 
 import { useStores } from 'src/stores/RootStoreContext';
+import { HomeRoute } from 'src/pages/Home/Route';
 
 import { observer } from 'mobx-react-lite';
 interface RequireUnauthenticatedProps {
@@ -15,7 +16,7 @@ const RequireUnauthenticated: React.FC<RequireUnauthenticatedProps> = observer(
     } = useStores();
 
     if (isAuth) {
-      return <Navigate to="/" />;
+      return <Navigate to={HomeRoute.path} />;
     }
 
     return <>{children}</>;

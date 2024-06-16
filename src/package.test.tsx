@@ -1,17 +1,17 @@
-const jsonfile = require("jsonfile");
+const jsonfile = require('jsonfile');
 
 let packageJSONData: {
   dependencies: { [x: string]: string };
   devDependencies: { [x: string]: string };
 };
 
-describe("package.json file", () => {
+describe('package.json file', () => {
   beforeAll(() => {
-    const file = "./package.json";
+    const file = './package.json';
     packageJSONData = jsonfile.readFileSync(file);
   });
 
-  test("Should have all dependencies with semver version fixed or caret versioning", () => {
+  test('Should have all dependencies with semver version fixed or caret versioning', () => {
     if (packageJSONData.dependencies) {
       const validPattern = /^(\^?\d+\.\d+\.\d+)/; // Allow versions like 1.0.0 or ^1.0.0
       const regex = RegExp(validPattern);
@@ -28,7 +28,7 @@ describe("package.json file", () => {
     }
   });
 
-  test("Should have all devDependencies with semver version fixed or caret versioning", () => {
+  test('Should have all devDependencies with semver version fixed or caret versioning', () => {
     if (packageJSONData.devDependencies) {
       const validPattern = /^(\^?\d+\.\d+\.\d+)/; // Allow versions like 1.0.0 or ^1.0.0
       const regex = RegExp(validPattern);

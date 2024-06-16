@@ -7,6 +7,6 @@ export const ServiceAdministrationRoute: RouteConfig = {
   path: '/services',
   element: ServiceAdministration,
 
-  auth: false,
+  auth: true,
   admin: false,
 };
