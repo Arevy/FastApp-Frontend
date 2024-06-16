@@ -1,7 +1,7 @@
-import React, { ReactElement, ElementType, ComponentType } from 'react';
-import RequireAdminRole from 'src/components/Auth/RequireAdminRole';
-import RequireAuth from 'src/components/Auth/RequireAuth';
-import RequireUnauthenticated from 'src/components/Auth/RequireUnauthenticated';
+import React, { ReactElement, ElementType, ComponentType } from "react";
+import RequireAdminRole from "src/components/Auth/RequireAdminRole";
+import RequireAuth from "src/components/Auth/RequireAuth";
+import RequireUnauthenticated from "src/components/Auth/RequireUnauthenticated";
 
 interface WrapComponentForProtectionProps {
   auth?: boolean;
@@ -31,13 +31,15 @@ const wrapComponentForProtection = (
           <Component />
         </RequireAuth>
       );
-    } else {
+    } else if (auth !== undefined) {
       // Wrap in RequireUnauthenticated for unauthenticated users.
       return (
         <RequireUnauthenticated>
           <Component />
         </RequireUnauthenticated>
       );
+    } else {
+      return <Component />;
     }
   };
 

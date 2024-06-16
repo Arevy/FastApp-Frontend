@@ -17,7 +17,7 @@ export interface RouteConfig {
   path: string;
   element: React.ElementType;
   wrapper?: React.ComponentType<WrapperProps>; // Ajustăm acest tip
-  auth: boolean;
+  auth?: boolean;
   admin?: boolean;
 }
 
