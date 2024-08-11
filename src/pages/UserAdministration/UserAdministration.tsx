@@ -5,7 +5,7 @@ import { GetListOfUsers } from 'src/components/Lists/ListOfUsers/GetListOfUsers'
 const UserAdministration = () => {
   return (
     <Fragment>
-      <PageTitle text="User administration panel" createBtn />
+      <PageTitle text="User Administration" createBtn createType="user" />
       <GetListOfUsers />
     </Fragment>
   );

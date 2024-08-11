@@ -109,6 +109,32 @@ class UserStore {
       this.isLoading = false;
     }
   };
+
+  async createUser(
+    email: string,
+    userName: string,
+    password: string,
+    userType: string,
+    isActive: boolean
+  ) {
+    this.isLoading = true;
+    this.error = null;
+    try {
+      await this.apolloClient.mutate({
+        mutation: Mutations.CREATE_USER, 
+        variables: { email, userName, password, userType, isActive },
+      });
+      runInAction(() => {
+        this.fetchUsers();
+        this.isLoading = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.error = error;
+        this.isLoading = false;
+      });
+    }
+  }
 }
 
 export default UserStore;

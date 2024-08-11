@@ -33,6 +33,32 @@ export const REGISTER_USER = gql`
   }
 `;
 
+export const CREATE_USER = gql`
+  mutation CreateUser(
+    $email: String!
+    $password: String!
+    $userType: UserType!
+    $userName: String!
+    $isActive: Boolean!
+  ) {
+    createUser(
+      email: $email
+      password: $password
+      userType: $userType
+      userName: $userName
+      isActive: $isActive
+    ) {
+      _id
+      email
+      userName
+      isAdmin
+      isActive
+      userType
+      registrationDate
+    }
+  }
+`;
+
 export const UPDATE_USER_ADMIN_STATUS = gql`
   mutation UpdateUserAdminStatus(
     $_id: ID!
