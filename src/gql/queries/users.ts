@@ -7,6 +7,7 @@ export const LIST_ALL_USERS = gql`
       email
       isAdmin
       isActive
+      userName
       registrationDate
       lastLogin
       userType

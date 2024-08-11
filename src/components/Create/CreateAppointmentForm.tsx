@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { observer } from 'mobx-react-lite';
-import { useStores } from 'src/stores/RootStoreContext';
-import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+import React, { useState, useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { useStores } from "src/stores/RootStoreContext";
+import { Button, Form, FormGroup, Label, Input, Alert } from "reactstrap";
 
 interface CreateAppointmentFormProps {
   onClose?: () => void;
@@ -11,10 +11,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = observer(
   ({ onClose }) => {
     const { appointmentStore, serviceStore, userStore, authStore } =
       useStores();
-    const [serviceId, setServiceId] = useState('');
-    const [date, setDate] = useState('');
-    const [status, setStatus] = useState(true);
-    const [userId, setUserId] = useState(authStore.userData?._id || ''); // need to check uuid
+    const [serviceId, setServiceId] = useState("");
+    const [date, setDate] = useState("");
+    const [status, setStatus] = useState("pending");
+    const [userId, setUserId] = useState(authStore.userData?._id || ""); // need to check uuid
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -29,14 +29,14 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = observer(
           userId,
           serviceId,
           date,
-          status ? 'pending' : 'canceled'
+          status
         );
         await appointmentStore.fetchAppointments();
         if (onClose) {
           onClose();
         }
       } catch (err) {
-        setError('Failed to create appointment. Please try again.');
+        setError("Failed to create appointment. Please try again.");
       }
     };
 
@@ -77,12 +77,18 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = observer(
         <FormGroup>
           <Label for="status">Status</Label>
           <Input
-            type="checkbox"
+            type="select"
             name="status"
             id="status"
-            checked={status}
-            onChange={(e) => setStatus(e.target.checked)}
-          />
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            required
+          >
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="completed">Completed</option>
+            <option value="canceled">Canceled</option>
+          </Input>
         </FormGroup>
         <FormGroup>
           <Label for="userId">User</Label>

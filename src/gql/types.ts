@@ -51,6 +51,7 @@ export interface IUser {
   email: string;
   isAdmin: boolean;
   isActive: boolean;
+  userName?: string;
   registrationDate: string | number;
   lastLogin: string | number;
   userType: UserType;
