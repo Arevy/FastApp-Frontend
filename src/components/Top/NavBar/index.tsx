@@ -1,5 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { useStores } from "src/stores/RootStoreContext";
 import {
   BsHouse,
   BsPeople,
@@ -7,17 +9,13 @@ import {
   BsBoxArrowRight,
   BsListCheck,
   BsTools,
-} from 'react-icons/bs';
-import { useStores } from 'src/stores/RootStoreContext';
-import { routes } from 'src/routes/routesConfig';
-import { observer } from 'mobx-react-lite';
+} from "react-icons/bs";
+import { routes } from "src/routes/routesConfig";
 
-const SIZE = '32px';
+const SIZE = "32px";
 
 export const NavBar = observer(() => {
-  const {
-    authStore,
-  } = useStores();
+  const { authStore } = useStores();
 
   const {
     HomeRoute,
@@ -27,6 +25,7 @@ export const NavBar = observer(() => {
     AppointmentsRoute,
     ServiceAdministrationRoute,
   } = routes;
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark justify-content-between d-flex border-bottom border-info mt-2 mb-5">
       <Link
@@ -35,7 +34,7 @@ export const NavBar = observer(() => {
       >
         <BsHouse size={SIZE} title="Home" />
       </Link>
-      {/* {isAuth && userData.isAdmin && ( */}
+      {/* {authStore.isAuth && authStore.userData.isAdmin && ( */}
       <Link
         className="navbar-item text-light font-weight-bold"
         to={UserAdministrationRoute.path}
@@ -63,7 +62,7 @@ export const NavBar = observer(() => {
           <BsBoxArrowInRight size={SIZE} title="Login" />
         ) : (
           <button type="button" className="btn btn-secondary btn-sm mx-auto">
-            Hi, {authStore.userData.userName}
+            Hi, {authStore.userData.userName}{" "}
             <BsBoxArrowRight size={SIZE} title="Logout" />
           </button>
         )}

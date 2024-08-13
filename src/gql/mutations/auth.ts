@@ -10,6 +10,7 @@ export const LOGIN = gql`
         email
         isAdmin
         isActive
+        userName
       }
     }
   }
@@ -29,6 +30,13 @@ export const REGISTER_USER = gql`
       userName: $userName
     ) {
       token
+      user {
+        _id
+        email
+        userName
+        isAdmin
+        isActive
+      }
     }
   }
 `;
