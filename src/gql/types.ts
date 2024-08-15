@@ -13,6 +13,8 @@ export interface Service {
   name: string;
   category: string;
   isActive: boolean;
+  imageUrl: string;
+  description: string;
 }
 
 export interface FetchServicesOutput {
@@ -62,6 +64,8 @@ export interface IService {
   name: string;
   category: string;
   isActive: boolean;
+  imageUrl: string;
+  description: string;
 }
 
 export interface IAppointment {

@@ -20,10 +20,7 @@ class ServiceStore {
   error: Error | null | unknown | any = null;
   private queryObservable: ObservableQuery<any> | null = null;
 
-  constructor(
-    private rootStore: RootStore,
-    private apolloClient: ApolloClient<NormalizedCacheObject>
-  ) {
+  constructor(private rootStore: RootStore, private apolloClient: ApolloClient<NormalizedCacheObject>) {
     makeAutoObservable(this);
   }
 
@@ -39,12 +36,10 @@ class ServiceStore {
 
       this.queryObservable.subscribe({
         next: (response) => {
-          this.services = response.data.listAllServices.map(
-            (service: IService) => ({
-              ...service,
-              serviceId: service._id,
-            })
-          );
+          this.services = response.data.listAllServices.map((service: IService) => ({
+            ...service,
+            serviceId: service._id,
+          }));
           this.isLoading = false;
         },
         error: (error) => {

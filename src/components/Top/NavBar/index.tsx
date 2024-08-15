@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { observer } from "mobx-react-lite";
-import { useStores } from "src/stores/RootStoreContext";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/stores/RootStoreContext';
 import {
   BsHouse,
   BsPeople,
@@ -9,13 +9,15 @@ import {
   BsBoxArrowRight,
   BsListCheck,
   BsTools,
-} from "react-icons/bs";
-import { routes } from "src/routes/routesConfig";
+} from 'react-icons/bs';
+import { routes } from 'src/routes/routesConfig';
 
-const SIZE = "32px";
+const SIZE = '32px';
+const styles = require('./index.scss');
 
 export const NavBar = observer(() => {
   const { authStore } = useStores();
+  const [isSticky, setIsSticky] = useState(false);
 
   const {
     HomeRoute,
@@ -26,8 +28,30 @@ export const NavBar = observer(() => {
     ServiceAdministrationRoute,
   } = routes;
 
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY + window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    if (scrollPosition >= documentHeight - 50) {
+      setIsSticky(true);
+    } else {
+      setIsSticky(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark justify-content-between d-flex border-bottom border-info mt-2 mb-5">
+    <nav
+      className={`navbar navbar-expand-lg navbar-dark bg-dark ${
+        isSticky ? 'fixed-top' : 'sticky-top'
+      } justify-content-between d-flex border-bottom border-info`}
+    >
       <Link
         className="navbar-item text-light font-weight-bold"
         to={HomeRoute.path}
@@ -62,7 +86,7 @@ export const NavBar = observer(() => {
           <BsBoxArrowInRight size={SIZE} title="Login" />
         ) : (
           <button type="button" className="btn btn-secondary btn-sm mx-auto">
-            Hi, {authStore.userData.userName}{" "}
+            Hi, {authStore.userData.userName}{' '}
             <BsBoxArrowRight size={SIZE} title="Logout" />
           </button>
         )}

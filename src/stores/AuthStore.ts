@@ -51,9 +51,12 @@ class AuthStore {
     this.apolloClient = apolloClient;
   }
 
-  async loginUser(email: string, password: string) {
+  async loginUser(email: string, password: string, userType:string) {
     this.isLoading = true;
     this.error = null;
+
+    //userType will be used in the future
+    
     try {
       const response = await this.apolloClient.mutate({
         mutation: Mutations.LOGIN,

@@ -38,7 +38,7 @@ const LoginForm: React.FC = () => {
       );
       const { token } = data.authUser;
       console.log('token', token);
-      authStore.activateAuth(token);
+      authStore.activateAuth(token, data.authUser);
     } catch (e) {
       if (e instanceof CustomError) {
         setError(e.message);

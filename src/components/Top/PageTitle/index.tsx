@@ -1,14 +1,14 @@
-import PropTypes from "prop-types";
-import React from "react";
-import ModalForm from "src/components/Modal/Modal";
-import CreateServiceForm from "src/components/Create/CreateServiceForm";
-import CreateAppointmentForm from "src/components/Create/CreateAppointmentForm";
-import CreateUserForm from "src/components/Create/CreateUserForm";
+import PropTypes from 'prop-types';
+import React from 'react';
+import ModalForm from 'src/components/Modal/Modal';
+import CreateServiceForm from 'src/components/Create/CreateServiceForm';
+import CreateAppointmentForm from 'src/components/Create/CreateAppointmentForm';
+import CreateUserForm from 'src/components/Create/CreateUserForm';
 
 interface PageTitleProps {
   text: string;
   createBtn?: boolean;
-  createType?: "service" | "appointment" | "user";
+  createType?: 'service' | 'appointment' | 'user';
 }
 
 export const PageTitle: React.FC<PageTitleProps> = ({
@@ -17,11 +17,11 @@ export const PageTitle: React.FC<PageTitleProps> = ({
   createType,
 }) => {
   let formComponent = null;
-  if (createType === "service") {
+  if (createType === 'service') {
     formComponent = <CreateServiceForm />;
-  } else if (createType === "appointment") {
+  } else if (createType === 'appointment') {
     formComponent = <CreateAppointmentForm />;
-  } else if (createType === "user") {
+  } else if (createType === 'user') {
     formComponent = <CreateUserForm />;
   }
 
@@ -38,5 +38,5 @@ export const PageTitle: React.FC<PageTitleProps> = ({
 PageTitle.propTypes = {
   text: PropTypes.string.isRequired,
   createBtn: PropTypes.bool,
-  createType: PropTypes.oneOf(["service", "appointment", "user"]),
+  createType: PropTypes.oneOf(['service', 'appointment', 'user']),
 };
