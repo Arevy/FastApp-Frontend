@@ -14,14 +14,10 @@ export const CREATE_APPOINTMENT = gql`
       status: $status
     ) {
       _id
-      userId {
-        uuid
-        email
-      }
-      serviceId {
-        _id
-        name
-      }
+      userId 
+
+      serviceId 
+
       date
       status
     }

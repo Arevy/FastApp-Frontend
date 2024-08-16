@@ -10,6 +10,7 @@ export const LOGIN = gql`
         email
         isAdmin
         isActive
+        userName
       }
     }
   }
@@ -20,9 +21,48 @@ export const REGISTER_USER = gql`
     $email: String!
     $password: String!
     $userType: UserType!
+    $userName: String!
   ) {
-    registerUser(email: $email, password: $password, userType: $userType) {
+    registerUser(
+      email: $email
+      password: $password
+      userType: $userType
+      userName: $userName
+    ) {
       token
+      user {
+        _id
+        email
+        userName
+        isAdmin
+        isActive
+      }
+    }
+  }
+`;
+
+export const CREATE_USER = gql`
+  mutation CreateUser(
+    $email: String!
+    $password: String!
+    $userType: UserType!
+    $userName: String!
+    $isActive: Boolean!
+  ) {
+    createUser(
+      email: $email
+      password: $password
+      userType: $userType
+      userName: $userName
+      isActive: $isActive
+    ) {
+      _id
+      email
+      userName
+      isAdmin
+      isActive
+      userType
+      registrationDate
     }
   }
 `;

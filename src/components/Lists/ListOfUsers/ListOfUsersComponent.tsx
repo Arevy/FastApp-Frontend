@@ -30,6 +30,7 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
         <thead>
           <tr>
             <th scope="col">Email</th>
+            <th scope="col">Username</th>
             <th scope="col">Is administrator?</th>
             <th scope="col">Is active?</th>
             <th scope="col">Registration date</th>
@@ -41,6 +42,7 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
           {users.map((user) => (
             <tr key={user._id}>
               <td>{user.email}</td>
+              <td>{user.userName}</td>
               <td
                 style={{ cursor: 'pointer' }}
                 onClick={() =>

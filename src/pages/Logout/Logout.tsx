@@ -10,7 +10,6 @@ const Logout = () => {
 
   useEffect(() => {
     /* Closing the session after the render of the view */
-    console.log('isAuth', authStore.isAuth);
     authStore.removeAuth();
   }, [authStore, submit]);
 

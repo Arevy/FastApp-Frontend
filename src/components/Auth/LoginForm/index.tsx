@@ -1,5 +1,4 @@
 import { useState, Fragment, FormEvent } from 'react';
-import PropTypes from 'prop-types';
 
 import React from 'react';
 import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
@@ -39,7 +38,7 @@ const LoginForm: React.FC = () => {
       );
       const { token } = data.authUser;
       console.log('token', token);
-      authStore.activateAuth(token);
+      authStore.activateAuth(token, data.authUser);
     } catch (e) {
       if (e instanceof CustomError) {
         setError(e.message);

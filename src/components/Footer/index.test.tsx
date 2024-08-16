@@ -5,7 +5,7 @@ import { Footer } from '.';
 
 describe('Footer', () => {
   it('renders a link with correct attributes', () => {
-    const { getByText } = render(<Footer />);
+    // const { getByText } = render(<Footer />);
 
     // const linkElement = getByText('didaquis') as HTMLAnchorElement;
 

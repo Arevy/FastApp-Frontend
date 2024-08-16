@@ -27,19 +27,19 @@ import apolloClient from 'src/apollo/config';
 const rootStore = new RootStore(apolloClient);
 
 autorun(() => {
-  // Aici poți accesa orice proprietate din rootStore pentru a declanșa reacția
-  // De exemplu, dacă vrei să "urmărești" userStore.users:
+  // Here you can access any property in the rootStore to trigger the reaction
+  // For example, if you want to "track" userStore.users:
   console.log(rootStore.userStore.users);
 
-  // Dacă ai nevoie de un "snapshot" complet al rootStore, trebuie să serializezi manual store-urile
+  // If you need a full "snapshot" of the rootStore, you must serialize the stores manually
   const snapshot = {
     userStore: JSON.parse(JSON.stringify(rootStore.userStore)),
     serviceStore: JSON.parse(JSON.stringify(rootStore.serviceStore)),
     appointmentStore: JSON.parse(JSON.stringify(rootStore.appointmentStore)),
     authStore: JSON.parse(JSON.stringify(rootStore.authStore)),
-    // ... serializează și alte store-uri după necesități
+    // ... serialize other stores as needed
   };
 
   console.log('Snapshot: ', snapshot);
-  // Aici poți salva snapshot-ul în localStorage sau să îl trimiți pe un server, etc.
+  // Here you can save the snapshot in localStorage or send it to a server, etc.
 });

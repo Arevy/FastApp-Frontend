@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/stores/RootStoreContext';
 import {
   BsHouse,
   BsPeople,
@@ -8,34 +10,55 @@ import {
   BsListCheck,
   BsTools,
 } from 'react-icons/bs';
-import { useStores } from 'src/stores/RootStoreContext';
 import { routes } from 'src/routes/routesConfig';
-const SIZE = '32px';
 
-export const NavBar = () => {
-  const {
-    authStore: { isAuth, userData },
-  } = useStores();
+const SIZE = '32px';
+const styles = require('./index.scss');
+
+export const NavBar = observer(() => {
+  const { authStore } = useStores();
+  const [isSticky, setIsSticky] = useState(false);
 
   const {
     HomeRoute,
     LoginRoute,
-    RegistrationRoute,
     LogoutRoute,
     UserAdministrationRoute,
-    Page404Route,
     AppointmentsRoute,
     ServiceAdministrationRoute,
   } = routes;
+
+  const handleScroll = () => {
+    const scrollPosition = window.scrollY + window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    if (scrollPosition >= documentHeight - 50) {
+      setIsSticky(true);
+    } else {
+      setIsSticky(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark justify-content-between d-flex border-bottom border-info mt-2 mb-5">
+    <nav
+      className={`navbar navbar-expand-lg navbar-dark bg-dark ${
+        isSticky ? 'fixed-top' : 'sticky-top'
+      } justify-content-between d-flex border-bottom border-info`}
+    >
       <Link
         className="navbar-item text-light font-weight-bold"
         to={HomeRoute.path}
       >
         <BsHouse size={SIZE} title="Home" />
       </Link>
-      {/* {isAuth && userData.isAdmin && ( */}
+      {/* {authStore.isAuth && authStore.userData.isAdmin && ( */}
       <Link
         className="navbar-item text-light font-weight-bold"
         to={UserAdministrationRoute.path}
@@ -57,14 +80,17 @@ export const NavBar = () => {
       </Link>
       <Link
         className="navbar-item text-light font-weight-bold"
-        to={!isAuth ? LoginRoute.path : LogoutRoute.path}
+        to={!authStore.isAuth ? LoginRoute.path : LogoutRoute.path}
       >
-        {!isAuth ? (
+        {!authStore.isAuth ? (
           <BsBoxArrowInRight size={SIZE} title="Login" />
         ) : (
-          <BsBoxArrowRight size={SIZE} title="Logout" />
+          <button type="button" className="btn btn-secondary btn-sm mx-auto">
+            Hi, {authStore.userData.userName}{' '}
+            <BsBoxArrowRight size={SIZE} title="Logout" />
+          </button>
         )}
       </Link>
     </nav>
   );
-};
+});

@@ -10,7 +10,7 @@ import { makeAutoObservable } from 'mobx';
 import RootStore from './RootStore';
 // import { userAppointments, createAppointment, updateAppointment, deleteAppointment } from '../graphql/queries'; // Import GraphQL queries
 import {
-  LIST_ALL_APPOINTMENTS, //->  trebuie folosita varianta scurta pe viitor
+  // LIST_ALL_APPOINTMENTS, //->  trebuie folosita varianta scurta pe viitor
   LIST_ALL_APPOINTMENTS_FULL,
   LIST_USER_APPOINTMENTS,
   CREATE_APPOINTMENTS,
@@ -19,7 +19,7 @@ import {
   CREATE_APPOINTMENT,
 } from 'src/gql/queries/appointments';
 import {
-  CancelAppointmentOutput,
+  // CancelAppointmentOutput,
   FetchUserAppointmentsOutput,
   IAppointment,
   ModifyAppointmentInput,

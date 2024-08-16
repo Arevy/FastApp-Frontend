@@ -13,8 +13,10 @@ export interface Service {
   name: string;
   category: string;
   isActive: boolean;
+  imageBase64?: string;
+  imageContentType?: string;
+  description?: string;
 }
-
 export interface FetchServicesOutput {
   listAllServices: Service[];
 }
@@ -24,6 +26,9 @@ export interface UpdateServiceInput {
   name?: string;
   category?: string;
   isActive?: boolean;
+  description?: string;
+  imageBase64?: string;
+  imageContentType?: string;
 }
 
 export interface UpdateServiceOutput {
@@ -34,6 +39,9 @@ export interface CreateServiceInput {
   name: string;
   category: string;
   isActive: boolean;
+  description?: string;
+  imageBase64?: string;
+  imageContentType?: string;
 }
 
 export interface CreateServiceOutput {
@@ -51,6 +59,7 @@ export interface IUser {
   email: string;
   isAdmin: boolean;
   isActive: boolean;
+  userName?: string;
   registrationDate: string | number;
   lastLogin: string | number;
   userType: UserType;
@@ -61,6 +70,8 @@ export interface IService {
   name: string;
   category: string;
   isActive: boolean;
+  imageUrl: string;
+  description: string;
 }
 
 export interface IAppointment {

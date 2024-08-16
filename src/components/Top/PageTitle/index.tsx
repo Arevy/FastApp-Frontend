@@ -3,11 +3,12 @@ import React from 'react';
 import ModalForm from 'src/components/Modal/Modal';
 import CreateServiceForm from 'src/components/Create/CreateServiceForm';
 import CreateAppointmentForm from 'src/components/Create/CreateAppointmentForm';
+import CreateUserForm from 'src/components/Create/CreateUserForm';
 
 interface PageTitleProps {
   text: string;
   createBtn?: boolean;
-  createType?: 'service' | 'appointment';
+  createType?: 'service' | 'appointment' | 'user';
 }
 
 export const PageTitle: React.FC<PageTitleProps> = ({
@@ -20,6 +21,8 @@ export const PageTitle: React.FC<PageTitleProps> = ({
     formComponent = <CreateServiceForm />;
   } else if (createType === 'appointment') {
     formComponent = <CreateAppointmentForm />;
+  } else if (createType === 'user') {
+    formComponent = <CreateUserForm />;
   }
 
   return (
@@ -35,5 +38,5 @@ export const PageTitle: React.FC<PageTitleProps> = ({
 PageTitle.propTypes = {
   text: PropTypes.string.isRequired,
   createBtn: PropTypes.bool,
-  createType: PropTypes.oneOf(['service', 'appointment']),
+  createType: PropTypes.oneOf(['service', 'appointment', 'user']),
 };

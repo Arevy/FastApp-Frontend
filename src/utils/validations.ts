@@ -50,12 +50,13 @@ const validateLoginForm = (email: string, password: string): boolean => {
 
 const validateRegisterForm = (
   email: string,
+  userName: string,
   password: string,
   repeatPassword: string
 ): boolean => {
   let dataIsValid: boolean = true;
 
-  if (!email || !password || !repeatPassword) {
+  if (!email || !userName || !password || !repeatPassword) {
     dataIsValid = false;
   }
 
