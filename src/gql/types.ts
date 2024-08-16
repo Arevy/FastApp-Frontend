@@ -13,10 +13,10 @@ export interface Service {
   name: string;
   category: string;
   isActive: boolean;
-  imageUrl: string;
-  description: string;
+  imageBase64?: string;
+  imageContentType?: string;
+  description?: string;
 }
-
 export interface FetchServicesOutput {
   listAllServices: Service[];
 }
@@ -26,6 +26,9 @@ export interface UpdateServiceInput {
   name?: string;
   category?: string;
   isActive?: boolean;
+  description?: string;
+  imageBase64?: string;
+  imageContentType?: string;
 }
 
 export interface UpdateServiceOutput {
@@ -36,6 +39,9 @@ export interface CreateServiceInput {
   name: string;
   category: string;
   isActive: boolean;
+  description?: string;
+  imageBase64?: string;
+  imageContentType?: string;
 }
 
 export interface CreateServiceOutput {

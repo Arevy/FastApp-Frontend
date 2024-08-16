@@ -23,7 +23,7 @@ const ListingFeed: React.FC = observer(() => {
         <div key={service.serviceId} className="service-card col-md-4 mb-4">
           <div className="card h-100">
             <img
-              src={service.imageUrl}
+              src={`data:${service.imageContentType};base64,${service.imageBase64}`}
               alt={service.name}
               className="card-img-top"
             />

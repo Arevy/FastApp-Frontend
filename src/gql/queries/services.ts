@@ -7,17 +7,37 @@ export const LIST_ALL_SERVICES = gql`
       name
       category
       isActive
+      description
+      imageBase64
+      imageContentType
+    }
+  }
+`;
+
+export const CREATE_SERVICE = gql`
+  mutation CreateService($input: CreateServiceInput!) {
+    createService(input: $input) {
+      _id
+      name
+      category
+      isActive
+      description
+      imageBase64
+      imageContentType
     }
   }
 `;
 
 export const UPDATE_SERVICE = gql`
-  mutation updateService($_id: ID!, $name: String, $category: String) {
-    updateService(_id: $_id, name: $name, category: $category) {
+  mutation UpdateService($_id: ID!, $input: CreateServiceInput) {
+    updateService(_id: $_id, input: $input) {
       _id
       name
       category
       isActive
+      description
+      imageBase64
+      imageContentType
     }
   }
 `;
@@ -38,21 +58,9 @@ export const TOGGLE_SERVICE_ACTIVE = gql`
       name
       category
       isActive
-    }
-  }
-`;
-
-export const CREATE_SERVICE = gql`
-  mutation CreateService(
-    $name: String!
-    $category: String!
-    $isActive: Boolean!
-  ) {
-    createService(name: $name, category: $category, isActive: $isActive) {
-      _id
-      name
-      category
-      isActive
+      description
+      imageBase64
+      imageContentType
     }
   }
 `;

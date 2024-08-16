@@ -12,7 +12,14 @@ import {
   TOGGLE_SERVICE_ACTIVE,
   UPDATE_SERVICE,
 } from 'src/gql/queries/services';
-import { IService, Service } from 'src/gql/types';
+import {
+  CreateServiceInput,
+  CreateServiceOutput,
+  IService,
+  Service,
+  UpdateServiceInput,
+  UpdateServiceOutput,
+} from 'src/gql/types';
 
 class ServiceStore {
   services: Service[] = [];
@@ -20,7 +27,10 @@ class ServiceStore {
   error: Error | null | unknown | any = null;
   private queryObservable: ObservableQuery<any> | null = null;
 
-  constructor(private rootStore: RootStore, private apolloClient: ApolloClient<NormalizedCacheObject>) {
+  constructor(
+    private rootStore: RootStore,
+    private apolloClient: ApolloClient<NormalizedCacheObject>
+  ) {
     makeAutoObservable(this);
   }
 
@@ -36,10 +46,12 @@ class ServiceStore {
 
       this.queryObservable.subscribe({
         next: (response) => {
-          this.services = response.data.listAllServices.map((service: IService) => ({
-            ...service,
-            serviceId: service._id,
-          }));
+          this.services = response.data.listAllServices.map(
+            (service: IService) => ({
+              ...service,
+              serviceId: service._id,
+            })
+          );
           this.isLoading = false;
         },
         error: (error) => {
@@ -57,24 +69,26 @@ class ServiceStore {
   stopPolling = () => {
     this.queryObservable?.stopPolling();
   };
-  async updateService(serviceId: string, name: string, category: string) {
+
+  updateService = async (serviceId: string, input: UpdateServiceInput) => {
     this.isLoading = true;
     try {
-      const result = await this.apolloClient.mutate({
+      const result = await this.apolloClient.mutate<UpdateServiceOutput>({
         mutation: UPDATE_SERVICE,
-        variables: { _id: serviceId, name, category },
+        variables: { _id: serviceId, input },
       });
       this.isLoading = false;
-      if (result.data.updateService) {
-        // The logic for updating the list of services or displaying a success message
+      if (result.data?.updateService) {
+        // Actualizează lista de servicii sau afișează un mesaj de succes
+        this.fetchServices();
       }
     } catch (error) {
       this.error = error;
       this.isLoading = false;
     }
-  }
+  };
 
-  async deleteService(serviceId: string) {
+  deleteService = async (serviceId: string) => {
     this.isLoading = true;
     try {
       const result = await this.apolloClient.mutate({
@@ -90,10 +104,9 @@ class ServiceStore {
       this.error = error;
       this.isLoading = false;
     }
-  }
+  };
 
   toggleServiceActive = async (serviceId: string) => {
-    console.log('Attempting to toggle active status for ID:', serviceId);
     this.isLoading = true;
     try {
       const result = await this.apolloClient.mutate({
@@ -102,7 +115,6 @@ class ServiceStore {
         refetchQueries: [{ query: LIST_ALL_SERVICES }],
       });
 
-      console.log('Mutation result:', result);
       if (result.data.toggleServiceActive) {
         console.log('Service active status toggled successfully');
         return result.data.toggleServiceActive;
@@ -114,20 +126,24 @@ class ServiceStore {
       this.isLoading = false;
     }
   };
-  createService = async (name: string, category: string, isActive: boolean) => {
+
+  createService = async (input: CreateServiceInput) => {
     this.isLoading = true;
     try {
-      const result = await this.apolloClient.mutate({
+      console.log('Creating service with input:', input);
+      const result = await this.apolloClient.mutate<CreateServiceOutput>({
         mutation: CREATE_SERVICE,
-        variables: { name, category, isActive },
+        variables: { input },
       });
       this.isLoading = false;
       if (result.data) {
+        console.log('Service created:', result.data.createService);
         this.services.push(result.data.createService);
       }
     } catch (error) {
       this.isLoading = false;
       this.error = error;
+      console.error('Service creation failed:', error);
     }
   };
 }
