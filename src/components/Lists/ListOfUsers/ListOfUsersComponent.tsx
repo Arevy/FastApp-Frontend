@@ -21,6 +21,9 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
 }) => {
   const [editing, setEditing] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<UserType | ''>('');
+  const [mainSelectedType, setMaiSelectedType] = useState<UserType | ''>(
+    selectedType
+  );
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredUsers = users.filter((user) => {
@@ -28,7 +31,9 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (user.userName &&
         user.userName.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesType = selectedType ? user.userType === selectedType : true;
+    const matchesType = mainSelectedType
+      ? user.userType === mainSelectedType
+      : true;
     return matchesSearch && matchesType;
   });
 
@@ -60,8 +65,10 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
               type="select"
               name="userType"
               id="userType"
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value as UserType | '')}
+              value={mainSelectedType}
+              onChange={(e) =>
+                setMaiSelectedType(e.target.value as UserType | '')
+              }
             >
               <option value="">All User Types</option>
               {Object.values(UserType).map((type) => (
@@ -75,7 +82,7 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
       </Row>
       <Row className="justify-content-center">
         <Col>
-          <table className="table text-light table-striped table-hover">
+          <table className="table text-light table-striped ">
             <thead>
               <tr>
                 <th scope="col">Email</th>

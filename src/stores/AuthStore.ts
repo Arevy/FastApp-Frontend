@@ -17,6 +17,7 @@ export interface UserData {
   isAdmin: boolean;
   isActive: boolean;
   userName: string;
+  userType: string;
   _id: string;
 }
 
@@ -46,17 +47,18 @@ class AuthStore {
       userName: '',
       isAdmin: false,
       isActive: false,
+      userType: '',
       _id: '',
     };
     this.apolloClient = apolloClient;
   }
 
-  async loginUser(email: string, password: string, userType:string) {
+  async loginUser(email: string, password: string, userType: string) {
     this.isLoading = true;
     this.error = null;
 
     //userType will be used in the future
-    
+
     try {
       const response = await this.apolloClient.mutate({
         mutation: Mutations.LOGIN,
@@ -119,17 +121,19 @@ class AuthStore {
     const decodedToken = (jwt.decode(token) as Partial<UserData>) || {};
     const userData: UserData = {
       email: decodedToken.email || '',
-      userName: decodedToken.email || '',
       isAdmin: !!decodedToken.isAdmin,
       isActive: !!decodedToken.isActive,
+      userType: decodedToken.userType || '', 
+      userName: decodedToken.userName || '',
       _id: decodedToken._id || '',
     };
-    //can use decde or directly from query response
+
     this.userData = {
       email: user.email || userData.email,
       userName: user.userName || userData.userName,
       isAdmin: user.isAdmin || userData.isAdmin,
       isActive: user.isActive || userData.isActive,
+      userType: user.userType || userData.userType,
       _id: user._id || userData._id,
     };
 
@@ -147,6 +151,7 @@ class AuthStore {
       userName: '',
       isAdmin: false,
       isActive: false,
+      userType: '',
       _id: '',
     };
   }

@@ -9,6 +9,7 @@ import {
   BsBoxArrowRight,
   BsListCheck,
   BsTools,
+  BsInfoCircle,
 } from 'react-icons/bs';
 import { routes } from 'src/routes/routesConfig';
 import './index.scss';
@@ -79,6 +80,12 @@ export const NavBar = observer(() => {
         >
           <BsTools size={SIZE} title="Services" />
         </Link>
+        <div className="navbar-item text-light font-weight-bold">
+          <BsInfoCircle size={SIZE} title="Home" />
+          {'   '}
+          {authStore.userData.userType}
+          {/**TODO make a nice replace for  userType */}
+        </div>
         <Link
           className="navbar-item text-light font-weight-bold"
           to={!authStore.isAuth ? LoginRoute.path : LogoutRoute.path}

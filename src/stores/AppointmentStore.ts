@@ -6,7 +6,7 @@ import {
   ObservableQuery,
 } from '@apollo/client';
 
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, observable, toJS } from 'mobx';
 import RootStore from './RootStore';
 // import { userAppointments, createAppointment, updateAppointment, deleteAppointment } from '../graphql/queries'; // Import GraphQL queries
 import {
@@ -55,38 +55,43 @@ class AppointmentStore {
   //   }
   // };
 
-  async fetchAppointments(userId?: string) {
+  async fetchAppointments() {
     this.isLoading = true;
     this.error = null;
     try {
-      // Use watchQuery for continuous polling
-      this.queryObservable = this.apolloClient.watchQuery({
-        query: userId ? LIST_USER_APPOINTMENTS : LIST_ALL_APPOINTMENTS_FULL,
-        variables: userId ? { userId } : {},
+    // Use watchQuery for continuous polling
+      const result = await this.apolloClient.query({
+        query: LIST_ALL_APPOINTMENTS_FULL,
         fetchPolicy: 'network-only',
-        pollInterval: 600000, // Poll every 10 minutes
       });
 
-      this.queryObservable.subscribe({
-        next: (response) => {
-          // Update appointments based on the query executed
-          this.appointments =
-            response.data[
-              userId ? 'userAppointments' : 'listAllAppointmentsFull'
-            ];
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Failed to load appointments:', error);
-          this.error = error;
-          this.isLoading = false;
-        },
-      });
-    } catch (error) {
-      console.error('Error initializing appointment query:', error);
+  
+      const userType = this.rootStore.authStore.userData.userType;
+      const serviceUserId = this.rootStore.authStore.userData._id;
+
+      console.log(
+        'serviceUserId',
+        serviceUserId,
+        toJS(
+          result.data.listAllAppointmentsFull.map(
+            (appointment: IAppointment) => appointment.serviceId
+          )
+        )
+      );
+      if (userType === 'SERVICE_USER') {
+        this.appointments = result.data.listAllAppointmentsFull.filter(
+          // (appointment: IAppointment) => appointment.serviceId === serviceUserId
+          (appointment: IAppointment) => appointment.service?.name === this.rootStore.authStore.userData.userName // TO DO it by id
+        );
+      } else {
+        this.appointments = result.data.listAllAppointmentsFull;
+      }
+
       this.isLoading = false;
-      this.error =
-        error instanceof Error ? error : new Error('An unknown error occurred');
+    } catch (error) {
+      console.error('Failed to load appointments:', error);
+      this.error = error;
+      this.isLoading = false;
     }
   }
 

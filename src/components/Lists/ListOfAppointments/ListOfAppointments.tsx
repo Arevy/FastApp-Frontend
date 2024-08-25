@@ -8,7 +8,7 @@ import { parseUnixTimestamp } from 'src/utils/utils';
 import { FormGroup, Input, Label, Row, Col } from 'reactstrap';
 
 export const ListOfAppointments = observer(() => {
-  const { appointmentStore } = useStores();
+  const { appointmentStore, authStore } = useStores();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
@@ -111,50 +111,57 @@ export const ListOfAppointments = observer(() => {
             />
           </FormGroup>
         </Col>
-        <Col md={4}>
-          <FormGroup className="mb-0">
-            <Label for="userSelect" className="text-light form-label w-100">
-              Filter by User
-            </Label>
-            <Input
-              type="select"
-              name="userSelect"
-              id="userSelect"
-              value={selectedUser}
-              onChange={(e) => setSelectedUser(e.target.value)}
-              className="form-select"
-            >
-              <option value="">All Users</option>
-              {users.map((user) => (
-                <option key={user} value={user}>
-                  {user}
-                </option>
-              ))}
-            </Input>
-          </FormGroup>
-        </Col>
-        <Col md={4}>
-          <FormGroup className="mb-0">
-            <Label for="serviceSelect" className="text-light form-label w-100">
-              Filter by Service
-            </Label>
-            <Input
-              type="select"
-              name="serviceSelect"
-              id="serviceSelect"
-              value={selectedService}
-              onChange={(e) => setSelectedService(e.target.value)}
-              className="form-select"
-            >
-              <option value="">All Services</option>
-              {services?.map((service) => (
-                <option key={service} value={service}>
-                  {service}
-                </option>
-              ))}
-            </Input>
-          </FormGroup>
-        </Col>
+        {authStore.userData.userType != 'NORMAL_USER' && (
+          <Col md={4}>
+            <FormGroup className="mb-0">
+              <Label for="userSelect" className="text-light form-label w-100">
+                Filter by User
+              </Label>
+              <Input
+                type="select"
+                name="userSelect"
+                id="userSelect"
+                value={selectedUser}
+                onChange={(e) => setSelectedUser(e.target.value)}
+                className="form-select"
+              >
+                <option value="">All Users</option>
+                {users.map((user) => (
+                  <option key={user} value={user}>
+                    {user}
+                  </option>
+                ))}
+              </Input>
+            </FormGroup>
+          </Col>
+        )}
+        {authStore.userData.userType == 'NORMAL_USER' && (
+          <Col md={4}>
+            <FormGroup className="mb-0">
+              <Label
+                for="serviceSelect"
+                className="text-light form-label w-100"
+              >
+                Filter by Service
+              </Label>
+              <Input
+                type="select"
+                name="serviceSelect"
+                id="serviceSelect"
+                value={selectedService}
+                onChange={(e) => setSelectedService(e.target.value)}
+                className="form-select"
+              >
+                <option value="">All Services</option>
+                {services?.map((service) => (
+                  <option key={service} value={service}>
+                    {service}
+                  </option>
+                ))}
+              </Input>
+            </FormGroup>
+          </Col>
+        )}
       </Row>
 
       <table className="table text-light">
@@ -165,8 +172,12 @@ export const ListOfAppointments = observer(() => {
             <th scope="col">Category</th>
             <th scope="col">Last Update</th>
             <th scope="col">Status</th>
-            <th scope="col">Modify</th>
-            <th scope="col">Cancel</th>
+            {authStore.userData.userType != 'NORMAL_USER' && (
+              <th scope="col">Modify</th>
+            )}
+            {authStore.userData.userType == 'NORMAL_USER' && (
+              <th scope="col">Cancel</th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -183,37 +194,41 @@ export const ListOfAppointments = observer(() => {
                   ]
                 }
               </td>
-              <td>
-                <select
-                  style={{ cursor: 'pointer' }}
-                  value={appointment.status}
-                  onChange={(e) =>
-                    appointmentStore.modifyAppointment(appointment._id, {
-                      newDate: appointment.date,
-                      newStatus: e.target.value as AppointmentStatus,
-                    })
-                  }
-                  onBlur={() => handleModify(appointment._id)}
-                  className="form-select"
-                >
-                  {Object.values(AppointmentStatus).map((status) => (
-                    <option key={status} value={status}>
-                      {AppointmentStatusLabels[status]}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <button
-                  className="btn btn-danger"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    appointmentStore.cancelAppointment(appointment._id)
-                  }
-                >
-                  Cancel
-                </button>
-              </td>
+              {authStore.userData.userType != 'NORMAL_USER' && (
+                <td>
+                  <select
+                    style={{ cursor: 'pointer' }}
+                    value={appointment.status}
+                    onChange={(e) =>
+                      appointmentStore.modifyAppointment(appointment._id, {
+                        newDate: appointment.date,
+                        newStatus: e.target.value as AppointmentStatus,
+                      })
+                    }
+                    onBlur={() => handleModify(appointment._id)}
+                    className="form-select"
+                  >
+                    {Object.values(AppointmentStatus).map((status) => (
+                      <option key={status} value={status}>
+                        {AppointmentStatusLabels[status]}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+              )}
+              {authStore.userData.userType == 'NORMAL_USER' && (
+                <td>
+                  <button
+                    className="btn btn-danger"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() =>
+                      appointmentStore.cancelAppointment(appointment._id)
+                    }
+                  >
+                    Cancel
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

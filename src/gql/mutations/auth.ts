@@ -11,6 +11,7 @@ export const LOGIN = gql`
         isAdmin
         isActive
         userName
+        userType
       }
     }
   }

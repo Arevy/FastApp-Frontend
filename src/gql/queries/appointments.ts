@@ -41,6 +41,7 @@ export const LIST_ALL_APPOINTMENTS_FULL = gql`
       _id
       user {
         email
+        _id
         __typename
       }
       service {
