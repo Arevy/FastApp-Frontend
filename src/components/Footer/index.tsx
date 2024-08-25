@@ -3,11 +3,16 @@ import classNames from 'classnames';
 
 const styles = require('./Footer.scss');
 
-export const Footer = () => {
+interface FooterProps {
+  className?: string;
+}
+
+export const Footer: React.FC<FooterProps> = ({ className }) => {
   return (
     <footer
       className={classNames(
-        'footer mt-auto py-3 fixed-bottom bg-dark border-top border-info'
+        'footer mt-auto py-3 fixed-bottom bg-dark border-top border-info',
+        className
       )}
     >
       <div className="container text-center">

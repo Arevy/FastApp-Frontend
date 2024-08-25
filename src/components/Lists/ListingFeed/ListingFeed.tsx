@@ -18,7 +18,7 @@ const ListingFeed: React.FC = observer(() => {
     return <ErrorAlert errorMessage={serviceStore.error?.message} />;
 
   return (
-    <section className="services-list row">
+    <section className="services-list row my-5 py-5">
       {serviceStore.services.map((service) => (
         <div key={service.serviceId} className="service-card col-md-4 mb-4">
           <div className="card h-100">

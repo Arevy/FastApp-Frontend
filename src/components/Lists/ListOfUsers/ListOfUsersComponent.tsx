@@ -25,7 +25,7 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
   );
 
   return (
-    <section className="table-responsive">
+    <section className="table-responsive my-4 py-4">
       <table className="table text-light">
         <thead>
           <tr>

@@ -7,7 +7,7 @@ const Home: React.FC = () => {
     <>
       <Jumbotron
         title="Welcome to FastApp!"
-        subtitle="This is the best place you can search for services"
+        subtitle="This is the best place you can search for a service"
       />
       <ListingFeed />
     </>

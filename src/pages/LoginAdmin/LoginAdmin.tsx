@@ -1,24 +1,21 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { RegistrationRoute } from 'src/pages/Registration/Route';
-import { LoginAdminRoute } from 'src/pages/LoginAdmin/Route';
+import { LoginRoute } from 'src/pages/Login/Route';
 import { LoginServiceRoute } from 'src/pages/LoginService/Route';
 
 import LoginForm from 'src/components/Auth/LoginForm';
 import { PageTitle } from 'src/components/Top/PageTitle';
 
-const Login = () => {
+const LoginAdmin = () => {
   return (
     <Fragment>
       <div className="my-3 py-3">
-        <PageTitle text="Log in" />
-        <LoginForm userType="NORMAL_USER" />
+        <PageTitle text="Admin Log in" />
+        <LoginForm userType="ADMIN_USER" />
         <div className="text-center mt-4">
-          <Link
-            className="btn btn-outline-primary mr-2"
-            to={LoginAdminRoute.path}
-          >
-            Admin Login
+          <Link className="btn btn-outline-primary mr-2" to={LoginRoute.path}>
+            Normal User Login
           </Link>
           <Link
             className="btn btn-outline-secondary mr-2"
@@ -47,4 +44,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginAdmin;

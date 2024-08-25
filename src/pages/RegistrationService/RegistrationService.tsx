@@ -1,28 +1,29 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { RegisterForm } from 'src/components/Auth/RegisterForm';
+// import { RegisterForm } from 'src/components/Auth/RegisterForm';
+import RegisterServiceForm from 'src/components/Auth/RegisterServiceForm';
 import { PageTitle } from 'src/components/Top/PageTitle';
+import { RegistrationRoute } from 'src/pages/Registration/Route';
 import { RegistrationAdminRoute } from 'src/pages/RegistrationAdmin/Route';
-import { RegistrationServiceRoute } from 'src/pages/RegistrationService/Route';
 
-const Registration = () => {
+const RegistrationService = () => {
   return (
     <Fragment>
       <div className="my-3 py-3">
-        <PageTitle text="Create an account" />
-        <RegisterForm userType="NORMAL_USER" />
+        <PageTitle text="Create a service account" />
+        <RegisterServiceForm />
         <div className="text-center mt-4">
           <Link
             className="btn btn-outline-primary mr-2"
-            to={RegistrationAdminRoute.path}
+            to={RegistrationRoute.path}
           >
-            Admin Registration
+            Normal User Registration
           </Link>
           <Link
             className="btn btn-outline-secondary mr-2"
-            to={RegistrationServiceRoute.path}
+            to={RegistrationAdminRoute.path}
           >
-            Service Registration
+            Admin Registration
           </Link>
         </div>
         <p className="mt-3 text-muted text-center">
@@ -34,4 +35,4 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default RegistrationService;

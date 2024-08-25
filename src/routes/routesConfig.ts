@@ -3,9 +3,13 @@ import { AppointmentsRoute } from 'src/pages/AppointmentsAdministration/Route';
 
 import { HomeRoute } from 'src/pages/Home/Route';
 import { LoginRoute } from 'src/pages/Login/Route';
+import { LoginAdminRoute } from 'src/pages/LoginAdmin/Route';
+import { LoginServiceRoute } from 'src/pages/LoginService/Route';
 import { LogoutRoute } from 'src/pages/Logout/Route';
 import { Page404Route } from 'src/pages/Page404/Route';
 import { RegistrationRoute } from 'src/pages/Registration/Route';
+import { RegistrationAdminRoute } from 'src/pages/RegistrationAdmin/Route';
+import { RegistrationServiceRoute } from 'src/pages/RegistrationService/Route';
 import { ServiceAdministrationRoute } from 'src/pages/ServiceAdministration/Route';
 import { UserAdministrationRoute } from 'src/pages/UserAdministration/Route';
 
@@ -25,7 +29,11 @@ export interface RouteConfig {
 export const routesArray: RouteConfig[] = [
   HomeRoute,
   LoginRoute,
+  LoginAdminRoute,
+  LoginServiceRoute,
   RegistrationRoute,
+  RegistrationAdminRoute, 
+  RegistrationServiceRoute, 
   LogoutRoute,
   UserAdministrationRoute,
   Page404Route,
@@ -38,6 +46,8 @@ export const routes = {
   HomeRoute,
   LoginRoute,
   RegistrationRoute,
+  LoginAdminRoute,
+  LoginServiceRoute,
   LogoutRoute,
   UserAdministrationRoute,
   Page404Route,

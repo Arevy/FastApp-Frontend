@@ -16,14 +16,18 @@ class CustomError extends Error {
   }
 }
 
-const LoginForm: React.FC = () => {
+interface LoginFormProps {
+  userType: string;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ userType }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { authStore } = useStores();
 
   const email = useInputValue('');
   const password = useInputValue('');
-  const userType = 'NORMAL_USER';
+  // const userType = 'NORMAL_USER';
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();

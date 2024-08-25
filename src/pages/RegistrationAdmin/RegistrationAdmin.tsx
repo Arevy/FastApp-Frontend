@@ -2,21 +2,21 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { RegisterForm } from 'src/components/Auth/RegisterForm';
 import { PageTitle } from 'src/components/Top/PageTitle';
-import { RegistrationAdminRoute } from 'src/pages/RegistrationAdmin/Route';
+import { RegistrationRoute } from 'src/pages/Registration/Route';
 import { RegistrationServiceRoute } from 'src/pages/RegistrationService/Route';
 
-const Registration = () => {
+const RegistrationAdmin = () => {
   return (
     <Fragment>
       <div className="my-3 py-3">
-        <PageTitle text="Create an account" />
-        <RegisterForm userType="NORMAL_USER" />
+        <PageTitle text="Create an admin account" />
+        <RegisterForm userType="ADMIN_USER" />
         <div className="text-center mt-4">
           <Link
             className="btn btn-outline-primary mr-2"
-            to={RegistrationAdminRoute.path}
+            to={RegistrationRoute.path}
           >
-            Admin Registration
+            Normal User Registration
           </Link>
           <Link
             className="btn btn-outline-secondary mr-2"
@@ -34,4 +34,4 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default RegistrationAdmin;

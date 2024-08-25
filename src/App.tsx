@@ -10,9 +10,9 @@ const App: React.FC = () => {
   return (
     <StrictMode>
       <div className="container-fluid bg-dark">
-        <div className="container">
+        <div className="container d-flex flex-column min-vh-100">
           <NavBar />
-          <main className="pb-4">
+          <main className="py-4 flex-grow-1">
             <Routes>
               {routesArray.map(({ path, element, wrapper, auth, admin }) => (
                 <Route
@@ -31,8 +31,7 @@ const App: React.FC = () => {
               ))}
             </Routes>
           </main>
-          <div className="row pb-5"></div>
-          <Footer />
+          <Footer className="mt-auto py-3" />
         </div>
       </div>
     </StrictMode>

@@ -45,7 +45,7 @@ export const ListOfAppointments = observer(() => {
   }
 
   return appointmentStore.appointments.length > 0 ? (
-    <section className="table-responsive">
+    <section className="table-responsive my-4 py-4">
       <table className="table text-light">
         <thead>
           <tr>

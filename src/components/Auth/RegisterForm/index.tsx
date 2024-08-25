@@ -1,8 +1,5 @@
 import { useState, Fragment } from 'react';
-// import PropTypes from 'prop-types';
-
 import { validateRegisterForm } from 'src/utils/validations';
-
 import React from 'react';
 import { useStores } from 'src/stores/RootStoreContext';
 import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
@@ -10,13 +7,14 @@ import { SubmitButton } from 'src/components/SmallComponents/SubmitButton';
 import { SubmitButtonHelper } from 'src/components/SmallComponents/SubmitButtonHelper';
 import { useInputValue } from 'src/hooks/useInputValue';
 
-const propTypes = {};
+interface RegisterFormProps {
+  userType: string;
+}
 
-export const RegisterForm: React.FC = () => {
+export const RegisterForm: React.FC<RegisterFormProps> = ({ userType }) => {
   const { authStore } = useStores();
 
-  const [isDisabled] = useState(false);
-
+  const [isDisabled, setIsDisabled] = useState(false);
   const email = useInputValue('');
   const userName = useInputValue('');
   const password = useInputValue('');
@@ -24,6 +22,7 @@ export const RegisterForm: React.FC = () => {
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
+    setIsDisabled(true);
 
     if (
       validateRegisterForm(
@@ -34,14 +33,16 @@ export const RegisterForm: React.FC = () => {
       )
     ) {
       try {
-        await authStore.registerUser(
-          email.value,
-          password.value,
-          'NORMAL_USER',
-          userName.value
-        );
+        await authStore
+          .registerUser(email.value, password.value, userType, userName.value)
+          .then(() => authStore.loginUser(email.value, password.value, userType))
+          .catch((error) => {
+            console.error('Error during registration or login:', error);
+          });
       } catch (error) {
-        console.error(error);
+        console.error('Error during form submission:', error);
+      } finally {
+        setIsDisabled(false);
       }
     }
   };
@@ -83,7 +84,7 @@ export const RegisterForm: React.FC = () => {
                 required
                 autoFocus
               />
-              <small id="emailHelp" className="form-text text-muted">
+              <small id="userNameHelp" className="form-text text-muted">
                 Make sure it's a valid Username
               </small>
             </div>
@@ -102,8 +103,7 @@ export const RegisterForm: React.FC = () => {
                 // pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!*^?+-_@#$%&]{8,}$"
               />
               <small id="passwordHelp" className="form-text text-muted">
-                At least 8 characters. It must contain numbers, lowercase
-                letters and uppercase letters. The spaces are not allowed
+                At least 8 characters. It must contain numbers, lowercase letters and uppercase letters. The spaces are not allowed
               </small>
             </div>
             <div className="form-group">
@@ -121,11 +121,9 @@ export const RegisterForm: React.FC = () => {
                 type="password"
                 {...repeatPassword}
                 required
-                // pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!*^?+-_@#$%&]{8,}$"
               />
               <small id="repeatPasswordHelp" className="form-text text-muted">
-                At least 8 characters. It must contain numbers, lowercase
-                letters and uppercase letters. The spaces are not allowed
+                At least 8 characters. It must contain numbers, lowercase letters and uppercase letters. The spaces are not allowed
               </small>
             </div>
             <div className="mt-2 ml-1">
@@ -178,4 +176,4 @@ export const RegisterForm: React.FC = () => {
 };
 
 // Apply prop types to the component
-RegisterForm.propTypes = propTypes;
+// RegisterForm.propTypes = propTypes;
