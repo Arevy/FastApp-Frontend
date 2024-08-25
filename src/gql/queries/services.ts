@@ -64,3 +64,17 @@ export const TOGGLE_SERVICE_ACTIVE = gql`
     }
   }
 `;
+
+export const LIST_SERVICES_BY_CATEGORY = gql`
+  query listServicesByCategory($category: String!) {
+    listServicesByCategory(category: $category) {
+      _id
+      name
+      category
+      isActive
+      description
+      imageBase64
+      imageContentType
+    }
+  }
+`;

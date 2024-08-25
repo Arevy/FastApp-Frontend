@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
-import { Spinner } from 'reactstrap';
+import React, { useEffect, useState } from 'react';
+import { Spinner, Input, FormGroup, Label } from 'reactstrap';
 import CreateAppointmentForm from 'src/components/Create/CreateAppointmentForm';
 import ModalForm from 'src/components/Modal/Modal';
 import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
@@ -8,40 +8,109 @@ import { useStores } from 'src/stores/RootStoreContext';
 
 const ListingFeed: React.FC = observer(() => {
   const { serviceStore } = useStores();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [category, setCategory] = useState('');
+  const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
-    serviceStore.fetchServices();
+    const fetchServicesAndCategories = async () => {
+      await serviceStore.fetchServices();
+      const uniqueCategories = Array.from(
+        new Set(serviceStore.services.map((service) => service.category))
+      );
+      setCategories(uniqueCategories);
+    };
+
+    fetchServicesAndCategories();
   }, [serviceStore]);
+
+  useEffect(() => {
+    if (category) {
+      serviceStore.fetchServicesByCategory(category);
+    } else {
+      serviceStore.fetchServices();
+    }
+  }, [category, serviceStore]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredServices = serviceStore.searchServices(searchTerm);
 
   if (serviceStore.isLoading) return <Spinner />;
   if (serviceStore.error)
     return <ErrorAlert errorMessage={serviceStore.error?.message} />;
 
   return (
-    <section className="services-list row my-5 py-5">
-      {serviceStore.services.map((service) => (
-        <div key={service.serviceId} className="service-card col-md-4 mb-4">
-          <div className="card h-100">
-            <img
-              src={`data:${service.imageContentType};base64,${service.imageBase64}`}
-              alt={service.name}
-              className="card-img-top"
+    <section className="services-list my-5 py-5">
+      <div className="row mb-4">
+        <div className="col-md-6">
+          <FormGroup>
+            <Label for="search" style={{ color: 'white' }}>
+              Search Services
+            </Label>
+            <Input
+              type="text"
+              name="search"
+              id="search"
+              placeholder="Search by name or description"
+              value={searchTerm}
+              onChange={handleSearchChange}
             />
-            <div className="card-body">
-              <h3 className="card-title">{service.name}</h3>
-              <p className="card-text">{service.description}</p>
-            </div>
-            <div className="card-footer text-center">
-              <ModalForm
-                buttonLabel="Set an Appointment"
-                formComponent={
-                  <CreateAppointmentForm propsServiceId={service.serviceId} />
-                }
+          </FormGroup>
+        </div>
+        <div className="col-md-6">
+          <FormGroup>
+            <Label for="category" style={{ color: 'white' }}>
+              Filter by Category
+            </Label>
+            <Input
+              type="select"
+              name="category"
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="">All Categories</option>
+              {categories.length > 0 ? (
+                categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))
+              ) : (
+                <option disabled>No categories available</option>
+              )}
+            </Input>
+          </FormGroup>
+        </div>
+      </div>
+      <div className="row">
+        {filteredServices.map((service) => (
+          <div key={service.serviceId} className="service-card col-md-4 mb-4">
+            <div className="card h-100">
+              <img
+                src={`data:${service.imageContentType};base64,${service.imageBase64}`}
+                alt={service.name}
+                className="card-img-top"
               />
+              <div className="card-body">
+                <h3 className="card-title">{service.name}</h3>
+                <p className="card-text">{service.description}</p>
+              </div>
+              <div className="card-footer text-center">
+                <ModalForm
+                  buttonLabel="Set an Appointment"
+                  formComponent={
+                    <CreateAppointmentForm propsServiceId={service.serviceId} />
+                  }
+                />
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </section>
   );
 });

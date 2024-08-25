@@ -9,6 +9,7 @@ import {
   CREATE_SERVICE,
   DELETE_SERVICE,
   LIST_ALL_SERVICES,
+  LIST_SERVICES_BY_CATEGORY,
   TOGGLE_SERVICE_ACTIVE,
   UPDATE_SERVICE,
 } from 'src/gql/queries/services';
@@ -145,6 +146,39 @@ class ServiceStore {
       this.error = error;
       console.error('Service creation failed:', error);
     }
+  };
+  
+  fetchServicesByCategory = async (category: string) => {
+    this.isLoading = true;
+    this.error = null;
+    try {
+      const result = await this.apolloClient.query({
+        query: LIST_SERVICES_BY_CATEGORY,
+        variables: { category },
+      });
+
+      this.services = result.data.listServicesByCategory.map(
+        (service: IService) => ({
+          ...service,
+          serviceId: service._id,
+        })
+      );
+    } catch (error) {
+      this.isLoading = false;
+      this.error = error;
+    } finally {
+      this.isLoading = false;
+    }
+  };
+
+  searchServices = (searchTerm: string) => {
+    if (!searchTerm) {
+      return this.services;
+    }
+    return this.services.filter(service =>
+      service.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   };
 }
 

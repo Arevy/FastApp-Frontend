@@ -1,4 +1,3 @@
-// src/pages/ServiceAdministration/ServiceAdministration.tsx
 import React, { Fragment } from 'react';
 import ListOfServices from 'src/components/Lists/ListOfServices/ListOfServices';
 import { PageTitle } from 'src/components/Top/PageTitle';
@@ -11,5 +10,6 @@ const ServiceAdministrationComponent = () => {
     </Fragment>
   );
 };
+ServiceAdministrationComponent.displayName = 'ServiceAdministrationComponent';
 
 export default ServiceAdministrationComponent;

@@ -135,6 +135,16 @@ class UserStore {
       });
     }
   }
+
+  searchAndFilterUsers = (searchTerm: string, userType: UserType | ''): IUser[] => {
+    return this.users.filter(user => {
+      const matchesSearch = 
+        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.userName?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesType = userType ? user.userType === userType : true;
+      return matchesSearch && matchesType;
+    });
+  };
 }
 
 export default UserStore;

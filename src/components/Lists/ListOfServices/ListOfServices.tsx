@@ -1,17 +1,43 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/stores/RootStoreContext';
 import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
 import { Spinner } from 'src/components/SmallComponents/Spinner';
 import { EmojiGreenCheck } from 'src/components/SmallComponents/EmojiGreenCheck';
 import { EmojiRedCross } from 'src/components/SmallComponents/EmojiRedCross';
+import { FormGroup, Input, Label, Row, Col } from 'reactstrap';
 
 export const ListOfServices = observer(() => {
   const { serviceStore } = useStores();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [category, setCategory] = useState('');
+  const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
-    serviceStore.fetchServices();
+    const fetchServicesAndCategories = async () => {
+      await serviceStore.fetchServices();
+      const uniqueCategories = Array.from(
+        new Set(serviceStore.services.map((service) => service.category))
+      );
+      setCategories(uniqueCategories);
+    };
+
+    fetchServicesAndCategories();
   }, [serviceStore]);
+
+  useEffect(() => {
+    if (category === '') {
+      serviceStore.fetchServices();
+    } else {
+      serviceStore.fetchServicesByCategory(category);
+    }
+  }, [category, serviceStore]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredServices = serviceStore.searchServices(searchTerm);
 
   const handleDelete = (serviceId: string) => {
     serviceStore.deleteService(serviceId);
@@ -34,6 +60,50 @@ export const ListOfServices = observer(() => {
 
   return (
     <section className="table-responsive my-4 py-4">
+      <Row className="mb-4 align-items-center">
+        <Col md={6} className="d-flex align-items-center">
+          <FormGroup className="w-100 mb-0">
+            <Label for="search" className="text-light form-label">
+              Search Services
+            </Label>
+            <Input
+              type="text"
+              name="search"
+              id="search"
+              placeholder="Search by name or description"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="form-control"
+            />
+          </FormGroup>
+        </Col>
+        <Col md={6} className="d-flex align-items-center">
+          <FormGroup className="w-100 mb-0">
+            <Label for="category" className="text-light form-label w-100">
+              Filter by Category
+            </Label>
+            <Input
+              type="select"
+              name="category"
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="form-select"
+            >
+              <option value="">All Categories</option>
+              {categories.length > 0 ? (
+                categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))
+              ) : (
+                <option disabled>No categories available</option>
+              )}
+            </Input>
+          </FormGroup>
+        </Col>
+      </Row>
       <table className="table text-light">
         <thead>
           <tr>
@@ -44,7 +114,7 @@ export const ListOfServices = observer(() => {
           </tr>
         </thead>
         <tbody>
-          {serviceStore.services
+          {filteredServices
             .slice()
             .sort((a, b) => a.category.localeCompare(b.category))
             .map((service) => (
