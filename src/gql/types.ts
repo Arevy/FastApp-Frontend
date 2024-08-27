@@ -1,15 +1,7 @@
-// export interface User {
-//   uuid: string;
-//   email: string;
-//   isAdmin: boolean;
-//   isActive: boolean;
-//   registrationDate: string;
-//   lastLogin: string;
-//   userType: UserType;
-// }
 
 export interface Service {
-  serviceId: string;
+  userId: string;
+  _id: string;
   name: string;
   category: string;
   isActive: boolean;
@@ -22,7 +14,6 @@ export interface FetchServicesOutput {
 }
 
 export interface UpdateServiceInput {
-  serviceId: string;
   name?: string;
   category?: string;
   isActive?: boolean;
@@ -42,6 +33,7 @@ export interface CreateServiceInput {
   description?: string;
   imageBase64?: string;
   imageContentType?: string;
+  userId?: string;
 }
 
 export interface CreateServiceOutput {
@@ -63,6 +55,7 @@ export interface IUser {
   registrationDate: string | number;
   lastLogin: string | number;
   userType: UserType;
+  serviceId?: string;
 }
 
 export interface IService {

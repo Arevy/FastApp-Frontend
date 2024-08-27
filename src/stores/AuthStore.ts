@@ -13,12 +13,13 @@ import RootStore from './RootStore';
 import * as Mutations from 'src/gql/mutations/auth';
 
 export interface UserData {
+  _id: string;  
   email: string;
   isAdmin: boolean;
   isActive: boolean;
   userName: string;
   userType: string;
-  _id: string;
+  serviceId: string;
 }
 
 class AuthStore {
@@ -43,12 +44,13 @@ class AuthStore {
 
     const recoveredUserData = recoverUserDataFromSessionStorage();
     this.userData = recoveredUserData || {
+      _id: '',
       email: '',
       userName: '',
       isAdmin: false,
       isActive: false,
       userType: '',
-      _id: '',
+      serviceId: '',
     };
     this.apolloClient = apolloClient;
   }
@@ -89,14 +91,15 @@ class AuthStore {
     email: string,
     password: string,
     userType: string,
-    userName: string
+    userName: string,
+    serviceId?: string
   ) {
     this.isLoading = true;
     this.error = null;
     try {
       const response = await this.apolloClient.mutate({
         mutation: Mutations.REGISTER_USER,
-        variables: { email, password, userType, userName },
+        variables: { email, password, userType, userName, serviceId },
       });
 
       const token = response.data?.registerUser?.token;
@@ -107,6 +110,7 @@ class AuthStore {
       }
 
       this.isLoading = false;
+      return user;
     } catch (error) {
       console.error('error', error);
       this.isLoading = false;
@@ -120,21 +124,23 @@ class AuthStore {
   async activateAuth(token: string, user: UserData) {
     const decodedToken = (jwt.decode(token) as Partial<UserData>) || {};
     const userData: UserData = {
+      _id: decodedToken._id || '',
       email: decodedToken.email || '',
       isAdmin: !!decodedToken.isAdmin,
       isActive: !!decodedToken.isActive,
-      userType: decodedToken.userType || '', 
+      userType: decodedToken.userType || '',
       userName: decodedToken.userName || '',
-      _id: decodedToken._id || '',
+      serviceId: decodedToken.serviceId || '',
     };
 
     this.userData = {
+      _id:user._id || userData._id,
       email: user.email || userData.email,
       userName: user.userName || userData.userName,
       isAdmin: user.isAdmin || userData.isAdmin,
       isActive: user.isActive || userData.isActive,
       userType: user.userType || userData.userType,
-      _id: user._id || userData._id,
+      serviceId: user.serviceId || userData.serviceId,
     };
 
     storeUserDataOnSessionStorage(this.userData);
@@ -147,13 +153,72 @@ class AuthStore {
     deleteSession();
     this.isAuth = false;
     this.userData = {
+      _id: '',
       email: '',
       userName: '',
       isAdmin: false,
       isActive: false,
       userType: '',
-      _id: '',
+      serviceId: '',
     };
+  }
+
+  async updatePassword(_id: string, newPassword: string) {
+    this.isLoading = true;
+    this.error = null;
+    try {
+      const result = await this.apolloClient.mutate({
+        mutation: Mutations.UPDATE_PASSWORD,
+        variables: { _id, newPassword },
+      });
+
+      if (result.data.updatePassword.success) {
+        console.log('Password updated successfully');
+      } else {
+        console.error(
+          'Password update failed:',
+          result.data.updatePassword.message
+        );
+      }
+
+      this.isLoading = false;
+    } catch (error) {
+      this.isLoading = false;
+      this.error = error;
+      console.error('Password update error:', error);
+    }
+  }
+
+  async updateUserDetails(_id: string, email: string, userName: string) {
+    this.isLoading = true;
+    this.error = null;
+    try {
+      const result = await this.apolloClient.mutate({
+        mutation: Mutations.UPDATE_USER_DETAILS,
+        variables: { _id, email, userName },
+      });
+
+      if (result.data.updateUserDetails.success) {
+        this.userData = {
+          ...this.userData,
+          email: result.data.updateUserDetails.user.email,
+          userName: result.data.updateUserDetails.user.userName,
+        };
+        storeUserDataOnSessionStorage(this.userData);
+        console.log('User details updated successfully');
+      } else {
+        console.error(
+          'User details update failed:',
+          result.data.updateUserDetails.message
+        );
+      }
+
+      this.isLoading = false;
+    } catch (error) {
+      this.isLoading = false;
+      this.error = error;
+      console.error('User details update error:', error);
+    }
   }
 }
 

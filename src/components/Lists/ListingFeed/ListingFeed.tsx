@@ -88,7 +88,7 @@ const ListingFeed: React.FC = observer(() => {
       </div>
       <div className="row">
         {filteredServices.map((service) => (
-          <div key={service.serviceId} className="service-card col-md-4 mb-4">
+          <div key={service._id} className="service-card col-md-4 mb-4">
             <div className="card h-100">
               <img
                 src={`data:${service.imageContentType};base64,${service.imageBase64}`}
@@ -103,7 +103,7 @@ const ListingFeed: React.FC = observer(() => {
                 <ModalForm
                   buttonLabel="Set an Appointment"
                   formComponent={
-                    <CreateAppointmentForm propsServiceId={service.serviceId} />
+                    <CreateAppointmentForm propsServiceId={service._id} />
                   }
                 />
               </div>

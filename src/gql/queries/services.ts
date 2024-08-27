@@ -29,8 +29,8 @@ export const CREATE_SERVICE = gql`
 `;
 
 export const UPDATE_SERVICE = gql`
-  mutation UpdateService($_id: ID!, $input: CreateServiceInput) {
-    updateService(_id: $_id, input: $input) {
+  mutation UpdateService($userId: ID!, $input: UpdateServiceInput!) {
+    updateService(userId: $userId, input: $input) {
       _id
       name
       category

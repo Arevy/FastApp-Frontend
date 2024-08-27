@@ -37,6 +37,16 @@ const RegisterServiceForm: React.FC<RegisterServiceFormProps> = observer(
       setIsSubmitting(true);
 
       try {
+        // Creează utilizatorul mai întâi
+        const newUser = await authStore.registerUser(
+          email,
+          password,
+          'SERVICE_USER',
+          userName,
+        );
+
+        const userId = newUser._id; // Presupunem că registerUser returnează un obiect cu id-ul utilizatorului
+
         let imageBase64 = '';
         let imageContentType = '';
 
@@ -48,6 +58,7 @@ const RegisterServiceForm: React.FC<RegisterServiceFormProps> = observer(
               imageBase64 = (reader.result as string).split(',')[1];
               imageContentType = imageFile.type;
 
+              // Creează serviciul și îl asociază cu userId
               serviceStore
                 .createService({
                   name,
@@ -56,14 +67,6 @@ const RegisterServiceForm: React.FC<RegisterServiceFormProps> = observer(
                   isActive: true,
                   imageBase64,
                   imageContentType,
-                })
-                .then(() => {
-                  return authStore.registerUser(
-                    email,
-                    password,
-                    'SERVICE_USER',
-                    userName
-                  );
                 })
                 .then(() => {
                   return authStore.loginUser(email, password, 'SERVICE');
@@ -93,6 +96,7 @@ const RegisterServiceForm: React.FC<RegisterServiceFormProps> = observer(
 
           reader.readAsDataURL(imageFile);
         } else {
+          // Creează serviciul fără imagine, dar asociază userId
           serviceStore
             .createService({
               name,
@@ -101,14 +105,6 @@ const RegisterServiceForm: React.FC<RegisterServiceFormProps> = observer(
               isActive: true,
               imageBase64,
               imageContentType,
-            })
-            .then(() => {
-              return authStore.registerUser(
-                email,
-                password,
-                'SERVICE',
-                userName
-              );
             })
             .then(() => {
               return authStore.loginUser(email, password, 'SERVICE');

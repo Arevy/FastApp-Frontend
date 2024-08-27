@@ -17,7 +17,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = observer(
     const [serviceId, setServiceId] = useState(propsServiceId || '');
     const [date, setDate] = useState('');
     const [status, setStatus] = useState('pending');
-    const [currentUserId, setUserId] = useState(authStore.userData?._id || ''); // need to check uuid
+    const [currentUserId, setUserId] = useState(authStore.userData?.serviceId || ''); // need to check uuid
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -75,7 +75,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = observer(
               disabled={!!propsServiceId} // Disable selection if propsServiceId is provided
             >
               <option value={serviceId} disabled>
-                {serviceStore.services.find((s) => s.serviceId === serviceId)
+                {serviceStore.services.find((s) => s?._id === serviceId)
                   ?.name || 'Service not found'}
               </option>
             </Input>
@@ -95,7 +95,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = observer(
                 Select a service
               </option>
               {serviceStore.services.map((service) => (
-                <option key={service.serviceId} value={service.serviceId}>
+                <option key={service._id} value={service._id}>
                   {service.name}
                 </option>
               ))}

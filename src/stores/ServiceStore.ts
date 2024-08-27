@@ -24,6 +24,7 @@ import {
 
 class ServiceStore {
   services: Service[] = [];
+  currentService: Service | null = null;
   isLoading: boolean = false;
   error: Error | null | unknown | any = null;
   private queryObservable: ObservableQuery<any> | null = null;
@@ -53,6 +54,7 @@ class ServiceStore {
               serviceId: service._id,
             })
           );
+          // this.setCurrentService();
           this.isLoading = false;
         },
         error: (error) => {
@@ -67,21 +69,31 @@ class ServiceStore {
     }
   };
 
+  setCurrentService = () => {
+    if (this.services.length > 0) {
+      this.fetchServices();
+    }
+    const userId = this.rootStore.authStore.userData.serviceId;
+    this.currentService =
+      this.services.find((service) => service._id === userId) || null;
+  };
+
   stopPolling = () => {
     this.queryObservable?.stopPolling();
   };
 
-  updateService = async (serviceId: string, input: UpdateServiceInput) => {
+  updateService = async (userId: string, input: UpdateServiceInput) => {
     this.isLoading = true;
     try {
       const result = await this.apolloClient.mutate<UpdateServiceOutput>({
         mutation: UPDATE_SERVICE,
-        variables: { _id: serviceId, input },
+        variables: { userId, input },
       });
       this.isLoading = false;
       if (result.data?.updateService) {
-        // Actualizează lista de servicii sau afișează un mesaj de succes
-        this.fetchServices();
+        this.currentService = result.data.updateService;
+        console.log('Service updated:', this.currentService);
+        this.fetchServices(); // Actualizează lista serviciilor după update
       }
     } catch (error) {
       this.error = error;
@@ -140,6 +152,16 @@ class ServiceStore {
       if (result.data) {
         console.log('Service created:', result.data.createService);
         this.services.push(result.data.createService);
+        this.currentService = result.data.createService; // Setează currentService
+        console.log('Service created:', this.currentService);
+
+        if (this.rootStore.authStore.userData.userType === 'SERVICE_USER') {
+          await this.rootStore.authStore.updateUserDetails(
+            this.currentService._id, // Actualizează userId cu noul serviceId
+            this.rootStore.authStore.userData.email,
+            this.rootStore.authStore.userData.userName
+          );
+        }
       }
     } catch (error) {
       this.isLoading = false;
@@ -147,7 +169,7 @@ class ServiceStore {
       console.error('Service creation failed:', error);
     }
   };
-  
+
   fetchServicesByCategory = async (category: string) => {
     this.isLoading = true;
     this.error = null;
@@ -175,9 +197,10 @@ class ServiceStore {
     if (!searchTerm) {
       return this.services;
     }
-    return this.services.filter(service =>
-      service.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    return this.services.filter(
+      (service) =>
+        service.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        service.description?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
 }

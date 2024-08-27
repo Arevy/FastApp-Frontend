@@ -12,7 +12,10 @@ export const LOGIN = gql`
         isActive
         userName
         userType
+        serviceId
+        __typename
       }
+      __typename
     }
   }
 `;
@@ -23,12 +26,14 @@ export const REGISTER_USER = gql`
     $password: String!
     $userType: UserType!
     $userName: String!
+    $serviceId: ID
   ) {
     registerUser(
       email: $email
       password: $password
       userType: $userType
       userName: $userName
+      serviceId: $serviceId
     ) {
       token
       user {
@@ -37,6 +42,7 @@ export const REGISTER_USER = gql`
         userName
         isAdmin
         isActive
+        serviceId
       }
     }
   }
@@ -86,4 +92,31 @@ export const UPDATE_USER_ADMIN_STATUS = gql`
     }
   }
 `;
+
+export const UPDATE_PASSWORD = gql`
+  mutation UpdatePassword($_id: ID!, $newPassword: String!) {
+    updatePassword(_id: $_id, newPassword: $newPassword) {
+      success
+      message
+    }
+  }
+`;
+
+export const UPDATE_USER_DETAILS = gql`
+  mutation UpdateUserDetails($_id: ID!, $email: String, $userName: String) {
+    updateUserDetails(_id: $_id, email: $email, userName: $userName) {
+      success
+      message
+      user {
+        _id
+        email
+        userName
+        userType
+        isAdmin
+        isActive
+      }
+    }
+  }
+`;
+
 /* eslint-enable quotes */

@@ -13,6 +13,7 @@ import {
 } from 'react-icons/bs';
 import { routes } from 'src/routes/routesConfig';
 import './index.scss';
+import { AccountDetailsRoute } from 'src/pages/AccountDetails/Route';
 
 const SIZE = '32px';
 
@@ -80,12 +81,15 @@ export const NavBar = observer(() => {
         >
           <BsTools size={SIZE} title="Services" />
         </Link>
-        <div className="navbar-item text-light font-weight-bold">
-          <BsInfoCircle size={SIZE} title="Home" />
-          {'   '}
-          {authStore.userData.userType}
-          {/**TODO make a nice replace for  userType */}
-        </div>
+        <Link
+            className="navbar-item text-light font-weight-bold"
+            to={AccountDetailsRoute.path} // Legăm ruta către `AccountDetails`
+          >
+            <BsInfoCircle size={SIZE} title="Account Details" />
+            {'   '}
+            {authStore.userData.userType}
+          </Link>
+
         <Link
           className="navbar-item text-light font-weight-bold"
           to={!authStore.isAuth ? LoginRoute.path : LogoutRoute.path}
@@ -94,7 +98,8 @@ export const NavBar = observer(() => {
             <BsBoxArrowInRight size={SIZE} title="Login" />
           ) : (
             <button type="button" className="btn btn-secondary btn-sm mx-auto">
-              Hi, {authStore.userData.userName}{' '}
+              Hi, {authStore.userData.userName}
+              {'      '}
               <BsBoxArrowRight size={SIZE} title="Logout" />
             </button>
           )}

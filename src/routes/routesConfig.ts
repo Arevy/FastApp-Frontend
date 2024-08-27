@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { AccountDetailsRoute } from 'src/pages/AccountDetails/Route';
 import { AppointmentsRoute } from 'src/pages/AppointmentsAdministration/Route';
 
 import { HomeRoute } from 'src/pages/Home/Route';
@@ -29,6 +30,7 @@ export interface RouteConfig {
 export const routesArray: RouteConfig[] = [
   HomeRoute,
   LoginRoute,
+  AccountDetailsRoute,
   LoginAdminRoute,
   LoginServiceRoute,
   RegistrationRoute,
@@ -46,6 +48,7 @@ export const routes = {
   HomeRoute,
   LoginRoute,
   RegistrationRoute,
+  AccountDetailsRoute,
   LoginAdminRoute,
   LoginServiceRoute,
   LogoutRoute,

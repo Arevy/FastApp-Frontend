@@ -118,19 +118,19 @@ export const ListOfServices = observer(() => {
             .slice()
             .sort((a, b) => a.category.localeCompare(b.category))
             .map((service) => (
-              <tr key={service.serviceId}>
+              <tr key={service._id}>
                 <td>{service.name}</td>
                 <td>{service.category}</td>
                 <td
                   style={{ cursor: 'pointer' }}
-                  onClick={() => handleToggleActive(service.serviceId)}
+                  onClick={() => handleToggleActive(service._id)}
                 >
                   {service.isActive ? <EmojiGreenCheck /> : <EmojiRedCross />}
                 </td>
                 <td>
                   <button
                     className="btn btn-danger"
-                    onClick={() => handleDelete(service.serviceId)}
+                    onClick={() => handleDelete(service._id)}
                     style={{ cursor: 'pointer' }}
                   >
                     Delete
