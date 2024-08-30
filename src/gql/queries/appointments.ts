@@ -14,9 +14,9 @@ export const CREATE_APPOINTMENT = gql`
       status: $status
     ) {
       _id
-      userId 
+      userId
 
-      serviceId 
+      serviceId
 
       date
       status
@@ -40,8 +40,9 @@ export const LIST_ALL_APPOINTMENTS_FULL = gql`
     listAllAppointmentsFull {
       _id
       user {
-        email
         _id
+        email
+        userName
         __typename
       }
       service {
@@ -58,9 +59,14 @@ export const LIST_ALL_APPOINTMENTS_FULL = gql`
 `;
 
 export const LIST_USER_APPOINTMENTS = gql`
-  query GetUserAppointments($userId: ID!) {
+  query ListUserAppointments($userId: ID!) {
     userAppointments(userId: $userId) {
       _id
+      user {
+        _id
+        email
+        userName
+      }
       service {
         _id
         name
@@ -101,4 +107,24 @@ export const DELETE_APPOINTMENTS = gql`
       message
     }
   }
+`;
+
+export const FETCH_SERVICE_APPOINTMENTS = gql`
+query FetchServiceAppointments($serviceId: ID!) {
+  fetchServiceAppointments(serviceId: $serviceId) {
+    _id
+    user {
+      _id
+      email
+      userName
+    }
+    service {
+      _id
+      name
+      category
+    }
+    date
+    status
+  }
+}
 `;

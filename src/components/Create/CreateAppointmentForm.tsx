@@ -17,7 +17,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = observer(
     const [serviceId, setServiceId] = useState(propsServiceId || '');
     const [date, setDate] = useState('');
     const [status, setStatus] = useState('pending');
-    const [currentUserId, setUserId] = useState(authStore.userData?.serviceId || ''); // need to check uuid
+    const [currentUserId, setUserId] = useState(authStore.userData?._id || ''); 
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {

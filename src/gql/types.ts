@@ -69,11 +69,11 @@ export interface IService {
 }
 
 export interface IAppointment {
-  user: any;
   _id: string;
-  userId: string;
-  serviceId: string;
-  service?: IService; // Include nested service details
+  userId: string; 
+  serviceId: string; 
+  user?: IUser | null; 
+  service?: IService | null; 
   date: string;
   status: string;
 }
@@ -86,6 +86,7 @@ export interface ScheduleAppointmentInput {
   userId: string;
   serviceId: string;
   date: string;
+  status: string;
 }
 
 export interface ScheduleAppointmentOutput {

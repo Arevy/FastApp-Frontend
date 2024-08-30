@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { observer } from "mobx-react-lite";
-import { useStores } from "src/stores/RootStoreContext";
-import { Spinner } from "src/components/SmallComponents/Spinner";
-import { ErrorAlert } from "src/components/SmallComponents/ErrorAlert";
-import { UpdateServiceInput } from "src/gql/types";
+import React, { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/stores/RootStoreContext';
+import { Spinner } from 'src/components/SmallComponents/Spinner';
+import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
+import { UpdateServiceInput } from 'src/gql/types';
 import {
   Button,
   Form,
@@ -14,23 +14,23 @@ import {
   Progress,
   Row,
   Col,
-} from "reactstrap";
+} from 'reactstrap';
 
 const AccountDetails = observer(() => {
   const { authStore, serviceStore } = useStores();
   const [isEditing, setIsEditing] = useState(false);
-  const [email, setEmail] = useState(authStore.userData.email || "");
-  const [userName, setUserName] = useState(authStore.userData.userName || "");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(authStore.userData.email || '');
+  const [userName, setUserName] = useState(authStore.userData.userName || '');
+  const [password, setPassword] = useState('');
   const [description, setDescription] = useState(
-    serviceStore.currentService?.description || ""
+    serviceStore.currentService?.description || ''
   );
   const [category, setCategory] = useState(
-    serviceStore.currentService?.category || ""
+    serviceStore.currentService?.category || ''
   );
   const [image, setImage] = useState<File | null>(null);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   useEffect(() => {
@@ -40,11 +40,11 @@ const AccountDetails = observer(() => {
 
   useEffect(() => {
     if (
-      authStore.userData.userType === "SERVICE_USER" &&
+      authStore.userData.userType === 'SERVICE_USER' &&
       serviceStore.currentService
     ) {
-      setDescription(serviceStore.currentService.description || "");
-      setCategory(serviceStore.currentService.category || "");
+      setDescription(serviceStore.currentService.description || '');
+      setCategory(serviceStore.currentService.category || '');
       setUserName(
         serviceStore.currentService.name || authStore.userData.userName
       );
@@ -74,9 +74,9 @@ const AccountDetails = observer(() => {
       );
 
       if (updateResult) {
-        setSuccessMessage("Service updated successfully!");
+        setSuccessMessage('Service updated successfully!');
       } else {
-        setErrorMessage("Failed to update service.");
+        setErrorMessage('Failed to update service.');
       }
     }
 
@@ -109,7 +109,7 @@ const AccountDetails = observer(() => {
       };
       reader.onloadend = () => {
         setUploadProgress(100);
-        resolve((reader.result as string).split(",")[1]);
+        resolve((reader.result as string).split(',')[1]);
       };
       reader.onerror = (error) => reject(error);
     });
@@ -125,7 +125,7 @@ const AccountDetails = observer(() => {
 
   return (
     <div className="container">
-      <Label className="font-weight-bold" style={{ color: "white" }}>
+      <Label className="font-weight-bold" style={{ color: 'white' }}>
         <h2>Account Details</h2>
       </Label>
       {successMessage && <Alert color="success">{successMessage}</Alert>}
@@ -138,7 +138,7 @@ const AccountDetails = observer(() => {
               <Label
                 for="email"
                 className="font-weight-bold"
-                style={{ color: "white" }}
+                style={{ color: 'white' }}
               >
                 Email
               </Label>
@@ -156,7 +156,7 @@ const AccountDetails = observer(() => {
               <Label
                 for="userName"
                 className="font-weight-bold"
-                style={{ color: "white" }}
+                style={{ color: 'white' }}
               >
                 Username
               </Label>
@@ -170,7 +170,7 @@ const AccountDetails = observer(() => {
             </FormGroup>
           </Col>
         </Row>
-        {authStore.userData.userType === "SERVICE_USER" && (
+        {authStore.userData.userType === 'SERVICE_USER' && (
           <>
             <Row>
               <Col md={6}>
@@ -178,7 +178,7 @@ const AccountDetails = observer(() => {
                   <Label
                     for="category"
                     className="font-weight-bold"
-                    style={{ color: "white" }}
+                    style={{ color: 'white' }}
                   >
                     Category
                   </Label>
@@ -196,7 +196,7 @@ const AccountDetails = observer(() => {
                   <Label
                     for="description"
                     className="font-weight-bold"
-                    style={{ color: "white" }}
+                    style={{ color: 'white' }}
                   >
                     Description
                   </Label>
@@ -211,14 +211,14 @@ const AccountDetails = observer(() => {
               </Col>
             </Row>
             {serviceStore.currentService?.imageBase64 && (
-              <div style={{ marginBottom: "10px" }}>
+              <div style={{ marginBottom: '10px' }}>
                 <img
                   src={`data:${serviceStore.currentService.imageContentType};base64,${serviceStore.currentService.imageBase64}`}
                   alt="Current Service"
                   style={{
-                    maxWidth: "100px",
-                    maxHeight: "100px",
-                    display: "block",
+                    maxWidth: '100px',
+                    maxHeight: '100px',
+                    display: 'block',
                   }}
                 />
               </div>
@@ -227,7 +227,7 @@ const AccountDetails = observer(() => {
               <Label
                 for="image"
                 className="font-weight-bold"
-                style={{ color: "white" }}
+                style={{ color: 'white' }}
               >
                 Upload Image
               </Label>
@@ -252,7 +252,7 @@ const AccountDetails = observer(() => {
           <Label
             for="password"
             className="font-weight-bold"
-            style={{ color: "white" }}
+            style={{ color: 'white' }}
           >
             Change Password
           </Label>
@@ -267,15 +267,15 @@ const AccountDetails = observer(() => {
         <Button
           color="primary"
           onClick={() => setIsEditing(!isEditing)}
-          className={isEditing ? "btn-danger" : ""}
+          className={isEditing ? 'btn-danger' : ''}
         >
-          {isEditing ? "Cancel" : "Edit"}
+          {isEditing ? 'Cancel' : 'Edit'}
         </Button>
         {isEditing && (
           <Button
             color="success"
             onClick={handleUpdate}
-            style={{ marginLeft: "10px" }}
+            style={{ marginLeft: '10px' }}
           >
             Save
           </Button>

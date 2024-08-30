@@ -5,7 +5,7 @@ import { AppointmentStatus, AppointmentStatusLabels } from 'src/gql/types';
 import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
 import { Spinner } from 'src/components/SmallComponents/Spinner';
 import { parseUnixTimestamp } from 'src/utils/utils';
-import { FormGroup, Input, Label, Row, Col } from 'reactstrap';
+import { FormGroup, Input, Label, Row, Col, Button } from 'reactstrap';
 
 export const ListOfAppointments = observer(() => {
   const { appointmentStore, authStore } = useStores();
@@ -13,6 +13,10 @@ export const ListOfAppointments = observer(() => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedService, setSelectedService] = useState('');
+  const [editing, setEditing] = useState<string | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<AppointmentStatus | ''>(
+    ''
+  );
   const [users, setUsers] = useState<string[]>([]);
   const [services, setServices] = useState<(string | undefined)[]>([]);
 
@@ -27,25 +31,25 @@ export const ListOfAppointments = observer(() => {
   useEffect(() => {
     const uniqueUsers = Array.from(
       new Set(
-        appointmentStore.appointments.map(
-          (appointment) => appointment.user?.email
+        appointmentStore.appointments?.map(
+          (appointment) => appointment.user?.email || ''
         )
       )
-    );
+    ).filter((email) => email !== '');
     setUsers(uniqueUsers);
 
     const uniqueServices = Array.from(
       new Set(
-        appointmentStore.appointments.map(
-          (appointment) => appointment.service?.name
+        appointmentStore.appointments?.map(
+          (appointment) => appointment.service?.name || ''
         )
       )
-    );
-    uniqueServices.length && setServices(uniqueServices);
+    ).filter((name) => name !== '');
+    setServices(uniqueServices);
   }, [appointmentStore.appointments]);
 
-  const filteredAppointments = appointmentStore.appointments.filter(
-    (appointment) => {
+  const filteredAppointments = appointmentStore.appointments
+    ?.filter((appointment) => {
       const matchesSearchTerm =
         appointment.user?.email
           ?.toLowerCase()
@@ -68,27 +72,32 @@ export const ListOfAppointments = observer(() => {
         : true;
 
       return matchesSearchTerm && matchesUser && matchesService;
-    }
-  );
+    })
+    ?.sort((a, b) => {
+      if (authStore.userData.userType === 'NORMAL_USER') {
+        return a.user?.email === authStore.userData.email ? -1 : 1;
+      }
+      return 0;
+    });
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
   const handleModify = (appointmentId: string) => {
-    const newStatus = appointmentStore.appointments.find(
-      (app) => app._id === appointmentId
-    )?.status;
-    appointmentStore.modifyAppointment(appointmentId, {
-      newDate: new Date().toISOString(),
-      newStatus,
-    });
+    if (selectedStatus) {
+      appointmentStore.modifyAppointment(appointmentId, {
+        newDate: new Date().toISOString(),
+        newStatus: selectedStatus,
+      });
+      setEditing(null);
+    }
   };
 
   if (appointmentStore.isLoading) return <Spinner />;
   if (appointmentStore.error)
     return <ErrorAlert errorMessage={appointmentStore.error.message} />;
-  if (filteredAppointments.length === 0) {
+  if (filteredAppointments?.length === 0) {
     return <ErrorAlert errorMessage="No appointments found" />;
   }
 
@@ -111,7 +120,7 @@ export const ListOfAppointments = observer(() => {
             />
           </FormGroup>
         </Col>
-        {authStore.userData.userType != 'NORMAL_USER' && (
+        {authStore.userData.userType !== 'NORMAL_USER' && (
           <Col md={4}>
             <FormGroup className="mb-0">
               <Label for="userSelect" className="text-light form-label w-100">
@@ -135,7 +144,7 @@ export const ListOfAppointments = observer(() => {
             </FormGroup>
           </Col>
         )}
-        {authStore.userData.userType == 'NORMAL_USER' && (
+        {authStore.userData.userType === 'NORMAL_USER' && (
           <Col md={4}>
             <FormGroup className="mb-0">
               <Label
@@ -172,40 +181,33 @@ export const ListOfAppointments = observer(() => {
             <th scope="col">Category</th>
             <th scope="col">Last Update</th>
             <th scope="col">Status</th>
-            {authStore.userData.userType != 'NORMAL_USER' && (
-              <th scope="col">Modify</th>
-            )}
-            {authStore.userData.userType == 'NORMAL_USER' && (
-              <th scope="col">Cancel</th>
+            {authStore.userData.userType !== 'NORMAL_USER' && (
+              <th scope="col">Actions</th>
             )}
           </tr>
         </thead>
         <tbody>
-          {filteredAppointments.map((appointment) => (
+          {filteredAppointments?.map((appointment) => (
             <tr key={appointment._id}>
-              <td>{appointment.user?.email}</td>
-              <td>{appointment.service?.name}</td>
-              <td>{appointment.service?.category}</td>
+              <td>{appointment.user?.email || 'N/A'}</td>
+              <td>{appointment.service?.name || 'N/A'}</td>
+              <td>{appointment.service?.category || 'N/A'}</td>
               <td>{parseUnixTimestamp(appointment.date)}</td>
               <td>
-                {
-                  AppointmentStatusLabels[
-                    appointment.status as AppointmentStatus
-                  ]
-                }
-              </td>
-              {authStore.userData.userType != 'NORMAL_USER' && (
-                <td>
-                  <select
-                    style={{ cursor: 'pointer' }}
-                    value={appointment.status}
-                    onChange={(e) =>
-                      appointmentStore.modifyAppointment(appointment._id, {
-                        newDate: appointment.date,
-                        newStatus: e.target.value as AppointmentStatus,
-                      })
+                {authStore.userData.userType === 'NORMAL_USER' ? (
+                  <span>
+                    {
+                      AppointmentStatusLabels[
+                        appointment.status as AppointmentStatus
+                      ]
                     }
-                    onBlur={() => handleModify(appointment._id)}
+                  </span>
+                ) : editing === appointment._id ? (
+                  <select
+                    value={selectedStatus}
+                    onChange={(e) =>
+                      setSelectedStatus(e.target.value as AppointmentStatus)
+                    }
                     className="form-select"
                   >
                     {Object.values(AppointmentStatus).map((status) => (
@@ -214,10 +216,33 @@ export const ListOfAppointments = observer(() => {
                       </option>
                     ))}
                   </select>
-                </td>
-              )}
-              {authStore.userData.userType == 'NORMAL_USER' && (
-                <td>
+                ) : (
+                  <span
+                    onClick={() => {
+                      setEditing(appointment._id);
+                      setSelectedStatus(
+                        appointment.status as AppointmentStatus
+                      );
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {
+                      AppointmentStatusLabels[
+                        appointment.status as AppointmentStatus
+                      ]
+                    }
+                  </span>
+                )}
+              </td>
+              <td>
+                {editing === appointment._id ? (
+                  <Button
+                    color="success"
+                    onClick={() => handleModify(appointment._id)}
+                  >
+                    Save
+                  </Button>
+                ) : (
                   <button
                     className="btn btn-danger"
                     style={{ cursor: 'pointer' }}
@@ -227,8 +252,8 @@ export const ListOfAppointments = observer(() => {
                   >
                     Cancel
                   </button>
-                </td>
-              )}
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

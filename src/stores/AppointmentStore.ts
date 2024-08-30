@@ -13,6 +13,7 @@ import {
   // LIST_ALL_APPOINTMENTS, //->  trebuie folosita varianta scurta pe viitor
   LIST_ALL_APPOINTMENTS_FULL,
   LIST_USER_APPOINTMENTS,
+  FETCH_SERVICE_APPOINTMENTS,
   CREATE_APPOINTMENTS,
   UPDATE_APPOINTMENTS,
   DELETE_APPOINTMENTS,
@@ -58,32 +59,34 @@ class AppointmentStore {
   async fetchAppointments() {
     this.isLoading = true;
     this.error = null;
+    const userType = this.rootStore.authStore.userData.userType;
+    const currentUserId = this.rootStore.authStore.userData._id;
+    const currentServiceId = this.rootStore.authStore.userData.serviceId;
+
     try {
-    // Use watchQuery for continuous polling
-      const result = await this.apolloClient.query({
-        query: LIST_ALL_APPOINTMENTS_FULL,
-        fetchPolicy: 'network-only',
-      });
+      let result;
 
-  
-      const userType = this.rootStore.authStore.userData.userType;
-      const serviceUserId = this.rootStore.authStore.userData._id;
-
-      console.log(
-        'serviceUserId',
-        serviceUserId,
-        toJS(
-          result.data.listAllAppointmentsFull.map(
-            (appointment: IAppointment) => appointment.serviceId
-          )
-        )
-      );
-      if (userType === 'SERVICE_USER') {
-        this.appointments = result.data.listAllAppointmentsFull.filter(
-          // (appointment: IAppointment) => appointment.serviceId === serviceUserId
-          (appointment: IAppointment) => appointment.service?.name === this.rootStore.authStore.userData.userName // TO DO it by id
-        );
-      } else {
+      if (userType === 'NORMAL_USER') {
+        result = await this.apolloClient.query({
+          query: LIST_USER_APPOINTMENTS,
+          variables: { userId: currentUserId },
+          fetchPolicy: 'network-only',
+        });
+        this.appointments = result.data.userAppointments;
+      } else if (userType === 'SERVICE_USER') {
+        result = await this.apolloClient.query({
+          query: FETCH_SERVICE_APPOINTMENTS,
+          variables: { serviceId: currentServiceId },
+          fetchPolicy: 'network-only',
+        });
+        this.appointments = result.data.fetchServiceAppointments;
+        console.log(this.appointments);
+        console.log(result.data.fetchServiceAppointments);
+      } else if (userType === 'ADMIN_USER') {
+        result = await this.apolloClient.query({
+          query: LIST_ALL_APPOINTMENTS_FULL,
+          fetchPolicy: 'network-only',
+        });
         this.appointments = result.data.listAllAppointmentsFull;
       }
 
