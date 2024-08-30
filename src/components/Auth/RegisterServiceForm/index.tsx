@@ -42,7 +42,7 @@ const RegisterServiceForm: React.FC<RegisterServiceFormProps> = observer(
           email,
           password,
           'SERVICE_USER',
-          userName,
+          userName
         );
 
         const userId = newUser._id; // Presupunem că registerUser returnează un obiect cu id-ul utilizatorului
@@ -57,19 +57,20 @@ const RegisterServiceForm: React.FC<RegisterServiceFormProps> = observer(
             if (reader.result) {
               imageBase64 = (reader.result as string).split(',')[1];
               imageContentType = imageFile.type;
-
               // Creează serviciul și îl asociază cu userId
               serviceStore
                 .createService({
+                  userId,
                   name,
                   category,
                   description,
                   isActive: true,
                   imageBase64,
                   imageContentType,
+                  userType: 'SERVICE_USER',
                 })
                 .then(() => {
-                  return authStore.loginUser(email, password, 'SERVICE');
+                  return authStore.loginUser(email, password, 'SERVICE_USER');
                 })
                 .then(() => {
                   serviceStore.fetchServices();
@@ -99,15 +100,17 @@ const RegisterServiceForm: React.FC<RegisterServiceFormProps> = observer(
           // Creează serviciul fără imagine, dar asociază userId
           serviceStore
             .createService({
+              userId,
               name,
               category,
               description,
               isActive: true,
               imageBase64,
               imageContentType,
+              userType: 'SERVICE_USER',
             })
             .then(() => {
-              return authStore.loginUser(email, password, 'SERVICE');
+              return authStore.loginUser(email, password, 'SERVICE_USER');
             })
             .then(() => {
               serviceStore.fetchServices();

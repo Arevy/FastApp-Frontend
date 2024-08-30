@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/stores/RootStoreContext';
 import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
@@ -9,13 +9,22 @@ interface CreateServiceFormProps {
 
 const CreateServiceForm: React.FC<CreateServiceFormProps> = observer(
   ({ onClose }) => {
-    const { serviceStore } = useStores();
+    const { serviceStore, userStore, authStore } = useStores();
     const [name, setName] = useState('');
     const [category, setCategory] = useState('');
     const [isActive, setIsActive] = useState(true);
     const [description, setDescription] = useState('');
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+
+    useEffect(() => {
+      if (authStore.userData.userType === 'ADMIN_USER') {
+        userStore.fetchUsers();
+      } else if (authStore.userData.userType === 'NORMAL_USER') {
+        setSelectedUserId(authStore.userData._id);
+      }
+    }, [authStore.userData.userType, userStore, authStore.userData._id]);
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
       e.preventDefault();
@@ -41,7 +50,6 @@ const CreateServiceForm: React.FC<CreateServiceFormProps> = observer(
                 imageContentType
               );
 
-              // După ce imaginea este încărcată, se face apelul pentru a crea serviciul
               serviceStore
                 .createService({
                   name,
@@ -50,9 +58,10 @@ const CreateServiceForm: React.FC<CreateServiceFormProps> = observer(
                   description,
                   imageBase64,
                   imageContentType,
+                  userId: selectedUserId || authStore.userData._id,
                 })
                 .then(() => {
-                  serviceStore.fetchServices(); // Fetch services after creating a new one
+                  serviceStore.fetchServices();
                   if (onClose) {
                     onClose();
                   }
@@ -83,9 +92,10 @@ const CreateServiceForm: React.FC<CreateServiceFormProps> = observer(
             description,
             imageBase64,
             imageContentType,
+            userId: selectedUserId || authStore.userData._id, // Folosim userId selectat sau pe cel al utilizatorului curent
           });
 
-          await serviceStore.fetchServices(); // Fetch services after creating a new one
+          await serviceStore.fetchServices();
           if (onClose) {
             onClose();
           }
@@ -143,6 +153,39 @@ const CreateServiceForm: React.FC<CreateServiceFormProps> = observer(
             }
           />
         </FormGroup>
+        {authStore.userData.userType === 'ADMIN_USER' ? (
+          <FormGroup>
+            <Label for="user">Assign to User</Label>
+            <Input
+              type="select"
+              name="user"
+              id="user"
+              value={selectedUserId || ''}
+              onChange={(e) => setSelectedUserId(e.target.value)}
+              required
+            >
+              <option value="" disabled>
+                Select a user
+              </option>
+              {userStore.users.map((user) => (
+                <option key={user._id} value={user._id}>
+                  {user.email}
+                </option>
+              ))}
+            </Input>
+          </FormGroup>
+        ) : (
+          <FormGroup>
+            <Label for="userEmail">User Email</Label>
+            <Input
+              type="text"
+              name="userEmail"
+              id="userEmail"
+              value={authStore.userData.email}
+              disabled
+            />
+          </FormGroup>
+        )}
         <FormGroup check>
           <Label check>
             <Input

@@ -78,3 +78,17 @@ export const LIST_SERVICES_BY_CATEGORY = gql`
     }
   }
 `;
+
+export const GET_SERVICE_BY_USER_ID = gql`
+  query ServiceByUserId($userId: ID!) {
+    serviceByUserId(userId: $userId) {
+      _id
+      name
+      category
+      isActive
+      description
+      imageBase64
+      imageContentType
+    }
+  }
+`;

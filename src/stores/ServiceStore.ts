@@ -8,6 +8,7 @@ import RootStore from './RootStore';
 import {
   CREATE_SERVICE,
   DELETE_SERVICE,
+  GET_SERVICE_BY_USER_ID,
   LIST_ALL_SERVICES,
   LIST_SERVICES_BY_CATEGORY,
   TOGGLE_SERVICE_ACTIVE,
@@ -69,20 +70,34 @@ class ServiceStore {
     }
   };
 
-  setCurrentService = () => {
-    if (this.services.length > 0) {
-      this.fetchServices();
+  setCurrentService = async () => {
+    const userId = this.rootStore.authStore.userData._id;
+
+    try {
+      const { data } = await this.apolloClient.query({
+        query: GET_SERVICE_BY_USER_ID,
+        variables: { userId },
+      });
+
+      if (data?.serviceByUserId) {
+        this.currentService = data.serviceByUserId;
+      } else {
+        this.currentService = null;
+      }
+    } catch (error) {
+      console.error('Error fetching current service:', error);
+      this.currentService = null;
     }
-    const userId = this.rootStore.authStore.userData.serviceId;
-    this.currentService =
-      this.services.find((service) => service._id === userId) || null;
   };
 
   stopPolling = () => {
     this.queryObservable?.stopPolling();
   };
 
-  updateService = async (userId: string, input: UpdateServiceInput) => {
+  updateService = async (
+    userId: string,
+    input: UpdateServiceInput
+  ): Promise<Service | null> => {
     this.isLoading = true;
     try {
       const result = await this.apolloClient.mutate<UpdateServiceOutput>({
@@ -90,14 +105,19 @@ class ServiceStore {
         variables: { userId, input },
       });
       this.isLoading = false;
+
       if (result.data?.updateService) {
         this.currentService = result.data.updateService;
         console.log('Service updated:', this.currentService);
         this.fetchServices(); // Actualizează lista serviciilor după update
+        return result.data.updateService; // Returnează rezultatul actualizării
       }
+
+      return null;
     } catch (error) {
       this.error = error;
       this.isLoading = false;
+      return null;
     }
   };
 

@@ -23,7 +23,7 @@ export interface UpdateServiceInput {
 }
 
 export interface UpdateServiceOutput {
-  updateService: Service;
+  updateService?: Service;
 }
 
 export interface CreateServiceInput {
@@ -33,7 +33,8 @@ export interface CreateServiceInput {
   description?: string;
   imageBase64?: string;
   imageContentType?: string;
-  userId?: string;
+  userId: string;
+  userType?: string;
 }
 
 export interface CreateServiceOutput {
