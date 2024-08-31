@@ -61,27 +61,32 @@ export const NavBar = observer(() => {
         >
           <BsHouse size={SIZE} title="Home" />
         </Link>
-        {/* {authStore.isAuth && authStore.userData.isAdmin && ( */}
-        <Link
-          className="navbar-item text-light font-weight-bold"
-          to={UserAdministrationRoute.path}
-        >
-          <BsPeople size={SIZE} title="User administration" />
-        </Link>
-        {/* )} */}
-        <Link
-          className="navbar-item text-light font-weight-bold"
-          to={AppointmentsRoute.path}
-        >
-          <BsListCheck size={SIZE} title="Appointments" />
-        </Link>
-        <Link
-          className="navbar-item text-light font-weight-bold"
-          to={ServiceAdministrationRoute.path}
-        >
-          <BsTools size={SIZE} title="Services" />
-        </Link>
-        <Link
+        {authStore.isAuth && (
+          <Link
+            className="navbar-item text-light font-weight-bold"
+            to={UserAdministrationRoute.path}
+          >
+            <BsPeople size={SIZE} title="User administration" />
+          </Link>
+        )}
+        {authStore.isAuth && (
+          <Link
+            className="navbar-item text-light font-weight-bold"
+            to={AppointmentsRoute.path}
+          >
+            <BsListCheck size={SIZE} title="Appointments" />
+          </Link>
+        )}
+        {authStore.isAuth && (
+          <Link
+            className="navbar-item text-light font-weight-bold"
+            to={ServiceAdministrationRoute.path}
+          >
+            <BsTools size={SIZE} title="Services" />
+          </Link>
+        )}
+        {authStore.isAuth && (
+          <Link
             className="navbar-item text-light font-weight-bold"
             to={AccountDetailsRoute.path} // Legăm ruta către `AccountDetails`
           >
@@ -89,7 +94,7 @@ export const NavBar = observer(() => {
             {'   '}
             {authStore.userData.userType}
           </Link>
-
+        )}
         <Link
           className="navbar-item text-light font-weight-bold"
           to={!authStore.isAuth ? LoginRoute.path : LogoutRoute.path}

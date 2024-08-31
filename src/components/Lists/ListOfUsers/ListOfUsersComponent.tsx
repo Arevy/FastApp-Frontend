@@ -13,11 +13,13 @@ interface ListOfUsersProps {
     isActive: boolean,
     userType: UserType
   ) => void;
+  deleteUser?: (_id: string) => void;
 }
 
 const ListOfUsers: React.FC<ListOfUsersProps> = ({
   users,
   updateUserAdminStatus,
+  deleteUser,
 }) => {
   const [editing, setEditing] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<UserType | ''>('');
@@ -92,6 +94,7 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                 <th scope="col">Registration date</th>
                 <th scope="col">Last login</th>
                 <th scope="col">User Type</th>
+                {!!deleteUser && <th scope="col">Delete</th>}
               </tr>
             </thead>
             <tbody>
@@ -163,6 +166,16 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                       </span>
                     )}
                   </td>
+                  {!!deleteUser && (
+                    <td>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => deleteUser(user._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

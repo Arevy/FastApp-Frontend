@@ -27,7 +27,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ userType }) => {
 
   const email = useInputValue('');
   const password = useInputValue('');
-  // const userType = 'NORMAL_USER';
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();

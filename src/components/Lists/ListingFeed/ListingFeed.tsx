@@ -13,24 +13,20 @@ const ListingFeed: React.FC = observer(() => {
   const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
-    const fetchServicesAndCategories = async () => {
-      await serviceStore.fetchServices();
-      const uniqueCategories = Array.from(
-        new Set(serviceStore.services.map((service) => service.category))
-      );
-      setCategories(uniqueCategories);
+    const fetchServices = async () => {
+      if (category) {
+        await serviceStore.fetchServicesByCategory(category);
+      } else {
+        await serviceStore.fetchServices().then(() => {
+          const uniqueCategories = Array.from(
+            new Set(serviceStore.services.map((service) => service.category))
+          );
+          setCategories(uniqueCategories);
+        });
+      }
     };
-
-    fetchServicesAndCategories();
-  }, [serviceStore]);
-
-  useEffect(() => {
-    if (category) {
-      serviceStore.fetchServicesByCategory(category);
-    } else {
-      serviceStore.fetchServices();
-    }
-  }, [category, serviceStore]);
+    fetchServices();
+  }, [category, serviceStore, serviceStore.services.length]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);

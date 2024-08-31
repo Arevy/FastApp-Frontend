@@ -6,9 +6,7 @@ import { useStores } from 'src/stores/RootStoreContext';
 import { observer } from 'mobx-react-lite';
 
 export const GetListOfUsers = observer(() => {
-  // const { loading, error, data, startPolling, stopPolling } = useQuery(LIST_ALL_USERS, { fetchPolicy: 'no-cache' });
-
-  const { userStore } = useStores();
+  const { userStore, authStore } = useStores();
 
   useEffect(() => {
     userStore.listAllUsers();
@@ -18,6 +16,10 @@ export const GetListOfUsers = observer(() => {
     };
   }, [userStore]);
 
+  const handleUserDeleted = () => {
+    userStore.listAllUsers();
+  };
+
   if (userStore.isLoading) return <Spinner />;
   if (userStore.error)
     return <ErrorAlert errorMessage={userStore.error.message} />;
@@ -26,6 +28,11 @@ export const GetListOfUsers = observer(() => {
     <ListOfUsers
       users={userStore.users}
       updateUserAdminStatus={userStore.updateUserAdminStatus}
+      deleteUser={
+        authStore.userData.userType === 'ADMIN_USER'
+          ? (userId) => userStore.deleteUserById(userId).then(handleUserDeleted)
+          : undefined
+      }
     />
   ) : (
     <ErrorAlert errorMessage="No users found" />

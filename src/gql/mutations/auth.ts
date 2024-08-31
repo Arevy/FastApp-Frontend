@@ -119,4 +119,13 @@ export const UPDATE_USER_DETAILS = gql`
   }
 `;
 
+export const DELETE_USER_BY_ID = gql`
+  mutation deleteUserById($_id: ID!) {
+    deleteUserById(_id: $_id) {
+      success
+      message
+    }
+  }
+`;
+
 /* eslint-enable quotes */

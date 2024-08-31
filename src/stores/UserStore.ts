@@ -121,7 +121,7 @@ class UserStore {
     this.error = null;
     try {
       await this.apolloClient.mutate({
-        mutation: Mutations.CREATE_USER, 
+        mutation: Mutations.CREATE_USER,
         variables: { email, userName, password, userType, isActive },
       });
       runInAction(() => {
@@ -136,15 +136,44 @@ class UserStore {
     }
   }
 
-  searchAndFilterUsers = (searchTerm: string, userType: UserType | ''): IUser[] => {
-    return this.users.filter(user => {
-      const matchesSearch = 
+  searchAndFilterUsers = (
+    searchTerm: string,
+    userType: UserType | ''
+  ): IUser[] => {
+    return this.users.filter((user) => {
+      const matchesSearch =
         user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.userName?.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesType = userType ? user.userType === userType : true;
       return matchesSearch && matchesType;
     });
   };
+  deleteUserById = async (_id: string): Promise<void> => {
+    this.isLoading = true;
+    try {
+      const result = await this.apolloClient.mutate({
+        mutation: Mutations.DELETE_USER_BY_ID,
+        variables: { _id },
+      });
+      
+      if (result.data?.deleteUserById?.success) {
+        await this.fetchUsers();
+      } else {
+        runInAction(() => {
+          this.error = new Error(result.data?.deleteUserById?.message || 'Failed to delete user.');
+        });
+      }
+    } catch (error) {
+      runInAction(() => {
+        this.error = error;
+      });
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
+    }
+  };
+  
 }
 
 export default UserStore;

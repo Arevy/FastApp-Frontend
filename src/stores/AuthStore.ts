@@ -59,8 +59,6 @@ class AuthStore {
     this.isLoading = true;
     this.error = null;
 
-    //userType will be used in the future
-
     try {
       const response = await this.apolloClient.mutate({
         mutation: Mutations.LOGIN,
@@ -128,9 +126,9 @@ class AuthStore {
       email: decodedToken.email || '',
       isAdmin: !!decodedToken.isAdmin,
       isActive: !!decodedToken.isActive,
-      userType: decodedToken.userType || '',
       userName: decodedToken.userName || '',
       serviceId: decodedToken.serviceId || '',
+      userType: decodedToken.userType || '',
     };
 
     this.userData = {
@@ -139,8 +137,8 @@ class AuthStore {
       userName: user.userName || userData.userName,
       isAdmin: user.isAdmin || userData.isAdmin,
       isActive: user.isActive || userData.isActive,
-      userType: user.userType || userData.userType,
       serviceId: user.serviceId || userData.serviceId,
+      userType: user.userType || userData.userType,
     };
 
     storeUserDataOnSessionStorage(this.userData);

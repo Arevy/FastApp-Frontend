@@ -22,7 +22,7 @@ export const Footer: React.FC<FooterProps> = ({ className }) => {
             className={classNames(styles['text-info'])}
             rel="noreferrer noopener"
           >
-            Arevy
+            Aurelian Mihai
           </p>
         </span>
       </div>
