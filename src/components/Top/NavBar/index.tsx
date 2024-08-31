@@ -92,7 +92,7 @@ export const NavBar = observer(() => {
           >
             <BsInfoCircle size={SIZE} title="Account Details" />
             {'   '}
-            {authStore.userData.userType}
+            {authStore.userData.userType.toLocaleLowerCase().replace('_', ' ')}
           </Link>
         )}
         <Link

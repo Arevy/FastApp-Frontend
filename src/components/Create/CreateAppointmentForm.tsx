@@ -55,7 +55,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = observer(
           currentUserId,
           serviceId,
           date,
-          status
+          authStore.userData.userType == 'NORMAL_USER' ? 'pending' : status
         );
         await appointmentStore.fetchAppointments();
         if (onClose) {
@@ -120,24 +120,26 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = observer(
             required
           />
         </FormGroup>
-        {!propsServiceId && (
+        {(!propsServiceId || authStore.userData.userType == 'NORMAL_USER') && (
           <>
-            <FormGroup>
-              <Label for="status">Status</Label>
-              <Input
-                type="select"
-                name="status"
-                id="status"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                required
-              >
-                <option value="pending">Pending</option>
-                <option value="confirmed">Confirmed</option>
-                <option value="completed">Completed</option>
-                <option value="canceled">Canceled</option>
-              </Input>
-            </FormGroup>
+            {authStore.userData.userType != 'NORMAL_USER' && (
+              <FormGroup>
+                <Label for="status">Status</Label>
+                <Input
+                  type="select"
+                  name="status"
+                  id="status"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  required
+                >
+                  <option value="pending">Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="completed">Completed</option>
+                  <option value="canceled">Canceled</option>
+                </Input>
+              </FormGroup>
+            )}
             <FormGroup>
               <Label for="userId">User</Label>
               <Input
@@ -147,6 +149,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = observer(
                 value={currentUserId}
                 onChange={(e) => setUserId(e.target.value)}
                 required
+                disabled={authStore.userData.userType == 'NORMAL_USER'}
               >
                 <option value="" disabled>
                   Select a user
