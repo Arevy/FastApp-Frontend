@@ -146,7 +146,9 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                         user._id,
                         !user.isAdmin,
                         user.isActive,
-                        user.userType
+                        user.isAdmin
+                          ? ('ADMIN_USER' as UserType)
+                          : user.userType
                       )
                     }
                   >

@@ -59,6 +59,7 @@ const CreateServiceForm: React.FC<CreateServiceFormProps> = observer(
                   imageBase64,
                   imageContentType,
                   userId: selectedUserId || authStore.userData._id,
+                  userType: 'SERVICE_USER'
                 })
                 .then(() => {
                   serviceStore.fetchServices();
@@ -92,7 +93,8 @@ const CreateServiceForm: React.FC<CreateServiceFormProps> = observer(
             description,
             imageBase64,
             imageContentType,
-            userId: selectedUserId || authStore.userData._id, // Folosim userId selectat sau pe cel al utilizatorului curent
+            userId: selectedUserId || authStore.userData._id, 
+            userType: 'SERVICE_USER'
           });
 
           await serviceStore.fetchServices();

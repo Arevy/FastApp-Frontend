@@ -210,8 +210,11 @@ class ServiceStore {
     }
     return this.services.filter(
       (service) =>
-        service.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        service.description?.toLowerCase().includes(searchTerm.toLowerCase())
+        (service.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          service.description
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase())) &&
+        service.isActive
     );
   };
 }

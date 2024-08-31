@@ -163,9 +163,15 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = observer(
             </FormGroup>
           </>
         )}
-        <Button color="primary" type="submit">
-          Set Appointment
-        </Button>
+        {authStore.userData.isActive ? (
+          <Button color="primary" type="submit">
+            Set Appointment
+          </Button>
+        ) : (
+          <Button color="error" type="reset">
+            Your is currently disabled, please contact an admin
+          </Button>
+        )}
       </Form>
     );
   }

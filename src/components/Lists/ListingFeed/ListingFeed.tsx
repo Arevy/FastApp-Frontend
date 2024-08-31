@@ -32,7 +32,7 @@ const ListingFeed: React.FC = observer(() => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredServices = serviceStore.searchServices(searchTerm);
+  const filteredServices = serviceStore.searchServices(searchTerm).filter((service) => service.isActive);
 
   if (serviceStore.isLoading) return <Spinner />;
   if (serviceStore.error)
