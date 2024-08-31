@@ -48,14 +48,15 @@ class ServiceStore {
       });
 
       this.queryObservable.subscribe({
-        next: (response) => {
+        next: async (response) => {
           this.services = response.data.listAllServices.map(
             (service: IService) => ({
               ...service,
               serviceId: service._id,
             })
           );
-          // this.setCurrentService();
+          this.rootStore.authStore.userData.userType === 'SERVICE_USER' &&
+            (await this.setCurrentService());
           this.isLoading = false;
         },
         error: (error) => {
@@ -78,14 +79,12 @@ class ServiceStore {
         query: GET_SERVICE_BY_USER_ID,
         variables: { userId },
       });
-
       if (data?.serviceByUserId) {
         this.currentService = data.serviceByUserId;
       } else {
         this.currentService = null;
       }
     } catch (error) {
-      console.error('Error fetching current service:', error);
       this.currentService = null;
     }
   };
@@ -105,12 +104,10 @@ class ServiceStore {
         variables: { userId, input },
       });
       this.isLoading = false;
-
-      if (result.data?.updateService) {
-        this.currentService = result.data.updateService;
-        console.log('Service updated:', this.currentService);
-        this.fetchServices(); // Actualizează lista serviciilor după update
-        return result.data.updateService; // Returnează rezultatul actualizării
+      if (result.data?.updateService?.service) {
+        this.currentService = result.data.updateService.service;
+        this.fetchServices();
+        return result.data.updateService.service;
       }
 
       return null;
@@ -149,11 +146,9 @@ class ServiceStore {
       });
 
       if (result.data.toggleServiceActive) {
-        console.log('Service active status toggled successfully');
         return result.data.toggleServiceActive;
       }
     } catch (error) {
-      console.error('Error toggling service active status', error);
       this.error = error;
     } finally {
       this.isLoading = false;
@@ -163,21 +158,18 @@ class ServiceStore {
   createService = async (input: CreateServiceInput) => {
     this.isLoading = true;
     try {
-      console.log('Creating service with input:', input);
       const result = await this.apolloClient.mutate<CreateServiceOutput>({
         mutation: CREATE_SERVICE,
         variables: { input },
       });
       this.isLoading = false;
       if (result.data) {
-        console.log('Service created:', result.data.createService);
         this.services.push(result.data.createService);
-        this.currentService = result.data.createService; // Setează currentService
-        console.log('Service created:', this.currentService);
+        this.currentService = result.data.createService;
 
         if (this.rootStore.authStore.userData.userType === 'SERVICE_USER') {
           await this.rootStore.authStore.updateUserDetails(
-            this.currentService._id, // Actualizează userId cu noul serviceId
+            this.currentService._id,
             this.rootStore.authStore.userData.email,
             this.rootStore.authStore.userData.userName
           );
@@ -186,7 +178,6 @@ class ServiceStore {
     } catch (error) {
       this.isLoading = false;
       this.error = error;
-      console.error('Service creation failed:', error);
     }
   };
 

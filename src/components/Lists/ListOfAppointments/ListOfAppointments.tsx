@@ -5,7 +5,18 @@ import { AppointmentStatus, AppointmentStatusLabels } from 'src/gql/types';
 import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
 import { Spinner } from 'src/components/SmallComponents/Spinner';
 import { parseUnixTimestamp } from 'src/utils/utils';
-import { FormGroup, Input, Label, Row, Col, Button } from 'reactstrap';
+import {
+  FormGroup,
+  Input,
+  Label,
+  Row,
+  Col,
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  CardText,
+} from 'reactstrap';
 
 export const ListOfAppointments = observer(() => {
   const { appointmentStore, authStore } = useStores();
@@ -101,6 +112,22 @@ export const ListOfAppointments = observer(() => {
     return <ErrorAlert errorMessage="No appointments found" />;
   }
 
+  const rowHoverStyle = {
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    cursor: 'pointer',
+  };
+
+  const cardHoverStyle = {
+    borderRadius: '10px',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+  };
+
+  const cardBodyHoverStyle = {
+    backgroundColor: '#5b838a',
+    transform: 'translateY(-2px)',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+  };
+
   return (
     <section className="table-responsive my-4 py-4">
       <Row className="mb-4 g-3 align-items-center">
@@ -173,91 +200,204 @@ export const ListOfAppointments = observer(() => {
         )}
       </Row>
 
-      <table className="table text-light">
-        <thead>
-          <tr>
-            <th scope="col">User Email</th>
-            <th scope="col">Service Name</th>
-            <th scope="col">Category</th>
-            <th scope="col">Last Update</th>
-            <th scope="col">Status</th>
-            {authStore.userData.userType !== 'NORMAL_USER' && (
-              <th scope="col">Actions</th>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {filteredAppointments?.map((appointment) => (
-            <tr key={appointment._id}>
-              <td>{appointment.user?.email || 'N/A'}</td>
-              <td>{appointment.service?.name || 'N/A'}</td>
-              <td>{appointment.service?.category || 'N/A'}</td>
-              <td>{parseUnixTimestamp(appointment.date)}</td>
-              <td>
-                {authStore.userData.userType === 'NORMAL_USER' ? (
-                  <span>
-                    {
-                      AppointmentStatusLabels[
-                        appointment.status as AppointmentStatus
-                      ]
-                    }
-                  </span>
-                ) : editing === appointment._id ? (
-                  <select
-                    value={selectedStatus}
-                    onChange={(e) =>
-                      setSelectedStatus(e.target.value as AppointmentStatus)
-                    }
-                    className="form-select"
-                  >
-                    {Object.values(AppointmentStatus).map((status) => (
-                      <option key={status} value={status}>
-                        {AppointmentStatusLabels[status]}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <span
-                    onClick={() => {
-                      setEditing(appointment._id);
-                      setSelectedStatus(
-                        appointment.status as AppointmentStatus
-                      );
-                    }}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {
-                      AppointmentStatusLabels[
-                        appointment.status as AppointmentStatus
-                      ]
-                    }
-                  </span>
+      {/* Tabel pe Desktop */}
+      <Row className="d-none d-lg-flex">
+        <Col xs={12}>
+          <table className="table text-light table-striped">
+            <thead>
+              <tr>
+                <th scope="col">User Email</th>
+                <th scope="col">Service Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Last Update</th>
+                <th scope="col">Status</th>
+                {authStore.userData.userType !== 'NORMAL_USER' && (
+                  <th scope="col">Actions</th>
                 )}
-              </td>
-              <td>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredAppointments?.map((appointment) => (
+                <tr
+                  key={appointment._id}
+                  style={rowHoverStyle}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.backgroundColor = '#5b838a')
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.backgroundColor = '')
+                  }
+                >
+                  <td>{appointment.user?.email || 'N/A'}</td>
+                  <td>{appointment.service?.name || 'N/A'}</td>
+                  <td>{appointment.service?.category || 'N/A'}</td>
+                  <td>{parseUnixTimestamp(appointment.date)}</td>
+                  <td>
+                    {authStore.userData.userType === 'NORMAL_USER' ? (
+                      <span>
+                        {
+                          AppointmentStatusLabels[
+                            appointment.status as AppointmentStatus
+                          ]
+                        }
+                      </span>
+                    ) : editing === appointment._id ? (
+                      <select
+                        value={selectedStatus}
+                        onChange={(e) =>
+                          setSelectedStatus(e.target.value as AppointmentStatus)
+                        }
+                        className="form-select"
+                      >
+                        {Object.values(AppointmentStatus).map((status) => (
+                          <option key={status} value={status}>
+                            {AppointmentStatusLabels[status]}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <span
+                        onClick={() => {
+                          setEditing(appointment._id);
+                          setSelectedStatus(
+                            appointment.status as AppointmentStatus
+                          );
+                        }}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        {
+                          AppointmentStatusLabels[
+                            appointment.status as AppointmentStatus
+                          ]
+                        }
+                      </span>
+                    )}
+                  </td>
+                  <td>
+                    {editing === appointment._id ? (
+                      <Button
+                        color="success"
+                        onClick={() => handleModify(appointment._id)}
+                      >
+                        Save
+                      </Button>
+                    ) : (
+                      <Button
+                        color="danger"
+                        onClick={() =>
+                          appointmentStore.cancelAppointment(appointment._id)
+                        }
+                      >
+                        Cancel
+                      </Button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Col>
+      </Row>
+
+      <Row className="d-lg-none">
+        {filteredAppointments?.map((appointment) => (
+          <Col xs={12} md={6} className="mb-3" key={appointment._id}>
+            <Card
+              className="bg-light text-dark shadow-sm"
+              style={cardHoverStyle}
+              onMouseEnter={(e) =>
+                Object.assign(e.currentTarget.style, cardBodyHoverStyle)
+              }
+              onMouseLeave={(e) =>
+                Object.assign(e.currentTarget.style, cardHoverStyle)
+              }
+            >
+              <CardBody className="p-3">
+                <CardTitle
+                  tag="h5"
+                  className="d-flex justify-content-between align-items-center"
+                >
+                  {appointment.service?.name || 'N/A'}
+                </CardTitle>
+                <CardText>
+                  <strong>User Email:</strong>{' '}
+                  {appointment.user?.email || 'N/A'}
+                </CardText>
+                <CardText>
+                  <strong>Category:</strong>{' '}
+                  {appointment.service?.category || 'N/A'}
+                </CardText>
+                <CardText>
+                  <strong>Last Update:</strong>{' '}
+                  {parseUnixTimestamp(appointment.date)}
+                </CardText>
+                <CardText>
+                  <strong>Status:</strong>{' '}
+                  {authStore.userData.userType === 'NORMAL_USER' ? (
+                    <span>
+                      {
+                        AppointmentStatusLabels[
+                          appointment.status as AppointmentStatus
+                        ]
+                      }
+                    </span>
+                  ) : editing === appointment._id ? (
+                    <Input
+                      type="select"
+                      value={selectedStatus}
+                      onChange={(e) =>
+                        setSelectedStatus(e.target.value as AppointmentStatus)
+                      }
+                      className="form-select"
+                    >
+                      {Object.values(AppointmentStatus).map((status) => (
+                        <option key={status} value={status}>
+                          {AppointmentStatusLabels[status]}
+                        </option>
+                      ))}
+                    </Input>
+                  ) : (
+                    <span
+                      onClick={() => {
+                        setEditing(appointment._id);
+                        setSelectedStatus(
+                          appointment.status as AppointmentStatus
+                        );
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {
+                        AppointmentStatusLabels[
+                          appointment.status as AppointmentStatus
+                        ]
+                      }
+                    </span>
+                  )}
+                </CardText>
                 {editing === appointment._id ? (
                   <Button
                     color="success"
                     onClick={() => handleModify(appointment._id)}
+                    className="mt-2"
                   >
                     Save
                   </Button>
                 ) : (
-                  <button
-                    className="btn btn-danger"
-                    style={{ cursor: 'pointer' }}
+                  <Button
+                    color="danger"
                     onClick={() =>
                       appointmentStore.cancelAppointment(appointment._id)
                     }
+                    className="mt-2"
                   >
                     Cancel
-                  </button>
+                  </Button>
                 )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </CardBody>
+            </Card>
+          </Col>
+        ))}
+      </Row>
     </section>
   );
 });

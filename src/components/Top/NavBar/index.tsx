@@ -61,7 +61,7 @@ export const NavBar = observer(() => {
         >
           <BsHouse size={SIZE} title="Home" />
         </Link>
-        {authStore.isAuth && (
+        {authStore.isAuth && authStore.userData.userType == 'ADMIN_USER' && (
           <Link
             className="navbar-item text-light font-weight-bold"
             to={UserAdministrationRoute.path}
@@ -77,7 +77,7 @@ export const NavBar = observer(() => {
             <BsListCheck size={SIZE} title="Appointments" />
           </Link>
         )}
-        {authStore.isAuth && (
+        {authStore.isAuth && authStore.userData.userType == 'ADMIN_USER' && (
           <Link
             className="navbar-item text-light font-weight-bold"
             to={ServiceAdministrationRoute.path}

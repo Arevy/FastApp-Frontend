@@ -29,6 +29,7 @@ const AccountDetails = observer(() => {
     serviceStore.currentService?.category || ''
   );
   const [image, setImage] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -69,12 +70,14 @@ const AccountDetails = observer(() => {
       }
 
       const updateResult = await serviceStore.updateService(
-        serviceStore.currentService._id,
+        authStore.userData._id,
         updateFields
       );
 
       if (updateResult) {
         setSuccessMessage('Service updated successfully!');
+        setImage(null);
+        setPreviewImage(null);
       } else {
         setErrorMessage('Failed to update service.');
       }
@@ -93,6 +96,31 @@ const AccountDetails = observer(() => {
 
     if (password) {
       await authStore.updatePassword(authStore.userData._id, password);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setImage(null);
+    setPreviewImage(null);
+    if (serviceStore.currentService) {
+      setDescription(serviceStore.currentService.description || '');
+      setCategory(serviceStore.currentService.category || '');
+      setUserName(serviceStore.currentService.name || '');
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setImage(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImage(null);
     }
   };
 
@@ -210,11 +238,14 @@ const AccountDetails = observer(() => {
                 </FormGroup>
               </Col>
             </Row>
-            {serviceStore.currentService?.imageBase64 && (
+            {previewImage || serviceStore.currentService?.imageBase64 ? (
               <div style={{ marginBottom: '10px' }}>
                 <img
-                  src={`data:${serviceStore.currentService.imageContentType};base64,${serviceStore.currentService.imageBase64}`}
-                  alt="Current Service"
+                  src={
+                    previewImage ||
+                    `data:${serviceStore.currentService?.imageContentType};base64,${serviceStore.currentService?.imageBase64}`
+                  }
+                  alt="Service"
                   style={{
                     maxWidth: '100px',
                     maxHeight: '100px',
@@ -222,7 +253,7 @@ const AccountDetails = observer(() => {
                   }}
                 />
               </div>
-            )}
+            ) : null}
             <FormGroup className="mb-4">
               <Label
                 for="image"
@@ -236,7 +267,7 @@ const AccountDetails = observer(() => {
                 name="image"
                 id="image"
                 accept="image/*"
-                onChange={(e) => setImage(e.target.files?.[0] || null)}
+                onChange={handleImageChange}
                 className="form-control"
                 disabled={!isEditing}
               />

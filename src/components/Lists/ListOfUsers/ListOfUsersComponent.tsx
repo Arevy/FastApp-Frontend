@@ -1,5 +1,18 @@
 import React, { useState } from 'react';
-import { FormGroup, Input, Label, Container, Row, Col } from 'reactstrap';
+import {
+  FormGroup,
+  Input,
+  Label,
+  Container,
+  Row,
+  Col,
+  Table,
+  Card,
+  CardBody,
+  CardTitle,
+  CardText,
+  Button,
+} from 'reactstrap';
 import { parseUnixTimestamp } from 'src/utils/utils';
 import { IUser, UserType, UserTypeLabels } from 'src/gql/types';
 import { EmojiGreenCheck } from 'src/components/SmallComponents/EmojiGreenCheck';
@@ -39,14 +52,27 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
     return matchesSearch && matchesType;
   });
 
+  const rowHoverStyle = {
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    cursor: 'pointer',
+  };
+
+  const cardHoverStyle = {
+    borderRadius: '10px',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+  };
+
+  const cardBodyHoverStyle = {
+    backgroundColor: '#65b5c2',
+    transform: 'translateY(-2px)',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+  };
+
   return (
     <Container className="my-4 py-4">
       <Row className="justify-content-center mb-4">
-        <Col
-          md={10}
-          className="d-flex justify-content-between align-items-center"
-        >
-          <FormGroup className="w-50">
+        <Col md={6} className="mb-3">
+          <FormGroup>
             <Label for="search" className="text-light">
               Search Users
             </Label>
@@ -59,8 +85,10 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </FormGroup>
-          <FormGroup className="w-50 ml-3">
-            <Label for="userType" className="text-light form-label w-100">
+        </Col>
+        <Col md={6} className="mb-3">
+          <FormGroup>
+            <Label for="userType" className="text-light">
               Filter by User Type
             </Label>
             <Input
@@ -82,28 +110,37 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
           </FormGroup>
         </Col>
       </Row>
-      <Row className="justify-content-center">
-        <Col>
-          <table className="table text-light table-striped ">
+      {/* Tabel pe Desktop */}
+      <Row className="d-none d-lg-flex">
+        <Col xs={12}>
+          <Table responsive striped className="text-light">
             <thead>
               <tr>
-                <th scope="col">Email</th>
-                <th scope="col">Username</th>
-                <th scope="col">Is administrator?</th>
-                <th scope="col">Is active?</th>
-                <th scope="col">Registration date</th>
-                <th scope="col">Last login</th>
-                <th scope="col">User Type</th>
-                {!!deleteUser && <th scope="col">Delete</th>}
+                <th>Email</th>
+                <th>Username</th>
+                <th>Is administrator?</th>
+                <th>Is active?</th>
+                <th>Registration date</th>
+                <th>Last login</th>
+                <th>User Type</th>
+                {!!deleteUser && <th>Delete</th>}
               </tr>
             </thead>
             <tbody>
               {filteredUsers.map((user) => (
-                <tr key={user._id}>
+                <tr
+                  key={user._id}
+                  style={rowHoverStyle}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.backgroundColor = '#5b838a')
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.backgroundColor = '')
+                  }
+                >
                   <td>{user.email}</td>
                   <td>{user.userName || 'No Username'}</td>
                   <td
-                    style={{ cursor: 'pointer' }}
                     onClick={() =>
                       updateUserAdminStatus(
                         user._id,
@@ -113,10 +150,9 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                       )
                     }
                   >
-                    {user.isAdmin ? <EmojiGreenCheck /> : <EmojiRedCross />}{' '}
+                    {user.isAdmin ? <EmojiGreenCheck /> : <EmojiRedCross />}
                   </td>
                   <td
-                    style={{ cursor: 'pointer' }}
                     onClick={() =>
                       updateUserAdminStatus(
                         user._id,
@@ -126,13 +162,14 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                       )
                     }
                   >
-                    {user.isActive ? <EmojiGreenCheck /> : <EmojiRedCross />}{' '}
+                    {user.isActive ? <EmojiGreenCheck /> : <EmojiRedCross />}
                   </td>
                   <td>{parseUnixTimestamp(user.registrationDate)}</td>
                   <td>{parseUnixTimestamp(user.lastLogin)}</td>
-                  <td style={{ cursor: 'pointer' }}>
+                  <td>
                     {editing === user._id ? (
-                      <select
+                      <Input
+                        type="select"
                         value={selectedType}
                         onChange={(e) =>
                           setSelectedType(e.target.value as UserType)
@@ -146,7 +183,7 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                               selectedType
                             );
                           }
-                          setEditing(null); // Stop editing after selection
+                          setEditing(null);
                         }}
                       >
                         {Object.values(UserType).map((type) => (
@@ -154,7 +191,7 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                             {UserTypeLabels[type]}
                           </option>
                         ))}
-                      </select>
+                      </Input>
                     ) : (
                       <span
                         onClick={() => {
@@ -179,8 +216,118 @@ const ListOfUsers: React.FC<ListOfUsersProps> = ({
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
         </Col>
+      </Row>
+      {/* Carduri pe Mobile și Tablete */}
+      <Row className="d-lg-none">
+        {filteredUsers.map((user) => (
+          <Col xs={12} md={6} className="mb-3" key={user._id}>
+            <Card
+              className="bg-light text-dark shadow-sm"
+              style={cardHoverStyle}
+              onMouseEnter={(e) =>
+                Object.assign(e.currentTarget.style, cardBodyHoverStyle)
+              }
+              onMouseLeave={(e) =>
+                Object.assign(e.currentTarget.style, cardHoverStyle)
+              }
+            >
+              <CardBody className="p-3">
+                <CardTitle
+                  tag="h5"
+                  className="d-flex justify-content-between align-items-center"
+                >
+                  {user.email}
+                </CardTitle>
+                <CardText>
+                  <strong>Username:</strong> {user.userName || 'No Username'}
+                </CardText>
+                <CardText>
+                  <strong>Is administrator?:</strong>{' '}
+                  <span
+                    onClick={() =>
+                      updateUserAdminStatus(
+                        user._id,
+                        !user.isAdmin,
+                        user.isActive,
+                        user.userType
+                      )
+                    }
+                  >
+                    {user.isAdmin ? <EmojiGreenCheck /> : <EmojiRedCross />}
+                  </span>
+                </CardText>
+                <CardText>
+                  <strong>Is active?:</strong>{' '}
+                  <span
+                    onClick={() =>
+                      updateUserAdminStatus(
+                        user._id,
+                        user.isAdmin,
+                        !user.isActive,
+                        user.userType
+                      )
+                    }
+                  >
+                    {user.isActive ? <EmojiGreenCheck /> : <EmojiRedCross />}
+                  </span>
+                </CardText>
+                <CardText>
+                  <strong>Registration date:</strong>{' '}
+                  {parseUnixTimestamp(user.registrationDate)}
+                </CardText>
+                <CardText>
+                  <strong>Last login:</strong>{' '}
+                  {parseUnixTimestamp(user.lastLogin)}
+                </CardText>
+                <CardText>
+                  <strong>User Type:</strong>{' '}
+                  {editing === user._id ? (
+                    <Input
+                      type="select"
+                      value={selectedType}
+                      onChange={(e) =>
+                        setSelectedType(e.target.value as UserType)
+                      }
+                      onBlur={() => {
+                        if (selectedType) {
+                          updateUserAdminStatus(
+                            user._id,
+                            selectedType === UserType.ADMIN_USER,
+                            user.isActive,
+                            selectedType
+                          );
+                        }
+                        setEditing(null);
+                      }}
+                    >
+                      {Object.values(UserType).map((type) => (
+                        <option key={type} value={type}>
+                          {UserTypeLabels[type]}
+                        </option>
+                      ))}
+                    </Input>
+                  ) : (
+                    <span
+                      onClick={() => {
+                        setEditing(user._id);
+                        setSelectedType(user.userType);
+                      }}
+                    >
+                      {UserTypeLabels[user.userType]}
+                    </span>
+                  )}
+                </CardText>
+                {!!deleteUser && (
+                  <Button color="danger" onClick={() => deleteUser(user._id)}>
+                    Delete
+                  </Button>
+                )}
+              </CardBody>
+            </Card>
+          </Col>
+        ))}
       </Row>
     </Container>
   );

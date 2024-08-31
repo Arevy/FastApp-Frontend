@@ -7,7 +7,7 @@ import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
 import { useStores } from 'src/stores/RootStoreContext';
 
 const ListingFeed: React.FC = observer(() => {
-  const { serviceStore } = useStores();
+  const { serviceStore, authStore } = useStores();
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('');
   const [categories, setCategories] = useState<string[]>([]);
@@ -95,14 +95,16 @@ const ListingFeed: React.FC = observer(() => {
                 <h3 className="card-title">{service.name}</h3>
                 <p className="card-text">{service.description}</p>
               </div>
-              <div className="card-footer text-center">
-                <ModalForm
-                  buttonLabel="Set an Appointment"
-                  formComponent={
-                    <CreateAppointmentForm propsServiceId={service._id} />
-                  }
-                />
-              </div>
+              {authStore.userData.userType != 'SERVICE_USER' && (
+                <div className="card-footer text-center">
+                  <ModalForm
+                    buttonLabel="Set an Appointment"
+                    formComponent={
+                      <CreateAppointmentForm propsServiceId={service._id} />
+                    }
+                  />
+                </div>
+              )}
             </div>
           </div>
         ))}

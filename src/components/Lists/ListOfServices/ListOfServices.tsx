@@ -5,7 +5,18 @@ import { ErrorAlert } from 'src/components/SmallComponents/ErrorAlert';
 import { Spinner } from 'src/components/SmallComponents/Spinner';
 import { EmojiGreenCheck } from 'src/components/SmallComponents/EmojiGreenCheck';
 import { EmojiRedCross } from 'src/components/SmallComponents/EmojiRedCross';
-import { FormGroup, Input, Label, Row, Col } from 'reactstrap';
+import {
+  FormGroup,
+  Input,
+  Label,
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardTitle,
+  CardText,
+  Button,
+} from 'reactstrap';
 
 export const ListOfServices = observer(() => {
   const { serviceStore } = useStores();
@@ -58,6 +69,22 @@ export const ListOfServices = observer(() => {
   if (serviceStore.error)
     return <ErrorAlert errorMessage={serviceStore.error?.message} />;
 
+  const rowHoverStyle = {
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    cursor: 'pointer',
+  };
+
+  const cardHoverStyle = {
+    borderRadius: '10px',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+  };
+
+  const cardBodyHoverStyle = {
+    backgroundColor: '#5b838a',
+    transform: 'translateY(-2px)',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+  };
+
   return (
     <section className="table-responsive my-4 py-4">
       <Row className="mb-4 align-items-center">
@@ -104,42 +131,97 @@ export const ListOfServices = observer(() => {
           </FormGroup>
         </Col>
       </Row>
-      <table className="table text-light">
-        <thead>
-          <tr>
-            <th scope="col">Service Name</th>
-            <th scope="col">Category</th>
-            <th scope="col">Is Active?</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredServices
-            .slice()
-            .sort((a, b) => a.category.localeCompare(b.category))
-            .map((service) => (
-              <tr key={service._id}>
-                <td>{service.name}</td>
-                <td>{service.category}</td>
-                <td
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => handleToggleActive(service._id)}
-                >
-                  {service.isActive ? <EmojiGreenCheck /> : <EmojiRedCross />}
-                </td>
-                <td>
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => handleDelete(service._id)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    Delete
-                  </button>
-                </td>
+      {/* Tabel pe Desktop */}
+      <Row className="d-none d-lg-flex">
+        <Col xs={12}>
+          <table className="table text-light table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Service Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Is Active?</th>
+                <th scope="col">Actions</th>
               </tr>
-            ))}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {filteredServices
+                .slice()
+                .sort((a, b) => a.category.localeCompare(b.category))
+                .map((service) => (
+                  <tr
+                    key={service._id}
+                    style={rowHoverStyle}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.backgroundColor = '#5b838a')
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.backgroundColor = '')
+                    }
+                  >
+                    <td>{service.name}</td>
+                    <td>{service.category}</td>
+                    <td onClick={() => handleToggleActive(service._id)}>
+                      {service.isActive ? (
+                        <EmojiGreenCheck />
+                      ) : (
+                        <EmojiRedCross />
+                      )}
+                    </td>
+                    <td>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleDelete(service._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </Col>
+      </Row>
+      {/* Carduri pe Mobile și Tablete */}
+      <Row className="d-lg-none">
+        {filteredServices.map((service) => (
+          <Col xs={12} md={6} className="mb-3" key={service._id}>
+            <Card
+              className="bg-light text-dark shadow-sm"
+              style={cardHoverStyle}
+              onMouseEnter={(e) =>
+                Object.assign(e.currentTarget.style, cardBodyHoverStyle)
+              }
+              onMouseLeave={(e) =>
+                Object.assign(e.currentTarget.style, cardHoverStyle)
+              }
+            >
+              <CardBody className="p-3">
+                <CardTitle
+                  tag="h5"
+                  className="d-flex justify-content-between align-items-center"
+                >
+                  {service.name}
+                </CardTitle>
+                <CardText>
+                  <strong>Category:</strong> {service.category}
+                </CardText>
+                <CardText>
+                  <strong>Is Active?:</strong>{' '}
+                  <span onClick={() => handleToggleActive(service._id)}>
+                    {service.isActive ? <EmojiGreenCheck /> : <EmojiRedCross />}
+                  </span>
+                </CardText>
+                <Button
+                  color="danger"
+                  onClick={() => handleDelete(service._id)}
+                >
+                  Delete
+                </Button>
+              </CardBody>
+            </Card>
+          </Col>
+        ))}
+      </Row>
     </section>
   );
 });

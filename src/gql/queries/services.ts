@@ -31,13 +31,16 @@ export const CREATE_SERVICE = gql`
 export const UPDATE_SERVICE = gql`
   mutation UpdateService($userId: ID!, $input: UpdateServiceInput!) {
     updateService(userId: $userId, input: $input) {
-      _id
-      name
-      category
-      isActive
-      description
-      imageBase64
-      imageContentType
+      service {
+        _id
+        name
+        category
+        isActive
+        description
+        imageBase64
+        imageContentType
+      }
+      message
     }
   }
 `;

@@ -23,7 +23,9 @@ export interface UpdateServiceInput {
 }
 
 export interface UpdateServiceOutput {
-  updateService?: Service;
+  updateService: any;
+  service?: Service;
+  message?: string;
 }
 
 export interface CreateServiceInput {
