@@ -18,16 +18,17 @@ If you prefer it, you can use one of these boilerplates without using the other!
 ### 📝 Frontend Requirements
 
 - Backend must be running. I recommend use my [backend boilerplate](https://github.com/Arevy/FastApp-Backend)
-- Node.js 18.15 or higher
-- or v16.15.1 + yarn
+- Node.js 
+  1. Production: 18.15 or higher
+  2. Development: 16.15.1 + yarn
 
 ### 📚 How to run the application?
 
-- Use the command: `npm install`.
+- Use the command: `yarn` or `npm install`.
 - Configure the application:
   - Duplicate the configuration file `_env` and rename it as `.env`
   - Edit the file `.env`
-- Then use: `npm run start`.
+- Then use: `yarn start` or `npm run start`.
 
 ### 🚀 How to deploy?
 
