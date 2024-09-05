@@ -11,17 +11,17 @@ import { onError } from '@apollo/client/link/error';
 import { deleteSession, recoverSession } from 'src/utils/session';
 
 /* Configuration imported from '.env' file */
-const backendProtocol = process.env.REACT_APP_PROTOCOL;
-const backendHost = process.env.REACT_APP_HOST;
-const backendPort = process.env.REACT_APP_PORT;
-const backendGraphql = process.env.REACT_APP_GRAPHQL;
+const backendProtocol = process.env.REACT_APP_PROTOCOL || 'http';
+const backendHost = process.env.REACT_APP_HOST || '127.0.0.1';
+const backendPort = process.env.REACT_APP_PORT || 4000;
+const backendGraphql = process.env.REACT_APP_GRAPHQL || '/graphql';
 
 const backendAddress = `${backendProtocol}://${backendHost}:${backendPort}${backendGraphql}`;
 
 const httpLink = new HttpLink({
 	uri: backendAddress,
 });
-
+// console.log(backendAddress);
 const authMiddleware = new ApolloLink((operation, forward) => {
 	const token = recoverSession('token');
 	const authorization = token ? `Bearer ${token}` : '';

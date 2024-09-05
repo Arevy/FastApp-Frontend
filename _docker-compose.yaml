@@ -1,0 +1,42 @@
+# version: '3'
+# services:
+#   backend:
+#     build:
+#       context: ./FastApp-Backend
+#     container_name: backend
+#     ports:
+#       - "4000:4000"
+#     depends_on:
+#       - redis
+#     env_file:
+#       - ./FastApp-Backend/.env
+#     networks:
+#       - app-network
+
+#   frontend:
+#     build:
+#       context: ./FastApp-Frontend
+#     container_name: frontend
+#     ports:
+#       - "3000:80"
+#     depends_on:
+#       - backend
+#     environment:
+#       REACT_APP_PROTOCOL: http
+#       REACT_APP_HOST: host.docker.internal
+#       REACT_APP_PORT: 4000
+#       REACT_APP_GRAPHQL: /graphql
+#     networks:
+#       - app-network
+
+#   redis:
+#     image: "redis:alpine"
+#     container_name: redis
+#     ports:
+#       - "6380:6379" # Portul extern este 6380, dar portul intern este 6379
+#     networks:
+#       - app-network
+
+# networks:
+#   app-network:
+#     driver: bridge
